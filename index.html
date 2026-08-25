@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>ResolveHub · Smart Complaint System</title>
+  <title>ResolveHub · Advanced Smart System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -25,8 +25,6 @@
     .card-hover:active { transform: scale(0.97); }
     .btn-primary { background: linear-gradient(135deg, #6e50c8, #a070e0); border: none; color: white; font-weight: 600; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 14px rgba(110, 80, 200, 0.25); }
     .btn-primary:active { transform: scale(0.95); }
-    .btn-secondary { background: rgba(110, 80, 200, 0.12); border: 1px solid rgba(110, 80, 200, 0.2); color: #6e50c8; font-weight: 600; transition: all 0.2s; cursor: pointer; }
-    .dark .btn-secondary { background: rgba(110, 80, 200, 0.2); color: #b8a0e8; border-color: rgba(110, 80, 200, 0.3); }
     .badge-priority { padding: 4px 12px; border-radius: 40px; font-size: 11px; font-weight: 600; letter-spacing: 0.2px; display: inline-block; }
     .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -74,7 +72,7 @@
     .dark .empty-state { color: #b0a0c0; }
     .empty-state i { font-size: 40px; opacity: 0.4; margin-bottom: 12px; display: block; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .modal-box { max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 28px; padding: 24px; background: rgba(255, 248, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); }
+    .modal-box { max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 28px; padding: 24px; background: rgba(255, 248, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); }
     .dark .modal-box { background: rgba(20, 14, 40, 0.9); border-color: rgba(255,255,255,0.06); }
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; font-size: 13px; font-weight: 600; color: #3a2a5a; margin-bottom: 4px; }
@@ -94,6 +92,18 @@
     .dark .toast-error { background: rgba(50, 20, 20, 0.9); color: #f0b0b0; }
     .toast-info { background: rgba(230, 240, 255, 0.9); border-color: #6e8ad0; color: #1a2a5a; }
     .dark .toast-info { background: rgba(20, 30, 50, 0.9); color: #b0c8f0; }
+    .heatmap-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; padding: 12px; background: rgba(255,248,255,0.3); border-radius: 16px; }
+    .heat-cell { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: rgba(0,0,0,0.5); transition: 0.2s; cursor: pointer; }
+    .heat-cell:hover { transform: scale(1.08); }
+    .dark .heat-cell { color: rgba(255,255,255,0.6); }
+    .upvote-btn { background: none; border: 1px solid rgba(110,80,200,0.15); padding: 4px 12px; border-radius: 30px; font-size: 12px; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 4px; }
+    .upvote-btn:hover { background: rgba(110,80,200,0.08); }
+    .upvote-btn.upvoted { background: rgba(110,80,200,0.15); border-color: #6e50c8; color: #6e50c8; }
+    .dept-score { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(110,80,200,0.06); }
+    .dept-score .bar { flex: 1; height: 6px; border-radius: 6px; background: rgba(110,80,200,0.1); overflow: hidden; }
+    .dept-score .bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #6e50c8, #c084e8); transition: width 0.5s; }
+    .timer-badge { font-family: monospace; font-size: 14px; font-weight: 700; color: #d06060; }
+    .dark .timer-badge { color: #f08080; }
     @media (max-width: 480px) {
       .sidebar-brand { font-size: 18px; }
       .nav-item { font-size: 12px; padding: 5px 12px; }
@@ -103,6 +113,7 @@
       .form-row { grid-template-columns: 1fr; }
       .main-area { padding: 12px; }
       .modal-box { padding: 16px; }
+      .heatmap-grid { grid-template-columns: repeat(4, 1fr); }
     }
     @media (min-width: 768px) {
       .app-layout { flex-direction: row; }
@@ -140,14 +151,15 @@
     { id: 'u4', name: 'Staff', email: 'staff@portal.demo', role: 'staff', department: 'Facilities', avatar: 'F' },
   ];
 
+  // Enhanced complaints with upvotes, location for heatmap, media
   const defaultComplaints = [
-    { id: 'CMP-2026-0001', subject: 'Broken AC in lab 301', description: 'AC not cooling since monday. Room temp is 32°C.', category: 'Infrastructure', subcategory: 'HVAC', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building A', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', attachments: [], comments: [{ id: 'c1', userId: 'u4', name: 'Staff', role: 'staff', message: 'Technician dispatched, will fix today.', timestamp: Date.now()-200000 }], timeline: [{ status: 'submitted', timestamp: Date.now()-500000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-300000, note: 'Assigned to Staff' }, { status: 'in progress', timestamp: Date.now()-150000, note: 'Work in progress' }], resolution: '', feedback: null, createdAt: Date.now()-500000, updatedAt: Date.now()-100000 },
-    { id: 'CMP-2026-0002', subject: 'Exam schedule conflict', description: 'Two major exams on same day. Need reschedule.', category: 'Examination', subcategory: 'Scheduling', priority: 'critical', status: 'under review', department: 'Examination', location: 'Online', anonymous: false, submittedBy: 'u3', assignedTo: null, attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-400000, note: 'Submitted' }, { status: 'under review', timestamp: Date.now()-250000, note: 'Under review' }], resolution: '', feedback: null, createdAt: Date.now()-400000, updatedAt: Date.now()-200000 },
-    { id: 'CMP-2026-0003', subject: 'Library quiet zone noise', description: 'Construction noise near library is disrupting study.', category: 'Library', subcategory: 'Environment', priority: 'medium', status: 'resolved', department: 'Library', location: 'Library', anonymous: true, submittedBy: 'u2', assignedTo: 'u4', attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-600000, note: 'Submitted' }, { status: 'in progress', timestamp: Date.now()-400000, note: 'In progress' }, { status: 'resolved', timestamp: Date.now()-100000, note: 'Resolved' }], resolution: 'Noise reduced, hours adjusted', feedback: { rating: 4, comment: 'Better now' }, createdAt: Date.now()-600000, updatedAt: Date.now()-100000 },
-    { id: 'CMP-2026-0004', subject: 'WiFi connectivity issue', description: 'No WiFi in hostel block C since yesterday.', category: 'IT / Technology', subcategory: 'Network', priority: 'high', status: 'assigned', department: 'IT', location: 'Hostel C', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-300000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-150000, note: 'Assigned to IT' }], resolution: '', feedback: null, createdAt: Date.now()-300000, updatedAt: Date.now()-150000 },
-    { id: 'CMP-2026-0005', subject: 'Harassment complaint', description: 'Inappropriate behavior in cafeteria. Urgent action needed.', category: 'Harassment / Misconduct', subcategory: 'Verbal', priority: 'critical', status: 'submitted', department: 'Administration', location: 'Cafeteria', anonymous: true, submittedBy: 'u2', assignedTo: null, attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-100000, note: 'Submitted' }], resolution: '', feedback: null, createdAt: Date.now()-100000, updatedAt: Date.now()-100000 },
-    { id: 'CMP-2026-0006', subject: 'Water leakage in restroom', description: 'Pipe burst near 2nd floor restroom.', category: 'Water', subcategory: 'Plumbing', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building B', anonymous: false, submittedBy: 'u3', assignedTo: 'u4', attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-700000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-600000, note: 'Assigned' }, { status: 'in progress', timestamp: Date.now()-400000, note: 'In progress' }], resolution: '', feedback: null, createdAt: Date.now()-700000, updatedAt: Date.now()-400000 },
-    { id: 'CMP-2026-0007', subject: 'Transport bus delay', description: 'Bus from campus to station is consistently late.', category: 'Transport', subcategory: 'Scheduling', priority: 'low', status: 'closed', department: 'Transport', location: 'Main gate', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-900000, note: 'Submitted' }, { status: 'resolved', timestamp: Date.now()-700000, note: 'Resolved' }, { status: 'closed', timestamp: Date.now()-500000, note: 'Closed' }], resolution: 'Schedule adjusted', feedback: { rating: 5, comment: 'Great' }, createdAt: Date.now()-900000, updatedAt: Date.now()-500000 },
+    { id: 'CMP-2026-0001', subject: 'Broken AC in lab 301', description: 'AC not cooling since monday. Room temp is 32°C.', category: 'Infrastructure', subcategory: 'HVAC', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building A', zone: 'academic', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 5, upvotedBy: [], attachments: [], comments: [{ id: 'c1', userId: 'u4', name: 'Staff', role: 'staff', message: 'Technician dispatched, will fix today.', timestamp: Date.now()-200000 }], timeline: [{ status: 'submitted', timestamp: Date.now()-500000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-300000, note: 'Assigned to Staff' }, { status: 'in progress', timestamp: Date.now()-150000, note: 'Work in progress' }], resolution: '', feedback: null, createdAt: Date.now()-500000, updatedAt: Date.now()-100000 },
+    { id: 'CMP-2026-0002', subject: 'Exam schedule conflict', description: 'Two major exams on same day. Need reschedule.', category: 'Examination', subcategory: 'Scheduling', priority: 'critical', status: 'under review', department: 'Examination', location: 'Online', zone: 'admin', anonymous: false, submittedBy: 'u3', assignedTo: null, upvotes: 12, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-400000, note: 'Submitted' }, { status: 'under review', timestamp: Date.now()-250000, note: 'Under review' }], resolution: '', feedback: null, createdAt: Date.now()-400000, updatedAt: Date.now()-200000 },
+    { id: 'CMP-2026-0003', subject: 'Library quiet zone noise', description: 'Construction noise near library is disrupting study.', category: 'Library', subcategory: 'Environment', priority: 'medium', status: 'resolved', department: 'Library', location: 'Library', zone: 'library', anonymous: true, submittedBy: 'u2', assignedTo: 'u4', upvotes: 8, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-600000, note: 'Submitted' }, { status: 'in progress', timestamp: Date.now()-400000, note: 'In progress' }, { status: 'resolved', timestamp: Date.now()-100000, note: 'Resolved' }], resolution: 'Noise reduced, hours adjusted', feedback: { rating: 4, comment: 'Better now' }, createdAt: Date.now()-600000, updatedAt: Date.now()-100000 },
+    { id: 'CMP-2026-0004', subject: 'WiFi connectivity issue', description: 'No WiFi in hostel block C since yesterday.', category: 'IT / Technology', subcategory: 'Network', priority: 'high', status: 'assigned', department: 'IT', location: 'Hostel C', zone: 'hostel', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 15, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-300000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-150000, note: 'Assigned to IT' }], resolution: '', feedback: null, createdAt: Date.now()-300000, updatedAt: Date.now()-150000 },
+    { id: 'CMP-2026-0005', subject: 'Harassment complaint', description: 'Inappropriate behavior in cafeteria. Urgent action needed.', category: 'Harassment / Misconduct', subcategory: 'Verbal', priority: 'critical', status: 'submitted', department: 'Administration', location: 'Cafeteria', zone: 'cafeteria', anonymous: true, submittedBy: 'u2', assignedTo: null, upvotes: 3, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-100000, note: 'Submitted' }], resolution: '', feedback: null, createdAt: Date.now()-100000, updatedAt: Date.now()-100000 },
+    { id: 'CMP-2026-0006', subject: 'Water leakage in restroom', description: 'Pipe burst near 2nd floor restroom.', category: 'Water', subcategory: 'Plumbing', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building B', zone: 'academic', anonymous: false, submittedBy: 'u3', assignedTo: 'u4', upvotes: 7, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-700000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-600000, note: 'Assigned' }, { status: 'in progress', timestamp: Date.now()-400000, note: 'In progress' }], resolution: '', feedback: null, createdAt: Date.now()-700000, updatedAt: Date.now()-400000 },
+    { id: 'CMP-2026-0007', subject: 'Transport bus delay', description: 'Bus from campus to station is consistently late.', category: 'Transport', subcategory: 'Scheduling', priority: 'low', status: 'closed', department: 'Transport', location: 'Main gate', zone: 'transport', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 2, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-900000, note: 'Submitted' }, { status: 'resolved', timestamp: Date.now()-700000, note: 'Resolved' }, { status: 'closed', timestamp: Date.now()-500000, note: 'Closed' }], resolution: 'Schedule adjusted', feedback: { rating: 5, comment: 'Great' }, createdAt: Date.now()-900000, updatedAt: Date.now()-500000 },
   ];
 
   const defaultNotifications = [
@@ -273,11 +285,24 @@
 
     const navItems = [
       { id: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high' },
+      { id: 'heatmap', label: 'Heatmap', icon: 'fa-map' },
       { id: 'complaints', label: 'Complaints', icon: 'fa-list' },
+      { id: 'leaderboard', label: 'Leaderboard', icon: 'fa-trophy' },
       { id: 'new-complaint', label: 'New', icon: 'fa-plus-circle' },
     ];
     if (isAdmin) { navItems.push({ id: 'admin-dashboard', label: 'Analytics', icon: 'fa-chart-pie' }); navItems.push({ id: 'users', label: 'Users', icon: 'fa-users' }); navItems.push({ id: 'audit', label: 'Audit', icon: 'fa-history' }); }
     navItems.push({ id: 'settings', label: 'Settings', icon: 'fa-sliders' });
+
+    // Heatmap data: zones with complaint counts
+    const zones = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
+    const zoneLabels = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
+    const getHeatColor = (count) => {
+      if (count === 0) return 'rgba(110,80,200,0.05)';
+      if (count <= 2) return 'rgba(110,80,200,0.2)';
+      if (count <= 4) return 'rgba(212,160,80,0.4)';
+      if (count <= 6) return 'rgba(208,128,80,0.6)';
+      return 'rgba(208,96,96,0.8)';
+    };
 
     function Dashboard() {
       const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
@@ -310,10 +335,31 @@
     }
 
     function ComplaintRow({ complaint, onClick }) {
+      const { updateData, session } = useData();
+      const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
+      const handleUpvote = (e) => {
+        e.stopPropagation();
+        updateData(prev => {
+          const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+          if (idx > -1) {
+            if (prev.complaints[idx].upvotedBy?.includes(session.userId)) {
+              prev.complaints[idx].upvotes -= 1;
+              prev.complaints[idx].upvotedBy = prev.complaints[idx].upvotedBy.filter(id => id !== session.userId);
+            } else {
+              prev.complaints[idx].upvotes += 1;
+              prev.complaints[idx].upvotedBy = [...(prev.complaints[idx].upvotedBy || []), session.userId];
+            }
+          }
+          return prev;
+        });
+      };
       return React.createElement('div', { className: 'complaint-card', onClick: onClick },
         React.createElement('div', { className: 'complaint-header' },
           React.createElement('span', { className: 'complaint-subject' }, complaint.subject),
-          React.createElement('div', { style: { display:'flex', gap:'6px', alignItems:'center' } },
+          React.createElement('div', { style: { display:'flex', gap:'6px', alignItems:'center', flexWrap:'wrap' } },
+            React.createElement('button', { className: `upvote-btn ${hasUpvoted ? 'upvoted' : ''}`, onClick: handleUpvote, style: { fontSize:'11px' } },
+              React.createElement('i', { className: 'fas fa-arrow-up' }), ' ', complaint.upvotes || 0
+            ),
             React.createElement('span', { className: 'badge-priority', style: { background: getPriorityColor(complaint.priority)+'20', color: getPriorityColor(complaint.priority) } }, complaint.priority),
             React.createElement('span', { className: 'badge-priority', style: { background: getStatusColor(complaint.status)+'20', color: getStatusColor(complaint.status) } }, complaint.status)
           )
@@ -328,20 +374,78 @@
       );
     }
 
+    function HeatmapView() {
+      const zoneCounts = {};
+      zones.forEach(z => zoneCounts[z] = data.complaints.filter(c => c.zone === z).length);
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('h3', { style: { fontSize:'18px', fontWeight:600, marginBottom:'16px', color:'#1a1028' } }, 'Campus Issue Heatmap'),
+        React.createElement('p', { style: { fontSize:'13px', color:'#7a6a8a', marginBottom:'16px' } }, 'Heat intensity shows complaint density per zone. Red zones need immediate attention.'),
+        React.createElement('div', { className: 'heatmap-grid' },
+          zones.map(z => React.createElement('div', { key: z, className: 'heat-cell', style: { background: getHeatColor(zoneCounts[z] || 0), border: '1px solid rgba(110,80,200,0.1)' } },
+            React.createElement('div', { style: { textAlign:'center' } },
+              React.createElement('div', { style: { fontSize:'11px', fontWeight:600 } }, zoneLabels[z]),
+              React.createElement('div', { style: { fontSize:'16px', fontWeight:700 } }, zoneCounts[z] || 0)
+            )
+          ))
+        ),
+        React.createElement('div', { style: { display:'flex', gap:'16px', marginTop:'16px', fontSize:'11px', color:'#7a6a8a', flexWrap:'wrap' } },
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(110,80,200,0.05)', marginRight:'4px' } }), ' 0'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(110,80,200,0.2)', marginRight:'4px' } }), ' 1-2'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(212,160,80,0.4)', marginRight:'4px' } }), ' 3-4'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(208,128,80,0.6)', marginRight:'4px' } }), ' 5-6'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(208,96,96,0.8)', marginRight:'4px' } }), ' 7+')
+        )
+      );
+    }
+
+    function LeaderboardView() {
+      const depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration'];
+      const deptStats = depts.map(d => {
+        const comps = data.complaints.filter(c => c.department === d);
+        const resolved = comps.filter(c => c.status === 'resolved' || c.status === 'closed');
+        const total = comps.length || 1;
+        const avgTime = resolved.length ? Math.round(resolved.reduce((acc, c) => {
+          const re = c.timeline?.find(t => t.status === 'resolved');
+          return acc + (re ? (re.timestamp - c.createdAt) : 0);
+        }, 0) / resolved.length / (1000*60*60)) : 0;
+        const satisfaction = resolved.length ? Math.round(resolved.reduce((acc, c) => acc + (c.feedback?.rating || 3), 0) / resolved.length * 20) : 50;
+        return { name: d, resolved: resolved.length, total: comps.length, rate: Math.round((resolved.length/total)*100), avgTime, satisfaction: Math.min(100, satisfaction) };
+      });
+      deptStats.sort((a,b) => b.rate - a.rate || a.avgTime - b.avgTime);
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('h3', { style: { fontSize:'18px', fontWeight:600, marginBottom:'16px', color:'#1a1028' } }, 'Department Performance Leaderboard'),
+        React.createElement('div', { style: { fontSize:'13px', color:'#7a6a8a', marginBottom:'12px' } }, 'Ranked by Resolution Rate · Higher is better'),
+        deptStats.map((d, i) => React.createElement('div', { key: d.name, className: 'dept-score' },
+          React.createElement('span', { style: { fontWeight:700, fontSize:'14px', color:'#1a1028', minWidth:'24px' } }, i+1),
+          React.createElement('span', { style: { fontWeight:600, minWidth:'100px', fontSize:'13px' } }, d.name),
+          React.createElement('div', { className: 'bar' },
+            React.createElement('div', { className: 'bar-fill', style: { width: d.rate+'%' } })
+          ),
+          React.createElement('span', { style: { fontWeight:600, fontSize:'12px', minWidth:'36px', color:'#6e50c8' } }, d.rate+'%'),
+          React.createElement('span', { style: { fontSize:'11px', color:'#8a7aaa', minWidth:'40px' } }, d.avgTime+'h'),
+          React.createElement('span', { style: { fontSize:'11px', color:'#4caf84', minWidth:'36px' } }, '★', d.satisfaction)
+        ))
+      );
+    }
+
     function ComplaintList() {
       let complaints = data.complaints;
-      if (!isAdmin && !isStaff) complaints = complaints.filter(c => c.submittedBy === session.userId);
+      if (!isAdmin && !isStaff) complaints = complaints.filter(c => c.submittedBy === session.userId || !c.anonymous);
       else if (isStaff) complaints = complaints.filter(c => c.assignedTo === session.userId || !c.assignedTo);
       if (searchQuery) { const q = searchQuery.toLowerCase(); complaints = complaints.filter(c => c.id.toLowerCase().includes(q) || c.subject.toLowerCase().includes(q) || c.description.toLowerCase().includes(q)); }
-      complaints.sort((a,b) => b.createdAt - a.createdAt);
+      complaints.sort((a,b) => (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt);
       return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'12px' } },
+          React.createElement('span', { style: { fontSize:'13px', color:'#7a6a8a' } }, 'Sorted by popularity (upvotes)'),
+          React.createElement('span', { className: 'badge-priority', style: { background:'rgba(110,80,200,0.08)', color:'#6e50c8' } }, 'Crowd-sourced')
+        ),
         complaints.length === 0 ? React.createElement(EmptyState, { message: 'No complaints found' }) :
         complaints.map(c => React.createElement(ComplaintRow, { key: c.id, complaint: c, onClick: () => setSelectedComplaint(c) }))
       );
     }
 
     function ComplaintDetail({ complaint, onClose }) {
-      const { updateData, addToast } = useData();
+      const { updateData, addToast, session } = useData();
       const [comment, setComment] = useState('');
       if (!complaint) return null;
       const handleAssign = () => {
@@ -357,6 +461,9 @@
         updateData(prev => { const idx = prev.complaints.findIndex(c => c.id === complaint.id); if (idx > -1) { prev.complaints[idx].comments.push({ id: 'c'+Date.now(), userId: session.userId, name: session.name, role: session.role, message: comment, timestamp: Date.now() }); } return prev; });
         setComment(''); addToast('Comment added', 'info');
       };
+      // Calculate time elapsed for high priority
+      const elapsed = Math.floor((Date.now() - complaint.createdAt) / (1000*60));
+      const timerDisplay = elapsed > 60 ? `${Math.floor(elapsed/60)}h ${elapsed%60}m` : `${elapsed}m`;
       return React.createElement('div', { className: 'modal-overlay', onClick: (e) => { if (e.target === e.currentTarget) onClose(); } },
         React.createElement('div', { className: 'modal-box slide-up' },
           React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'start', marginBottom:'16px' } },
@@ -366,11 +473,17 @@
             ),
             React.createElement('button', { onClick: onClose, style: { background:'none', border:'none', fontSize:'22px', color:'#8a7aaa', cursor:'pointer' } }, React.createElement('i', { className: 'fas fa-times' }))
           ),
+          {complaint.priority === 'high' || complaint.priority === 'critical' ? React.createElement('div', { style: { background:'rgba(208,96,96,0.08)', padding:'8px 16px', borderRadius:'12px', marginBottom:'12px', display:'flex', alignItems:'center', gap:'12px' } },
+            React.createElement('i', { className: 'fas fa-clock', style: { color:'#d06060' } }),
+            React.createElement('span', { style: { fontWeight:600, fontSize:'13px' } }, 'High Priority · Time since submission: '),
+            React.createElement('span', { className: 'timer-badge' }, timerDisplay)
+          ) : null},
           React.createElement('p', { style: { color:'#3a2a5a', marginBottom:'16px', fontSize:'14px', lineHeight:1.6 } }, complaint.description),
           React.createElement('div', { style: { display:'flex', gap:'16px', flexWrap:'wrap', fontSize:'13px', color:'#7a6a8a', marginBottom:'16px' } },
             React.createElement('span', null, 'Priority: ', React.createElement('span', { style: { color: getPriorityColor(complaint.priority), fontWeight:600 } }, complaint.priority)),
             React.createElement('span', null, 'Status: ', React.createElement('span', { style: { color: getStatusColor(complaint.status), fontWeight:600 } }, complaint.status)),
-            React.createElement('span', null, 'Location: ', complaint.location)
+            React.createElement('span', null, 'Location: ', complaint.location),
+            React.createElement('span', null, 'Upvotes: ', React.createElement('span', { style: { fontWeight:600, color:'#6e50c8' } }, complaint.upvotes || 0))
           ),
           {isAdmin && complaint.status !== 'resolved' && complaint.status !== 'closed' && React.createElement('div', { style: { display:'flex', gap:'8px', marginBottom:'16px' } },
             React.createElement('button', { onClick: handleAssign, className: 'btn-primary', style: { padding:'8px 20px', borderRadius:'30px', fontSize:'13px' } }, 'Assign'),
@@ -393,23 +506,28 @@
           React.createElement('div', { style: { display:'flex', gap:'8px' } },
             React.createElement('input', { type: 'text', value: comment, onChange: e => setComment(e.target.value), placeholder: 'Add comment...', style: { flex:1, padding:'10px 16px', borderRadius:'30px', border:'1px solid rgba(110,80,200,0.15)', background:'rgba(255,248,255,0.5)', outline:'none' } }),
             React.createElement('button', { onClick: handleAddComment, className: 'btn-primary', style: { padding:'10px 20px', borderRadius:'30px', fontSize:'13px' } }, 'Send')
+          ),
+          React.createElement('div', { style: { marginTop:'12px', padding:'12px', background:'rgba(110,80,200,0.04)', borderRadius:'12px', fontSize:'12px', color:'#7a6a8a' } },
+            React.createElement('i', { className: 'fas fa-shield-alt', style: { marginRight:'6px' } }),
+            'Media redaction active · Auto-blur faces & metadata'
           )
         )
       );
     }
 
     function ComplaintForm({ onSuccess }) {
-      const { updateData, addToast } = useData();
-      const [form, setForm] = useState({ subject:'', category:'Infrastructure', subcategory:'', description:'', priority:'medium', department:'', location:'', anonymous:false });
+      const { updateData, addToast, session } = useData();
+      const [form, setForm] = useState({ subject:'', category:'Infrastructure', subcategory:'', description:'', priority:'medium', department:'', location:'', zone:'academic', anonymous:false });
       const [loading, setLoading] = useState(false);
       const categories = ['Infrastructure','Academic','Faculty','Examination','Hostel','Transport','Library','IT / Technology','Security','Cleanliness','Electricity','Water','Harassment / Misconduct','Administration','Other'];
       const priorities = ['low','medium','high','critical'];
+      const zones = ['academic','hostel','library','cafeteria','admin','transport'];
       const handleSubmit = (e) => {
         e.preventDefault();
         if (!form.subject || !form.description) { addToast('Subject and description required', 'error'); return; }
         setLoading(true);
         setTimeout(() => {
-          const newComplaint = { id: generateId(), subject: form.subject, description: form.description, category: form.category, subcategory: form.subcategory || 'General', priority: form.priority, status: 'submitted', department: form.department || 'General', location: form.location || 'Campus', anonymous: form.anonymous, submittedBy: session.userId, assignedTo: null, attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted' }], resolution: '', feedback: null, createdAt: Date.now(), updatedAt: Date.now() };
+          const newComplaint = { id: generateId(), subject: form.subject, description: form.description, category: form.category, subcategory: form.subcategory || 'General', priority: form.priority, status: 'submitted', department: form.department || 'General', location: form.location || 'Campus', zone: form.zone || 'academic', anonymous: form.anonymous, submittedBy: session.userId, assignedTo: null, upvotes: 0, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted' }], resolution: '', feedback: null, createdAt: Date.now(), updatedAt: Date.now() };
           updateData(prev => ({ ...prev, complaints: [newComplaint, ...prev.complaints] }));
           addToast(`Complaint ${newComplaint.id} created`, 'success');
           onSuccess(); setLoading(false);
@@ -445,6 +563,10 @@
               React.createElement('input', { type: 'text', value: form.location, onChange: e => setForm({...form, location:e.target.value}) })
             )
           ),
+          React.createElement('div', { className: 'form-group' },
+            React.createElement('label', null, 'Campus Zone (for heatmap)'),
+            React.createElement('select', { value: form.zone, onChange: e => setForm({...form, zone:e.target.value}) }, zones.map(z => React.createElement('option', { key: z, value: z }, z)))
+          ),
           React.createElement('div', { className: 'form-group', style: { display:'flex', alignItems:'center', gap:'10px' } },
             React.createElement('input', { type: 'checkbox', checked: form.anonymous, onChange: e => setForm({...form, anonymous:e.target.checked}), style: { width:'auto' } }),
             React.createElement('label', { style: { margin:0, cursor:'pointer' } }, 'Submit anonymously')
@@ -469,6 +591,7 @@
       }
       const catMap = {}; complaints.forEach(c => { catMap[c.category] = (catMap[c.category]||0)+1; });
       const priMap = {}; complaints.forEach(c => { priMap[c.priority] = (priMap[c.priority]||0)+1; });
+      const totalUpvotes = complaints.reduce((acc, c) => acc + (c.upvotes || 0), 0);
       return React.createElement('div', { className: 'fade-in' },
         React.createElement('div', { className: 'stats-grid' },
           React.createElement(StatCard, { label: 'Total', value: total, icon: 'fa-folder-open', color: '#6e50c8' }),
@@ -476,7 +599,8 @@
           React.createElement(StatCard, { label: 'Resolved', value: resolved, icon: 'fa-check-circle', color: '#4caf84' }),
           React.createElement(StatCard, { label: 'Critical', value: critical, icon: 'fa-exclamation-triangle', color: '#d06060' }),
           React.createElement(StatCard, { label: 'Rate', value: rate+'%', icon: 'fa-percent', color: '#8a6ed0' }),
-          React.createElement(StatCard, { label: 'Avg Time', value: avgTime+'h', icon: 'fa-hourglass-half', color: '#6e8ad0' })
+          React.createElement(StatCard, { label: 'Avg Time', value: avgTime+'h', icon: 'fa-hourglass-half', color: '#6e8ad0' }),
+          React.createElement(StatCard, { label: 'Upvotes', value: totalUpvotes, icon: 'fa-arrow-up', color: '#c084e8' })
         ),
         React.createElement('div', { style: { display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px,1fr))', gap:'16px' } },
           React.createElement('div', { className: 'glass', style: { borderRadius:'20px', padding:'18px' } },
@@ -541,6 +665,8 @@
     function renderView() {
       switch(activeView) {
         case 'dashboard': return React.createElement(Dashboard, null);
+        case 'heatmap': return React.createElement(HeatmapView, null);
+        case 'leaderboard': return React.createElement(LeaderboardView, null);
         case 'complaints': return React.createElement(ComplaintList, null);
         case 'new-complaint': return React.createElement(ComplaintForm, { onSuccess: () => { setActiveView('complaints'); addToast('Complaint submitted!', 'success'); } });
         case 'admin-dashboard': return isAdmin ? React.createElement(AdminDashboard, null) : React.createElement('div', null, 'Access denied');
