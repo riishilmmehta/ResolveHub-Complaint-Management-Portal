@@ -2,1904 +2,276 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-  <title>ResolveHub · Extreme Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>ResolveHub · Advanced Smart System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    :root {
-      --bg: #0a0e1a;
-      --bg-elevated: #111827;
-      --surface: rgba(255,255,255,0.03);
-      --surface-hover: rgba(255,255,255,0.06);
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(255,255,255,0.15);
-      --text: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --primary-glow: rgba(99,102,241,0.4);
-      --success: #22c55e;
-      --warning: #eab308;
-      --danger: #ef4444;
-      --info: #3b82f6;
-      --accent-purple: #a855f7;
-      --accent-pink: #ec4899;
-      --font: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-      --radius: 20px;
-      --radius-sm: 12px;
-    }
-    .light-mode {
-      --bg: #f8fafc;
-      --bg-elevated: #ffffff;
-      --surface: rgba(255,255,255,0.7);
-      --surface-hover: rgba(241,245,249,0.9);
-      --border: rgba(148,163,184,0.2);
-      --border-hover: rgba(148,163,184,0.3);
-      --text: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-      overflow-x: hidden;
-    }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 10px; }
-    ::selection { background: var(--primary-glow); color: white; }
-    
-    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-    @keyframes slideIn { from { opacity:0; transform: translateX(-20px); } to { opacity:1; transform: translateX(0); } }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-    @keyframes glow { 0%,100% { box-shadow: 0 0 20px var(--primary-glow); } 50% { box-shadow: 0 0 40px var(--primary-glow); } }
-    @keyframes countUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    .animate-fade { animation: fadeIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .animate-slide { animation: slideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .stagger-1 { animation-delay: 0.05s; opacity:0; }
-    .stagger-2 { animation-delay: 0.1s; opacity:0; }
-    .stagger-3 { animation-delay: 0.15s; opacity:0; }
-    .stagger-4 { animation-delay: 0.2s; opacity:0; }
-    
-    .glass {
-      background: var(--surface);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-    .glass:hover { border-color: var(--border-hover); }
-    
-    .app { display: flex; min-height: 100vh; }
-    .sidebar {
-      width: 260px;
-      background: var(--bg-elevated);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 16px;
-      position: fixed;
-      height: 100vh;
-      z-index: 50;
-      transition: transform 0.3s;
-    }
-    .sidebar-collapsed { transform: translateX(-100%); }
-    .main {
-      flex: 1;
-      margin-left: 260px;
-      padding: 24px 32px;
-      max-width: calc(100vw - 260px);
-    }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-    .page-subtitle { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
-    
-    .nav-brand {
-      font-size: 22px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .nav-brand .badge {
-      font-size: 10px;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      -webkit-text-fill-color: white;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .nav-section { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 20px 0 10px 12px; font-weight: 600; }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: left;
-      position: relative;
-    }
-    .nav-item:hover { background: var(--surface-hover); color: var(--text); }
-    .nav-item.active {
-      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
-      color: var(--primary-light);
-      font-weight: 600;
-    }
-    .nav-item.active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 3px;
-      height: 20px;
-      background: linear-gradient(180deg, var(--primary), var(--accent-purple));
-      border-radius: 0 4px 4px 0;
-    }
-    .nav-badge {
-      margin-left: auto;
-      background: var(--danger);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 20px;
-      min-width: 18px;
-      text-align: center;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-    .stat-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--border-hover);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
-    .stat-card::after {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 120px; height: 120px;
-      background: radial-gradient(circle, var(--glow-color, rgba(99,102,241,0.1)), transparent 70%);
-      border-radius: 50%;
-      transform: translate(30%, -30%);
-    }
-    .stat-icon {
-      width: 44px; height: 44px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      margin-bottom: 14px;
-      background: var(--glow-color, rgba(99,102,241,0.1));
-      color: var(--icon-color, var(--primary-light));
-    }
-    .stat-value {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-    .stat-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .stat-delta {
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: var(--delta-bg);
-      color: var(--delta-color);
-    }
-    
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: all 0.3s;
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .card-title { font-size: 16px; font-weight: 700; margin: 0; }
-    
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      color: white;
-      box-shadow: 0 4px 20px rgba(99,102,241,0.3);
-    }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover { background: var(--surface-hover); color: var(--text); }
-    .btn-success { background: var(--success); color: white; }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-sm { padding: 6px 14px; font-size: 12px; }
-    
-    .search-bar {
-      position: relative;
-      flex: 1;
-      max-width: 400px;
-    }
-    .search-bar input {
-      width: 100%;
-      padding: 12px 16px 12px 44px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--bg-elevated);
-      color: var(--text);
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s;
-    }
-    .search-bar input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-    }
-    .search-bar i {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-    .filter-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .filter-chip:hover, .filter-chip.active {
-      border-color: var(--primary);
-      color: var(--primary-light);
-      background: rgba(99,102,241,0.08);
-    }
-    
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-    .badge-priority-critical { background: rgba(239,68,68,0.12); color: #f87171; }
-    .badge-priority-high { background: rgba(234,179,8,0.12); color: #facc15; }
-    .badge-priority-medium { background: rgba(59,130,246,0.12); color: #60a5fa; }
-    .badge-priority-low { background: rgba(148,163,184,0.12); color: #94a3b8; }
-    .badge-status-submitted { background: rgba(148,163,184,0.12); color: #94a3b8; }
-    .badge-status-assigned { background: rgba(59,130,246,0.12); color: #60a5fa; }
-    .badge-status-progress { background: rgba(168,85,247,0.12); color: #c084fc; }
-    .badge-status-review { background: rgba(234,179,8,0.12); color: #facc15; }
-    .badge-status-resolved { background: rgba(34,197,94,0.12); color: #4ade80; }
-    .badge-status-closed { background: rgba(100,116,139,0.12); color: #64748b; }
-    
-    .complaint-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      border-radius: var(--radius-sm);
-      transition: all 0.2s;
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
-    .complaint-row:hover {
-      background: var(--surface-hover);
-      border-color: var(--border);
-    }
-    .complaint-row.selected {
-      background: rgba(99,102,241,0.05);
-      border-color: rgba(99,102,241,0.3);
-    }
-    .complaint-info { flex: 1; min-width: 0; }
-    .complaint-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .complaint-meta {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      font-size: 12px;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .upvote-btn {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-    .upvote-btn:hover { border-color: var(--primary); color: var(--primary-light); }
-    .upvote-btn.active {
-      background: rgba(99,102,241,0.12);
-      border-color: var(--primary);
-      color: var(--primary-light);
-    }
-    
-    .kanban-board {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-    .kanban-column {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      min-height: 400px;
-    }
-    .kanban-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .kanban-count {
-      background: var(--surface);
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-secondary);
-    }
-    .kanban-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .kanban-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--border-hover);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .kanban-card.dragging { opacity: 0.5; transform: rotate(3deg); }
-    .progress-bar {
-      height: 4px;
-      background: var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-    .progress-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent-purple));
-      transition: width 0.5s ease;
-    }
-    
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-    }
-    .calendar-day-header {
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      padding: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .calendar-day {
-      aspect-ratio: 1;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--surface);
-      padding: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-height: 80px;
-    }
-    .calendar-day:hover { border-color: var(--primary); }
-    .calendar-day.other-month { opacity: 0.3; }
-    .calendar-day.today {
-      border-color: var(--primary);
-      background: rgba(99,102,241,0.05);
-    }
-    .calendar-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      position: absolute;
-      bottom: 8px;
-    }
-    
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(12px);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeIn 0.2s;
-    }
-    .modal-box {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      max-width: 700px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      animation: slideIn 0.3s cubic-bezier(0.16,1,0.3,1);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px 24px 0;
-    }
-    .modal-body { padding: 20px 24px 24px; }
-    .modal-close {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    .modal-close:hover { background: var(--surface-hover); color: var(--text); }
-    
-    .timeline { position: relative; padding-left: 24px; }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 7px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, var(--primary), var(--accent-purple));
-      border-radius: 2px;
-    }
-    .timeline-item {
-      position: relative;
-      padding-bottom: 20px;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -20px;
-      top: 2px;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--bg-elevated);
-      border: 2px solid var(--primary);
-    }
-    .timeline-time {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
-    .timeline-content {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    
-    .comment {
-      display: flex;
-      gap: 12px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .comment-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-    .comment-body { flex: 1; }
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-    .comment-author { font-weight: 600; font-size: 13px; }
-    .comment-role {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--text-muted);
-      margin-left: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .comment-text {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    .comment-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 8px;
-    }
-    .comment-action {
-      font-size: 12px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color 0.2s;
-      background: none;
-      border: none;
-      font-family: inherit;
-    }
-    .comment-action:hover { color: var(--primary-light); }
-    
-    .form-group { margin-bottom: 20px; }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--bg-elevated);
-      color: var(--text);
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-    }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    
-    .notif-dropdown {
-      position: absolute;
-      top: 50px;
-      right: 0;
-      width: 360px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-      z-index: 60;
-      overflow: hidden;
-      animation: fadeIn 0.2s;
-    }
-    .notif-item {
-      display: flex;
-      gap: 12px;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .notif-item:hover { background: var(--surface-hover); }
-    .notif-item.unread { border-left: 3px solid var(--primary); }
-    .notif-icon {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    
-    .heatmap-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .heat-cell {
-      aspect-ratio: 1;
-      border-radius: var(--radius-sm);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 1px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-    .heat-cell:hover { transform: scale(1.05); z-index: 2; }
-    .heat-cell .heat-glow {
-      position: absolute;
-      inset: 0;
-      opacity: 0.3;
-      filter: blur(20px);
-    }
-    
-    .chart-bar {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      height: 160px;
-      padding-top: 20px;
-    }
-    .chart-bar-item {
-      flex: 1;
-      background: linear-gradient(180deg, var(--primary), var(--accent-purple));
-      border-radius: 6px 6px 0 0;
-      min-height: 4px;
-      transition: all 0.5s ease;
-      position: relative;
-      opacity: 0.8;
-    }
-    .chart-bar-item:hover { opacity: 1; }
-    .chart-bar-label {
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-    .chart-bar-value {
-      position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    
-    .leader-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .leader-rank {
-      width: 28px;
-      text-align: center;
-      font-weight: 800;
-      font-size: 16px;
-    }
-    .leader-bar {
-      flex: 1;
-      height: 8px;
-      background: var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .leader-fill {
-      height: 100%;
-      border-radius: 8px;
-      background: linear-gradient(90deg, var(--primary), var(--accent-purple));
-      transition: width 0.8s ease;
-    }
-    
-    .insight-card {
-      padding: 16px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(168,85,247,0.03));
-      margin-bottom: 12px;
-    }
-    .insight-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-      font-weight: 600;
-      font-size: 13px;
-    }
-    .insight-text {
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    
-    .sla-timer {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 8px;
-      background: rgba(239,68,68,0.1);
-      color: #f87171;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .sla-timer.safe {
-      background: rgba(34,197,94,0.1);
-      color: #4ade80;
-    }
-    .sla-timer.warning {
-      background: rgba(234,179,8,0.1);
-      color: #facc15;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-    .empty-state i {
-      font-size: 48px;
-      margin-bottom: 16px;
-      opacity: 0.3;
-    }
-    
-    .toast-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .toast {
-      padding: 14px 20px;
-      border-radius: var(--radius-sm);
-      backdrop-filter: blur(20px);
-      font-weight: 500;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      animation: slideIn 0.3s;
-      border-left: 4px solid;
-      max-width: 400px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    }
-    .toast-success { background: rgba(34,197,94,0.15); border-color: var(--success); color: #4ade80; }
-    .toast-error { background: rgba(239,68,68,0.15); border-color: var(--danger); color: #f87171; }
-    .toast-info { background: rgba(59,130,246,0.15); border-color: var(--info); color: #60a5fa; }
-    
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--bg-elevated);
-      border-top: 1px solid var(--border);
-      padding: 8px 16px;
-      z-index: 50;
-      justify-content: space-around;
-    }
-    .mobile-nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 12px;
-      border-radius: 12px;
-      color: var(--text-muted);
-      font-size: 10px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .mobile-nav-item.active { color: var(--primary-light); }
-    .mobile-nav-item i { font-size: 18px; }
-    
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; max-width: 100%; padding: 16px; padding-bottom: 80px; }
-      .mobile-nav { display: flex; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f4f1fb; transition: background 0.3s ease, color 0.2s; }
+    body.dark { background: #0e0a1a; color: #e2e8f0; }
+    #root { min-height: 100vh; display: flex; }
+    .loader { display: flex; align-items: center; justify-content: center; height: 100vh; width: 100%; background: linear-gradient(135deg, #e8e0f5, #f4f1fb); flex-direction: column; gap: 20px; }
+    .loader .spinner { width: 60px; height: 60px; border-radius: 50%; border: 5px solid rgba(110, 80, 200, 0.1); border-top: 5px solid #6e50c8; animation: spin 0.9s cubic-bezier(0.6, 0, 0.4, 1) infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: #b8a0e8; border-radius: 12px; }
+    body.dark ::-webkit-scrollbar-thumb { background: #4a3a7a; }
+    .glass { background: rgba(255, 248, 255, 0.6); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.25); }
+    .dark .glass { background: rgba(20, 14, 40, 0.75); border-color: rgba(255, 255, 255, 0.06); }
+    .card-hover { transition: all 0.2s cubic-bezier(0.2, 0, 0, 1); }
+    .card-hover:active { transform: scale(0.97); }
+    .btn-primary { background: linear-gradient(135deg, #6e50c8, #a070e0); border: none; color: white; font-weight: 600; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 14px rgba(110, 80, 200, 0.25); }
+    .btn-primary:active { transform: scale(0.95); }
+    .badge-priority { padding: 4px 12px; border-radius: 40px; font-size: 11px; font-weight: 600; letter-spacing: 0.2px; display: inline-block; }
+    .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.25s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .app-layout { display: flex; flex-direction: column; width: 100%; min-height: 100vh; }
+    .sidebar { width: 100%; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(110, 80, 200, 0.08); position: sticky; top: 0; z-index: 20; background: rgba(255, 248, 255, 0.7); backdrop-filter: blur(14px); }
+    .dark .sidebar { background: rgba(14, 10, 26, 0.85); border-bottom-color: rgba(110, 80, 200, 0.15); }
+    .sidebar-brand { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #6e50c8, #c084e8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-scroll { display: flex; gap: 4px; overflow-x: auto; padding: 4px 0; flex: 1; margin: 0 6px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nav-scroll::-webkit-scrollbar { display: none; }
+    .nav-item { flex-shrink: 0; padding: 6px 14px; border-radius: 40px; border: none; background: transparent; font-weight: 500; font-size: 13px; color: #5a4a7a; transition: 0.15s; cursor: pointer; white-space: nowrap; }
+    .dark .nav-item { color: #b0a0c8; }
+    .nav-item.active { background: rgba(110, 80, 200, 0.15); color: #6e50c8; font-weight: 600; }
+    .dark .nav-item.active { background: rgba(110, 80, 200, 0.25); color: #c084e8; }
+    .user-badge { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .avatar { width: 36px; height: 36px; border-radius: 36px; background: linear-gradient(135deg, #6e50c8, #c084e8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+    .main-area { flex: 1; padding: 16px; max-width: 100%; overflow-x: hidden; }
+    .top-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .top-bar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+    .page-title { font-size: 22px; font-weight: 700; color: #1a1028; }
+    .dark .page-title { color: #f1e8f8; }
+    .search-wrap { position: relative; flex: 1; min-width: 140px; }
+    .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #8a7aaa; }
+    .search-wrap input { width: 100%; padding: 10px 12px 10px 40px; border: 1px solid rgba(110, 80, 200, 0.15); border-radius: 40px; font-size: 14px; background: rgba(255, 248, 255, 0.5); backdrop-filter: blur(4px); transition: 0.15s; outline: none; }
+    .search-wrap input:focus { border-color: #6e50c8; box-shadow: 0 0 0 3px rgba(110, 80, 200, 0.1); }
+    .dark .search-wrap input { background: rgba(30, 20, 50, 0.5); border-color: rgba(110, 80, 200, 0.2); color: #e2e8f0; }
+    .btn-new { padding: 10px 20px; border-radius: 40px; font-size: 13px; font-weight: 600; border: none; background: linear-gradient(135deg, #6e50c8, #a070e0); color: white; display: flex; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 14px rgba(110, 80, 200, 0.2); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { padding: 14px 16px; border-radius: 20px; display: flex; align-items: center; gap: 12px; background: rgba(255, 248, 255, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .dark .stat-card { background: rgba(20, 14, 40, 0.5); border-color: rgba(255, 255, 255, 0.05); }
+    .stat-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .stat-value { font-size: 22px; font-weight: 700; color: #1a1028; }
+    .dark .stat-value { color: #f1e8f8; }
+    .stat-label { font-size: 12px; color: #7a6a8a; font-weight: 500; }
+    .dark .stat-label { color: #b0a0c0; }
+    .complaint-card { padding: 14px 0; border-bottom: 1px solid rgba(110, 80, 200, 0.06); cursor: pointer; transition: 0.15s; }
+    .dark .complaint-card { border-bottom-color: rgba(110, 80, 200, 0.1); }
+    .complaint-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px; }
+    .complaint-subject { font-weight: 600; color: #1a1028; font-size: 15px; }
+    .dark .complaint-subject { color: #f1e8f8; }
+    .complaint-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; color: #7a6a8a; }
+    .dark .complaint-meta { color: #b0a0c0; }
+    .empty-state { text-align: center; padding: 40px 20px; color: #8a7aaa; }
+    .dark .empty-state { color: #b0a0c0; }
+    .empty-state i { font-size: 40px; opacity: 0.4; margin-bottom: 12px; display: block; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-box { max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 28px; padding: 24px; background: rgba(255, 248, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); }
+    .dark .modal-box { background: rgba(20, 14, 40, 0.9); border-color: rgba(255,255,255,0.06); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #3a2a5a; margin-bottom: 4px; }
+    .dark .form-group label { color: #c0b0d0; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border-radius: 16px; border: 1px solid rgba(110, 80, 200, 0.15); background: rgba(255,255,255,0.5); font-size: 14px; transition: 0.15s; outline: none; }
+    .dark .form-group input, .dark .form-group select, .dark .form-group textarea { background: rgba(30, 20, 50, 0.5); border-color: rgba(110, 80, 200, 0.2); color: #e2e8f0; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #6e50c8; box-shadow: 0 0 0 3px rgba(110, 80, 200, 0.1); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .timeline-item { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(110, 80, 200, 0.06); font-size: 13px; }
+    .dark .timeline-item { border-bottom-color: rgba(110, 80, 200, 0.1); }
+    .timeline-status { font-weight: 600; color: #6e50c8; min-width: 80px; }
+    .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 360px; width: 100%; }
+    .toast { padding: 14px 20px; border-radius: 16px; backdrop-filter: blur(12px); font-weight: 500; font-size: 14px; border-left: 5px solid; animation: slideUp 0.3s ease; }
+    .toast-success { background: rgba(220, 240, 230, 0.9); border-color: #4caf84; color: #1a3a2a; }
+    .dark .toast-success { background: rgba(30, 50, 40, 0.9); color: #b0e0c8; }
+    .toast-error { background: rgba(255, 230, 230, 0.9); border-color: #e06060; color: #5a1a1a; }
+    .dark .toast-error { background: rgba(50, 20, 20, 0.9); color: #f0b0b0; }
+    .toast-info { background: rgba(230, 240, 255, 0.9); border-color: #6e8ad0; color: #1a2a5a; }
+    .dark .toast-info { background: rgba(20, 30, 50, 0.9); color: #b0c8f0; }
+    .heatmap-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; padding: 12px; background: rgba(255,248,255,0.3); border-radius: 16px; }
+    .heat-cell { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: rgba(0,0,0,0.5); transition: 0.2s; cursor: pointer; }
+    .heat-cell:hover { transform: scale(1.08); }
+    .dark .heat-cell { color: rgba(255,255,255,0.6); }
+    .upvote-btn { background: none; border: 1px solid rgba(110,80,200,0.15); padding: 4px 12px; border-radius: 30px; font-size: 12px; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 4px; }
+    .upvote-btn:hover { background: rgba(110,80,200,0.08); }
+    .upvote-btn.upvoted { background: rgba(110,80,200,0.15); border-color: #6e50c8; color: #6e50c8; }
+    .dept-score { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(110,80,200,0.06); }
+    .dept-score .bar { flex: 1; height: 6px; border-radius: 6px; background: rgba(110,80,200,0.1); overflow: hidden; }
+    .dept-score .bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #6e50c8, #c084e8); transition: width 0.5s; }
+    .timer-badge { font-family: monospace; font-size: 14px; font-weight: 700; color: #d06060; }
+    .dark .timer-badge { color: #f08080; }
+    @media (max-width: 480px) {
+      .sidebar-brand { font-size: 18px; }
+      .nav-item { font-size: 12px; padding: 5px 12px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stat-card { padding: 10px 12px; }
+      .stat-value { font-size: 18px; }
       .form-row { grid-template-columns: 1fr; }
-      .kanban-board { grid-template-columns: 1fr; }
-      .calendar-grid { gap: 4px; }
-      .calendar-day { min-height: 60px; font-size: 11px; }
-      .topbar { flex-direction: column; align-items: stretch; }
-      .search-bar { max-width: 100%; }
-      .notif-dropdown { width: calc(100vw - 32px); right: -60px; }
+      .main-area { padding: 12px; }
+      .modal-box { padding: 16px; }
+      .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
     }
-    
-    .skeleton {
-      background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 8px;
+    @media (min-width: 768px) {
+      .app-layout { flex-direction: row; }
+      .sidebar { width: 220px; flex-direction: column; align-items: stretch; height: 100vh; position: sticky; top: 0; border-bottom: none; border-right: 1px solid rgba(110, 80, 200, 0.08); padding: 20px 16px; }
+      .dark .sidebar { border-right-color: rgba(110, 80, 200, 0.1); }
+      .nav-scroll { flex-direction: column; overflow-x: visible; margin: 16px 0; flex: 1; }
+      .nav-item { padding: 10px 16px; }
+      .main-area { padding: 24px 32px; }
+      .top-bar-row { flex-wrap: nowrap; }
+      .search-wrap { max-width: 280px; }
+      .user-badge { margin-top: auto; border-top: 1px solid rgba(110, 80, 200, 0.08); padding-top: 16px; }
+      .dark .user-badge { border-top-color: rgba(110, 80, 200, 0.1); }
     }
-    
-    .checkbox {
-      width: 18px; height: 18px;
-      border-radius: 6px;
-      border: 2px solid var(--border);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-    .checkbox.checked {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-    
-    .tooltip {
-      position: relative;
-    }
-    .tooltip::after {
-      content: attr(data-tip);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 6px 12px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 11px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-      z-index: 10;
-    }
-    .tooltip:hover::after { opacity: 1; }
-    
-    .h-scroll {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-    }
-    .h-scroll::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body>
 <div id="root"></div>
 
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
 <script>
 (function() {
-  const React = window.React;
-  const ReactDOM = window.ReactDOM;
-  const { useState, useEffect, useCallback, useContext, createContext, useRef, useMemo } = React;
+  var React = window.React;
+  var ReactDOM = window.ReactDOM;
+  var useState = React.useState;
+  var useEffect = React.useEffect;
+  var useCallback = React.useCallback;
+  var useContext = React.useContext;
+  var createContext = React.createContext;
 
-  const STORAGE_KEY = 'resolvehub_extreme_v2';
-  const SESSION_KEY = 'resolvehub_session_v2';
+  var STORAGE_KEY = 'resolvehub_data';
+  var SESSION_KEY = 'resolvehub_session';
 
-  const defaultUsers = [
-    { id: 'u1', name: 'Alex Chen', email: 'admin@portal.demo', role: 'admin', department: 'Administration', avatar: 'AC', reputation: 1250, streak: 15, badges: ['super_admin','firefighter'] },
-    { id: 'u2', name: 'Maya Patel', email: 'student@portal.demo', role: 'student', department: 'Engineering', avatar: 'MP', reputation: 340, streak: 5, badges: ['reporter'] },
-    { id: 'u3', name: 'Dr. James Wilson', email: 'teacher@portal.demo', role: 'teacher', department: 'CS', avatar: 'JW', reputation: 890, streak: 12, badges: ['mentor'] },
-    { id: 'u4', name: 'Sam Torres', email: 'staff@portal.demo', role: 'staff', department: 'Facilities', avatar: 'ST', reputation: 670, streak: 8, badges: ['fixer'] },
-    { id: 'u5', name: 'Lisa Wong', email: 'it@portal.demo', role: 'staff', department: 'IT', avatar: 'LW', reputation: 920, streak: 20, badges: ['tech_guru','night_owl'] },
+  var defaultUsers = [
+    { id: 'u1', name: 'Admin', email: 'admin@portal.demo', role: 'admin', department: 'Administration', avatar: 'A' },
+    { id: 'u2', name: 'Student', email: 'student@portal.demo', role: 'student', department: 'Engineering', avatar: 'S' },
+    { id: 'u3', name: 'Teacher', email: 'teacher@portal.demo', role: 'teacher', department: 'CS', avatar: 'T' },
+    { id: 'u4', name: 'Staff', email: 'staff@portal.demo', role: 'staff', department: 'Facilities', avatar: 'F' },
   ];
 
-  const now = Date.now();
-  const defaultComplaints = [
-    { id: 'CMP-2026-0001', subject: 'Broken AC in lab 301', description: 'AC not cooling since Monday. Room temp is 32°C. Students cannot attend lab sessions.', category: 'Infrastructure', subcategory: 'HVAC', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building A', zone: 'academic', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 5, upvotedBy: ['u3','u5'], attachments: [], comments: [
-      { id: 'c1', userId: 'u4', name: 'Sam Torres', role: 'staff', message: 'Technician dispatched, will fix today.', timestamp: now-200000, reactions: {👍:2} },
-      { id: 'c2', userId: 'u2', name: 'Maya Patel', role: 'student', message: 'Thanks! Its getting unbearable.', timestamp: now-100000, reactions: {} }
-    ], timeline: [
-      { status: 'submitted', timestamp: now-500000, note: 'Submitted by Maya Patel' },
-      { status: 'assigned', timestamp: now-300000, note: 'Assigned to Sam Torres (Facilities)' },
-      { status: 'in progress', timestamp: now-150000, note: 'Technician on site' }
-    ], resolution: '', feedback: null, createdAt: now-500000, updatedAt: now-100000, slaHours: 24, sentiment: 'negative', predictedResolve: 6 },
-    
-    { id: 'CMP-2026-0002', subject: 'Exam schedule conflict', description: 'Two major exams scheduled on same day. Need immediate reschedule for 200+ students.', category: 'Examination', subcategory: 'Scheduling', priority: 'critical', status: 'under review', department: 'Examination', location: 'Online', zone: 'admin', anonymous: false, submittedBy: 'u3', assignedTo: null, upvotes: 12, upvotedBy: ['u2','u4','u5'], attachments: [], comments: [], timeline: [
-      { status: 'submitted', timestamp: now-400000, note: 'Submitted by Dr. James Wilson' },
-      { status: 'under review', timestamp: now-250000, note: 'Under review by Examination Committee' }
-    ], resolution: '', feedback: null, createdAt: now-400000, updatedAt: now-200000, slaHours: 4, sentiment: 'negative', predictedResolve: 12 },
-    
-    { id: 'CMP-2026-0003', subject: 'Library quiet zone noise', description: 'Construction noise near library is disrupting study areas during exam season.', category: 'Library', subcategory: 'Environment', priority: 'medium', status: 'resolved', department: 'Library', location: 'Library', zone: 'library', anonymous: true, submittedBy: 'u2', assignedTo: 'u4', upvotes: 8, upvotedBy: ['u3'], attachments: [], comments: [
-      { id: 'c3', userId: 'u4', name: 'Sam Torres', role: 'staff', message: 'Construction hours adjusted to 10AM-4PM only.', timestamp: now-120000, reactions: {❤️:3} }
-    ], timeline: [
-      { status: 'submitted', timestamp: now-600000, note: 'Submitted anonymously' },
-      { status: 'in progress', timestamp: now-400000, note: 'In progress' },
-      { status: 'resolved', timestamp: now-100000, note: 'Resolved - Hours adjusted' }
-    ], resolution: 'Noise reduced, construction hours adjusted to 10AM-4PM', feedback: { rating: 4, comment: 'Better now, thanks!' }, createdAt: now-600000, updatedAt: now-100000, slaHours: 48, sentiment: 'neutral', predictedResolve: 0 },
-    
-    { id: 'CMP-2026-0004', subject: 'WiFi connectivity issue', description: 'No WiFi in hostel block C since yesterday. 150+ residents affected.', category: 'IT / Technology', subcategory: 'Network', priority: 'high', status: 'assigned', department: 'IT', location: 'Hostel C', zone: 'hostel', anonymous: false, submittedBy: 'u2', assignedTo: 'u5', upvotes: 15, upvotedBy: ['u3','u4'], attachments: [], comments: [
-      { id: 'c4', userId: 'u5', name: 'Lisa Wong', role: 'staff', message: 'Router replacement in progress. ETA 2 hours.', timestamp: now-80000, reactions: {👍:5,🔥:2} }
-    ], timeline: [
-      { status: 'submitted', timestamp: now-300000, note: 'Submitted by Maya Patel' },
-      { status: 'assigned', timestamp: now-150000, note: 'Assigned to Lisa Wong (IT)' }
-    ], resolution: '', feedback: null, createdAt: now-300000, updatedAt: now-80000, slaHours: 8, sentiment: 'negative', predictedResolve: 2 },
-    
-    { id: 'CMP-2026-0005', subject: 'Harassment complaint', description: 'Inappropriate behavior reported in cafeteria. Urgent action needed.', category: 'Harassment / Misconduct', subcategory: 'Verbal', priority: 'critical', status: 'submitted', department: 'Administration', location: 'Cafeteria', zone: 'cafeteria', anonymous: true, submittedBy: 'u2', assignedTo: null, upvotes: 3, upvotedBy: [], attachments: [], comments: [], timeline: [
-      { status: 'submitted', timestamp: now-100000, note: 'Submitted anonymously' }
-    ], resolution: '', feedback: null, createdAt: now-100000, updatedAt: now-100000, slaHours: 2, sentiment: 'very_negative', predictedResolve: 4 },
-    
-    { id: 'CMP-2026-0006', subject: 'Water leakage in restroom', description: 'Pipe burst near 2nd floor restroom causing flooding.', category: 'Water', subcategory: 'Plumbing', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building B', zone: 'academic', anonymous: false, submittedBy: 'u3', assignedTo: 'u4', upvotes: 7, upvotedBy: ['u2'], attachments: [], comments: [], timeline: [
-      { status: 'submitted', timestamp: now-700000, note: 'Submitted by Dr. James Wilson' },
-      { status: 'assigned', timestamp: now-600000, note: 'Assigned to Sam Torres' },
-      { status: 'in progress', timestamp: now-400000, note: 'Plumber on site' }
-    ], resolution: '', feedback: null, createdAt: now-700000, updatedAt: now-400000, slaHours: 12, sentiment: 'negative', predictedResolve: 3 },
-    
-    { id: 'CMP-2026-0007', subject: 'Transport bus delay', description: 'Bus from campus to station consistently 30+ mins late.', category: 'Transport', subcategory: 'Scheduling', priority: 'low', status: 'closed', department: 'Transport', location: 'Main gate', zone: 'transport', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 2, upvotedBy: [], attachments: [], comments: [], timeline: [
-      { status: 'submitted', timestamp: now-900000, note: 'Submitted' },
-      { status: 'resolved', timestamp: now-700000, note: 'Schedule adjusted' },
-      { status: 'closed', timestamp: now-500000, note: 'Closed after verification' }
-    ], resolution: 'Schedule adjusted with 15 min buffer', feedback: { rating: 5, comment: 'Great improvement!' }, createdAt: now-900000, updatedAt: now-500000, slaHours: 72, sentiment: 'positive', predictedResolve: 0 },
+  var defaultComplaints = [
+    { id: 'CMP-2026-0001', subject: 'Broken AC in lab 301', description: 'AC not cooling since monday. Room temp is 32°C.', category: 'Infrastructure', subcategory: 'HVAC', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building A', zone: 'academic', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 5, upvotedBy: [], attachments: [], comments: [{ id: 'c1', userId: 'u4', name: 'Staff', role: 'staff', message: 'Technician dispatched, will fix today.', timestamp: Date.now()-200000 }], timeline: [{ status: 'submitted', timestamp: Date.now()-500000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-300000, note: 'Assigned to Staff' }, { status: 'in progress', timestamp: Date.now()-150000, note: 'Work in progress' }], resolution: '', feedback: null, createdAt: Date.now()-500000, updatedAt: Date.now()-100000 },
+    { id: 'CMP-2026-0002', subject: 'Exam schedule conflict', description: 'Two major exams on same day. Need reschedule.', category: 'Examination', subcategory: 'Scheduling', priority: 'critical', status: 'under review', department: 'Examination', location: 'Online', zone: 'admin', anonymous: false, submittedBy: 'u3', assignedTo: null, upvotes: 12, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-400000, note: 'Submitted' }, { status: 'under review', timestamp: Date.now()-250000, note: 'Under review' }], resolution: '', feedback: null, createdAt: Date.now()-400000, updatedAt: Date.now()-200000 },
+    { id: 'CMP-2026-0003', subject: 'Library quiet zone noise', description: 'Construction noise near library is disrupting study.', category: 'Library', subcategory: 'Environment', priority: 'medium', status: 'resolved', department: 'Library', location: 'Library', zone: 'library', anonymous: true, submittedBy: 'u2', assignedTo: 'u4', upvotes: 8, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-600000, note: 'Submitted' }, { status: 'in progress', timestamp: Date.now()-400000, note: 'In progress' }, { status: 'resolved', timestamp: Date.now()-100000, note: 'Resolved' }], resolution: 'Noise reduced, hours adjusted', feedback: { rating: 4, comment: 'Better now' }, createdAt: Date.now()-600000, updatedAt: Date.now()-100000 },
+    { id: 'CMP-2026-0004', subject: 'WiFi connectivity issue', description: 'No WiFi in hostel block C since yesterday.', category: 'IT / Technology', subcategory: 'Network', priority: 'high', status: 'assigned', department: 'IT', location: 'Hostel C', zone: 'hostel', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 15, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-300000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-150000, note: 'Assigned to IT' }], resolution: '', feedback: null, createdAt: Date.now()-300000, updatedAt: Date.now()-150000 },
+    { id: 'CMP-2026-0005', subject: 'Harassment complaint', description: 'Inappropriate behavior in cafeteria. Urgent action needed.', category: 'Harassment / Misconduct', subcategory: 'Verbal', priority: 'critical', status: 'submitted', department: 'Administration', location: 'Cafeteria', zone: 'cafeteria', anonymous: true, submittedBy: 'u2', assignedTo: null, upvotes: 3, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-100000, note: 'Submitted' }], resolution: '', feedback: null, createdAt: Date.now()-100000, updatedAt: Date.now()-100000 },
+    { id: 'CMP-2026-0006', subject: 'Water leakage in restroom', description: 'Pipe burst near 2nd floor restroom.', category: 'Water', subcategory: 'Plumbing', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building B', zone: 'academic', anonymous: false, submittedBy: 'u3', assignedTo: 'u4', upvotes: 7, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-700000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-600000, note: 'Assigned' }, { status: 'in progress', timestamp: Date.now()-400000, note: 'In progress' }], resolution: '', feedback: null, createdAt: Date.now()-700000, updatedAt: Date.now()-400000 },
+    { id: 'CMP-2026-0007', subject: 'Transport bus delay', description: 'Bus from campus to station is consistently late.', category: 'Transport', subcategory: 'Scheduling', priority: 'low', status: 'closed', department: 'Transport', location: 'Main gate', zone: 'transport', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 2, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-900000, note: 'Submitted' }, { status: 'resolved', timestamp: Date.now()-700000, note: 'Resolved' }, { status: 'closed', timestamp: Date.now()-500000, note: 'Closed' }], resolution: 'Schedule adjusted', feedback: { rating: 5, comment: 'Great' }, createdAt: Date.now()-900000, updatedAt: Date.now()-500000 },
   ];
 
-  const defaultNotifications = [
-    { id: 'n1', userId: 'u2', type: 'status', title: 'Complaint assigned', message: 'CMP-2026-0001 has been assigned to Sam Torres.', read: false, createdAt: now-200000, icon: 'fa-user-check', color: '#60a5fa' },
-    { id: 'n2', userId: 'u4', type: 'assignment', title: 'New assignment', message: 'You have been assigned CMP-2026-0004 (WiFi issue).', read: false, createdAt: now-150000, icon: 'fa-wifi', color: '#a78bfa' },
-    { id: 'n3', userId: 'u2', type: 'escalation', title: 'Auto-escalation', message: 'CMP-2026-0005 approaching SLA breach.', read: false, createdAt: now-50000, icon: 'fa-exclamation-triangle', color: '#f87171' },
-    { id: 'n4', userId: 'u5', type: 'upvote', title: 'Trending complaint', message: 'CMP-2026-0004 reached 15 upvotes.', read: true, createdAt: now-100000, icon: 'fa-fire', color: '#facc15' },
+  var defaultNotifications = [
+    { id: 'n1', userId: 'u2', type: 'status', title: 'Complaint assigned', message: 'Your complaint CMP-2026-0001 has been assigned.', read: false, createdAt: Date.now()-200000 },
+    { id: 'n2', userId: 'u4', type: 'assignment', title: 'New assignment', message: 'You have been assigned complaint CMP-2026-0004.', read: false, createdAt: Date.now()-150000 },
+    { id: 'n3', userId: 'u2', type: 'submission', title: 'Complaint submitted', message: 'Your complaint CMP-2026-0005 has been submitted.', read: true, createdAt: Date.now()-90000 },
   ];
 
-  const defaultAudit = [
-    { id: 'a1', actorId: 'u1', actorName: 'Alex Chen', role: 'admin', action: 'login', targetId: '', description: 'Admin logged in', createdAt: now-10000 },
-    { id: 'a2', actorId: 'u2', actorName: 'Maya Patel', role: 'student', action: 'complaint_created', targetId: 'CMP-2026-0005', description: 'Created complaint CMP-2026-0005', createdAt: now-90000 },
+  var defaultAudit = [
+    { id: 'a1', actorId: 'u1', actorName: 'Admin', role: 'admin', action: 'login', targetId: '', description: 'Admin logged in', createdAt: Date.now()-10000 },
+    { id: 'a2', actorId: 'u2', actorName: 'Student', role: 'student', action: 'complaint_created', targetId: 'CMP-2026-0005', description: 'Created complaint CMP-2026-0005', createdAt: Date.now()-90000 },
   ];
 
   function getDefaultData() {
-    return {
-      users: defaultUsers,
-      complaints: defaultComplaints,
-      notifications: defaultNotifications,
-      auditLogs: defaultAudit,
-      settings: { theme: 'dark', compactMode: false, soundEnabled: true },
-      views: { complaintView: 'list' }
-    };
+    return { users: defaultUsers, complaints: defaultComplaints, notifications: defaultNotifications, auditLogs: defaultAudit, settings: { theme: 'light' } };
   }
 
   function loadData() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        const def = getDefaultData();
-        for (let k in def) if (!(k in parsed)) parsed[k] = def[k];
-        return parsed;
-      }
-    } catch(e) {}
+    try { var raw = localStorage.getItem(STORAGE_KEY); if (raw) { var parsed = JSON.parse(raw); var def = getDefaultData(); for (var k in def) if (!(k in parsed)) parsed[k] = def[k]; return parsed; } } catch(e) {}
     return getDefaultData();
   }
   function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-  function loadSession() { try { const s = localStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; } }
+  function loadSession() { try { var s = localStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; } }
   function saveSession(s) { if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
 
-  const DataContext = createContext(null);
-  function DataProvider({ children }) {
-    const [data, setData] = useState(() => loadData());
-    const [session, setSession] = useState(() => loadSession());
-    const [toasts, setToasts] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => { setTimeout(() => setLoading(false), 800); }, []);
-    useEffect(() => { saveData(data); }, [data]);
-    useEffect(() => {
-      document.body.className = data.settings?.theme === 'light' ? 'light-mode' : '';
-    }, [data.settings?.theme]);
-
-    const addToast = useCallback((message, type='info', duration=4000) => {
-      const id = Date.now() + Math.random();
-      setToasts(prev => [...prev, { id, message, type, duration }]);
-      setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
+  var DataContext = createContext(null);
+  function DataProvider(props) {
+    var _a = useState(loadData), data = _a[0], setData = _a[1];
+    var _b = useState(loadSession), session = _b[0], setSession = _b[1];
+    var _c = useState([]), toasts = _c[0], setToasts = _c[1];
+    useEffect(function() { saveData(data); }, [data]);
+    var addToast = useCallback(function(message, type, duration) {
+      if (type === void 0) type = 'info';
+      if (duration === void 0) duration = 3500;
+      var id = Date.now() + Math.random();
+      setToasts(function(prev) { return [].concat(prev, [{ id: id, message: message, type: type, duration: duration }]); });
+      setTimeout(function() { setToasts(function(prev) { return prev.filter(function(t) { return t.id !== id; }); }); }, duration);
     }, []);
-
-    const updateData = useCallback((fn) => {
-      setData(prev => {
-        const next = typeof fn === 'function' ? fn(JSON.parse(JSON.stringify(prev))) : fn;
-        return next;
-      });
-    }, []);
-
-    const login = useCallback((email, password) => {
-      const user = data.users.find(u => u.email === email);
+    var updateData = useCallback(function(fn) { setData(function(prev) { return typeof fn === 'function' ? fn(prev) : fn; }); }, []);
+    var login = useCallback(function(email, password) {
+      var user = data.users.find(function(u) { return u.email === email; });
       if (user) {
-        const sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
+        var sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
         setSession(sess); saveSession(sess);
-        const auditEntry = { id: 'a'+Date.now(), actorId: user.id, actorName: user.name, role: user.role, action: 'login', targetId: '', description: `${user.name} logged in`, createdAt: Date.now() };
-        updateData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
-        return { success: true, user };
+        var auditEntry = { id: 'a'+Date.now(), actorId: user.id, actorName: user.name, role: user.role, action: 'login', targetId: '', description: user.role + ' logged in', createdAt: Date.now() };
+        setData(function(prev) { return ({}.assign({}, prev, { auditLogs: [auditEntry].concat(prev.auditLogs) })); });
+        return { success: true, user: user };
       }
-      return { success: false, error: 'Invalid credentials' };
-    }, [data.users, updateData]);
-
-    const logout = useCallback(() => {
+      return { success: false, error: 'Invalid email or password' };
+    }, [data.users]);
+    var logout = useCallback(function() {
       if (session) {
-        const auditEntry = { id: 'a'+Date.now(), actorId: session.userId, actorName: session.name, role: session.role, action: 'logout', targetId: '', description: `${session.name} logged out`, createdAt: Date.now() };
-        updateData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
+        var auditEntry = { id: 'a'+Date.now(), actorId: session.userId, actorName: session.name, role: session.role, action: 'logout', targetId: '', description: session.role + ' logged out', createdAt: Date.now() };
+        setData(function(prev) { return ({}.assign({}, prev, { auditLogs: [auditEntry].concat(prev.auditLogs) })); });
       }
       setSession(null); saveSession(null);
-    }, [session, updateData]);
-
-    return React.createElement(DataContext.Provider, { value: { data, setData, updateData, session, login, logout, toasts, addToast, loading } }, children);
+    }, [session]);
+    return React.createElement(DataContext.Provider, { value: { data: data, setData: setData, updateData: updateData, session: session, login: login, logout: logout, toasts: toasts, addToast: addToast } }, props.children);
   }
   function useData() { return useContext(DataContext); }
 
-  const statusColors = {
-    submitted: '#94a3b8', 'under review': '#facc15', assigned: '#60a5fa',
-    'in progress': '#a78bfa', resolved: '#4ade80', closed: '#64748b',
-    reopened: '#f87171', rejected: '#f87171'
-  };
-  const priorityConfig = {
-    critical: { color: '#ef4444', bg: 'rgba(239,68,68,0.12)', label: 'CRITICAL', icon: 'fa-fire' },
-    high: { color: '#eab308', bg: 'rgba(234,179,8,0.12)', label: 'HIGH', icon: 'fa-bolt' },
-    medium: { color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', label: 'MEDIUM', icon: 'fa-arrow-up' },
-    low: { color: '#64748b', bg: 'rgba(100,116,139,0.12)', label: 'LOW', icon: 'fa-arrow-down' }
-  };
-  function getStatusColor(s) { return statusColors[s?.toLowerCase()] || '#94a3b8'; }
-  function formatDate(ts) {
-    if (!ts) return '';
-    const d = new Date(ts);
-    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
-  }
-  function formatRelative(ts) {
-    const diff = Date.now() - ts;
-    if (diff < 60000) return 'just now';
-    if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
-    if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
-    return Math.floor(diff/86400000) + 'd ago';
-  }
-  function generateId() {
-    const year = new Date().getFullYear();
-    return `CMP-${year}-${String(Math.floor(Math.random()*10000)).padStart(5,'0')}`;
-  }
-  function getSLAStatus(complaint) {
-    const elapsed = (Date.now() - complaint.createdAt) / (1000*60*60);
-    const remaining = complaint.slaHours - elapsed;
-    if (remaining < 0) return { status: 'breached', text: 'SLA Breached', class: 'danger' };
-    if (remaining < complaint.slaHours * 0.25) return { status: 'critical', text: `${Math.ceil(remaining)}h left`, class: 'warning' };
-    return { status: 'safe', text: `${Math.floor(remaining)}h left`, class: 'safe' };
-  }
+  var statusColors = { 'submitted':'#8a7aaa','under review':'#d4a050','assigned':'#6e8ad0','in progress':'#8a6ed0','resolved':'#4caf84','closed':'#8a7aaa','reopened':'#d06060','rejected':'#d06060' };
+  var priorityColors = { 'low':'#8a7aaa','medium':'#d4a050','high':'#d08050','critical':'#d06060' };
+  function getStatusColor(s) { return statusColors[s && s.toLowerCase ? s.toLowerCase() : ''] || '#8a7aaa'; }
+  function getPriorityColor(p) { return priorityColors[p && p.toLowerCase ? p.toLowerCase() : ''] || '#8a7aaa'; }
+  function formatDate(ts) { if (!ts) return ''; var d = new Date(ts); return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+  function generateId() { var year = new Date().getFullYear(); return 'CMP-' + year + '-' + String(Math.floor(Math.random()*10000)).padStart(5,'0'); }
 
   function ToastContainer() {
-    const { toasts } = useData();
-    if (!toasts?.length) return null;
+    var _a = useData(), toasts = _a.toasts;
+    if (!toasts || !toasts.length) return null;
     return React.createElement('div', { className: 'toast-container' },
-      toasts.map(t => React.createElement('div', { key: t.id, className: `toast toast-${t.type}` },
-        React.createElement('i', { className: `fas ${t.type==='success'?'fa-check-circle':t.type==='error'?'fa-exclamation-circle':'fa-info-circle'}` }),
-        t.message
-      ))
-    );
-  }
-
-  function AnimatedCounter({ value, duration = 1000 }) {
-    const [display, setDisplay] = useState(0);
-    const startTime = useRef(null);
-    const startVal = useRef(0);
-    
-    useEffect(() => {
-      startVal.current = display;
-      startTime.current = null;
-      let raf;
-      const animate = (timestamp) => {
-        if (!startTime.current) startTime.current = timestamp;
-        const progress = Math.min((timestamp - startTime.current) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setDisplay(Math.round(startVal.current + (value - startVal.current) * eased));
-        if (progress < 1) raf = requestAnimationFrame(animate);
-      };
-      raf = requestAnimationFrame(animate);
-      return () => cancelAnimationFrame(raf);
-    }, [value, duration]);
-    
-    return React.createElement('span', null, display.toLocaleString());
-  }
-
-  function SLATimer({ complaint }) {
-    const [now, setNow] = useState(Date.now());
-    useEffect(() => { const i = setInterval(() => setNow(Date.now()), 60000); return () => clearInterval(i); }, []);
-    const sla = getSLAStatus({ ...complaint, createdAt: complaint.createdAt });
-    const elapsed = (now - complaint.createdAt) / (1000*60*60);
-    const remaining = complaint.slaHours - elapsed;
-    const hours = Math.max(0, Math.floor(remaining));
-    const mins = Math.max(0, Math.floor((remaining - hours) * 60));
-    
-    return React.createElement('span', { className: `sla-timer ${sla.class}` },
-      React.createElement('i', { className: 'fas fa-clock' }),
-      `${hours}h ${mins}m`
+      toasts.map(function(t) { return React.createElement('div', { key: t.id, className: 'toast toast-' + t.type + ' slide-up' }, t.message); })
     );
   }
 
   function Login() {
-    const { login, addToast, session } = useData();
-    const [email, setEmail] = useState('admin@portal.demo');
-    const [password, setPassword] = useState('demo');
-    const [loading, setLoading] = useState(false);
-    const [showPw, setShowPw] = useState(false);
-    
+    var _a = useData(), login = _a.login, addToast = _a.addToast, session = _a.session;
+    var _b = useState('admin@portal.demo'), email = _b[0], setEmail = _b[1];
+    var _c = useState('demo'), password = _c[0], setPassword = _c[1];
+    var _d = useState(false), loading = _d[0], setLoading = _d[1];
+    var _e = useState(false), showPw = _e[0], setShowPw = _e[1];
     if (session) return null;
-    
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      setLoading(true);
-      setTimeout(() => {
-        const r = login(email, password);
-        if (r.success) addToast(`Welcome back, ${r.user.name}!`, 'success');
-        else addToast(r.error, 'error');
-        setLoading(false);
-      }, 600);
-    };
-
-    return React.createElement('div', { style: { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)', padding:'20px' } },
-      React.createElement('div', { className: 'glass', style: { maxWidth:'440px', width:'100%', borderRadius:'32px', padding:'48px 36px', boxShadow:'0 40px 100px rgba(0,0,0,0.4)', animation:'fadeIn 0.6s' } },
-        React.createElement('div', { style: { textAlign:'center', marginBottom:'36px' } },
-          React.createElement('div', { style: { fontSize:'40px', fontWeight:800, letterSpacing:'-1px', background: 'linear-gradient(135deg,#6366f1,#a855f7)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', marginBottom:'8px' } }, 'ResolveHub'),
-          React.createElement('div', { style: { color:'#94a3b8', fontSize:'15px' } }, 'Extreme Edition · Next-gen complaint intelligence')
+    var handleSubmit = function(e) { e.preventDefault(); setLoading(true); setTimeout(function() { var r = login(email, password); if (r.success) addToast('Welcome back!', 'success'); else addToast(r.error, 'error'); setLoading(false); }, 400); };
+    return React.createElement('div', { style: { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background: 'linear-gradient(145deg, #f0e8fa 0%, #e0d8f0 100%)', padding:'20px' } },
+      React.createElement('div', { className: 'glass', style: { maxWidth:'420px', width:'100%', borderRadius:'40px', padding:'40px 32px', boxShadow:'0 40px 100px rgba(110,80,200,0.08)' } },
+        React.createElement('div', { style: { marginBottom:'28px' } },
+          React.createElement('div', { style: { fontSize:'32px', fontWeight:800, letterSpacing:'-1px', background: 'linear-gradient(135deg,#6e50c8,#c084e8)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' } }, 'ResolveHub'),
+          React.createElement('div', { style: { color:'#5a4a7a', fontSize:'14px', marginTop:'4px', fontWeight:400 } }, 'Smart complaint management')
         ),
         React.createElement('form', { onSubmit: handleSubmit },
-          React.createElement('div', { style: { marginBottom:'18px' } },
-            React.createElement('label', { style: { fontSize:'13px', fontWeight:600, color:'#94a3b8', display:'block', marginBottom:'8px' } }, 'Email Address'),
-            React.createElement('input', { type: 'email', value: email, onChange: e => setEmail(e.target.value), required: true, style: { width:'100%', padding:'14px 18px', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'16px', fontSize:'15px', background:'rgba(255,255,255,0.03)', color:'#f1f5f9', outline:'none', transition:'0.2s', fontFamily:'inherit' } })
+          React.createElement('div', { style: { marginBottom:'14px' } },
+            React.createElement('label', { style: { fontSize:'13px', fontWeight:600, color:'#3a2a5a' } }, 'Email'),
+            React.createElement('input', { type: 'email', value: email, onChange: function(e) { setEmail(e.target.value); }, placeholder: 'admin@portal.demo', required: true, style: { width:'100%', padding:'14px 18px', border:'1px solid rgba(110,80,200,0.15)', borderRadius:'18px', marginTop:'6px', fontSize:'15px', background:'rgba(255,248,255,0.7)', outline:'none', transition:'0.15s' } })
           ),
-          React.createElement('div', { style: { marginBottom:'28px', position:'relative' } },
-            React.createElement('label', { style: { fontSize:'13px', fontWeight:600, color:'#94a3b8', display:'block', marginBottom:'8px' } }, 'Password'),
-            React.createElement('input', { type: showPw ? 'text' : 'password', value: password, onChange: e => setPassword(e.target.value), required: true, style: { width:'100%', padding:'14px 18px', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'16px', fontSize:'15px', background:'rgba(255,255,255,0.03)', color:'#f1f5f9', outline:'none', paddingRight:'48px', fontFamily:'inherit' } }),
-            React.createElement('button', { type: 'button', onClick: () => setShowPw(!showPw), style: { position:'absolute', right:'16px', bottom:'14px', background:'none', border:'none', color:'#64748b', fontSize:'18px', cursor:'pointer' } }, React.createElement('i', { className: `fas ${showPw ? 'fa-eye' : 'fa-eye-slash'}` }))
+          React.createElement('div', { style: { marginBottom:'22px', position:'relative' } },
+            React.createElement('label', { style: { fontSize:'13px', fontWeight:600, color:'#3a2a5a' } }, 'Password'),
+            React.createElement('input', { type: showPw ? 'text' : 'password', value: password, onChange: function(e) { setPassword(e.target.value); }, placeholder: '•••••••', required: true, style: { width:'100%', padding:'14px 18px', border:'1px solid rgba(110,80,200,0.15)', borderRadius:'18px', marginTop:'6px', fontSize:'15px', background:'rgba(255,248,255,0.7)', paddingRight:'48px', outline:'none' } }),
+            React.createElement('button', { type: 'button', onClick: function() { setShowPw(!showPw); }, style: { position:'absolute', right:'16px', bottom:'16px', background:'none', border:'none', color:'#8a7aaa', fontSize:'18px', cursor:'pointer' } }, React.createElement('i', { className: 'fas ' + (showPw ? 'fa-eye' : 'fa-eye-slash') }))
           ),
-          React.createElement('button', { type: 'submit', disabled: loading, className: 'btn btn-primary', style: { width:'100%', padding:'16px', borderRadius:'24px', fontSize:'16px', justifyContent:'center' } },
-            loading ? React.createElement('i', { className: 'fas fa-circle-notch fa-spin' }) : 'Sign In Securely'
-          )
+          React.createElement('button', { type: 'submit', disabled: loading, className: 'btn-primary', style: { width:'100%', padding:'16px', borderRadius:'24px', fontSize:'16px', fontWeight:600, cursor:'pointer' } }, loading ? 'Signing in...' : 'Get Started')
         ),
-        React.createElement('div', { style: { marginTop:'32px', background:'rgba(255,255,255,0.02)', borderRadius:'20px', padding:'18px', border:'1px solid rgba(255,255,255,0.05)' } },
-          React.createElement('div', { style: { fontWeight:700, marginBottom:'10px', fontSize:'12px', textTransform:'uppercase', letterSpacing:'1px', color:'#64748b' } }, 'Demo Accounts'),
-          React.createElement('div', { style: { display:'grid', gridTemplateColumns:'1fr auto', gap:'6px 12px', fontSize:'12px', color:'#94a3b8' } },
-            React.createElement('span', null, 'admin@portal.demo'), React.createElement('span', { style: { color:'#818cf8', fontWeight:700 } }, 'Admin'),
-            React.createElement('span', null, 'student@portal.demo'), React.createElement('span', { style: { color:'#818cf8', fontWeight:700 } }, 'Student'),
-            React.createElement('span', null, 'teacher@portal.demo'), React.createElement('span', { style: { color:'#818cf8', fontWeight:700 } }, 'Teacher'),
-            React.createElement('span', null, 'staff@portal.demo'), React.createElement('span', { style: { color:'#818cf8', fontWeight:700 } }, 'Staff')
-          ),
-          React.createElement('div', { style: { marginTop:'10px', fontSize:'11px', color:'#475569', textAlign:'center' } }, 'Password: demo')
-        )
-      )
-    );
-  }
-
-  function StatCard({ label, value, icon, color, delta, delay }) {
-    const isPositive = delta && delta.startsWith('+');
-    return React.createElement('div', { className: 'stat-card animate-fade stagger-' + delay, style: {'--glow-color': color+'20', '--icon-color': color} },
-      React.createElement('div', { className: 'stat-icon', style: {background: color+'15', color} }, React.createElement('i', { className: `fas ${icon}` })),
-      React.createElement('div', { className: 'stat-value', style: {color} }, typeof value === 'string' ? value : React.createElement(AnimatedCounter, { value: value })),
-      React.createElement('div', { className: 'stat-label' }, label),
-      delta && React.createElement('div', { className: 'stat-delta', style: {'--delta-bg': isPositive?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)', '--delta-color': isPositive?'#4ade80':'#f87171'} },
-        React.createElement('i', { className: `fas fa-arrow-${isPositive?'up':'down'}` }), delta
-      )
-    );
-  }
-
-  function NotificationBell() {
-    const { data, session, updateData } = useData();
-    const [open, setOpen] = useState(false);
-    const ref = useRef(null);
-    const notifs = data.notifications.filter(n => n.userId === session?.userId).sort((a,b) => b.createdAt - a.createdAt);
-    const unread = notifs.filter(n => !n.read).length;
-    
-    useEffect(() => {
-      function handleClick(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
-      document.addEventListener('mousedown', handleClick);
-      return () => document.removeEventListener('mousedown', handleClick);
-    }, []);
-    
-    const markRead = (id) => {
-      updateData(prev => ({
-        ...prev,
-        notifications: prev.notifications.map(n => n.id === id ? {...n, read: true} : n)
-      }));
-    };
-    
-    const markAllRead = () => {
-      updateData(prev => ({
-        ...prev,
-        notifications: prev.notifications.map(n => n.userId === session?.userId ? {...n, read: true} : n)
-      }));
-    };
-
-    if (!session) return null;
-
-    return React.createElement('div', { style: { position:'relative' }, ref },
-      React.createElement('button', {
-        className: 'btn btn-ghost',
-        style: { width:'40px', height:'40px', padding:0, borderRadius:'50%', justifyContent:'center', position:'relative' },
-        onClick: () => setOpen(!open)
-      },
-        React.createElement('i', { className: 'fas fa-bell', style: { fontSize:'16px' } }),
-        unread > 0 && React.createElement('span', { style: { position:'absolute', top:'-2px', right:'-2px', background:'#ef4444', color:'white', fontSize:'10px', fontWeight:700, width:'18px', height:'18px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', border:'2px solid var(--bg-elevated)' } }, unread)
-      ),
-      open && React.createElement('div', { className: 'notif-dropdown' },
-        React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 18px', borderBottom:'1px solid var(--border)' } },
-          React.createElement('span', { style: { fontWeight:700, fontSize:'14px' } }, 'Notifications'),
-          unread > 0 && React.createElement('button', { onClick: markAllRead, style: { background:'none', border:'none', color:'var(--primary-light)', fontSize:'12px', fontWeight:600, cursor:'pointer' } }, 'Mark all read')
-        ),
-        notifs.length === 0 && React.createElement('div', { style: { padding:'24px', textAlign:'center', color:'var(--text-muted)', fontSize:'13px' } }, 'No notifications'),
-        notifs.slice(0, 6).map(n => React.createElement('div', {
-          key: n.id,
-          className: `notif-item ${!n.read ? 'unread' : ''}`,
-          onClick: () => markRead(n.id)
-        },
-          React.createElement('div', { className: 'notif-icon', style: { background: n.color+'15', color: n.color } }, React.createElement('i', { className: `fas ${n.icon}` })),
-          React.createElement('div', { style: { flex:1 } },
-            React.createElement('div', { style: { fontWeight:600, fontSize:'13px', marginBottom:'2px' } }, n.title),
-            React.createElement('div', { style: { fontSize:'12px', color:'var(--text-muted)', lineHeight:1.4 } }, n.message),
-            React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)', marginTop:'4px' } }, formatRelative(n.createdAt))
-          )
-        ))
-      )
-    );
-  }
-
-  function UserMenu() {
-    const { session, logout, addToast, data } = useData();
-    const [open, setOpen] = useState(false);
-    const ref = useRef(null);
-    const user = data.users.find(u => u.id === session?.userId);
-    
-    useEffect(() => {
-      function handleClick(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
-      document.addEventListener('mousedown', handleClick);
-      return () => document.removeEventListener('mousedown', handleClick);
-    }, []);
-    
-    if (!session) return null;
-    
-    return React.createElement('div', { style: { position:'relative' }, ref },
-      React.createElement('button', {
-        className: 'btn btn-ghost',
-        style: { width:'40px', height:'40px', padding:0, borderRadius:'50%', justifyContent:'center', fontWeight:700, fontSize:'14px', background:'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.1))', borderColor:'var(--border)' },
-        onClick: () => setOpen(!open)
-      }, user?.avatar || 'U'),
-      open && React.createElement('div', { style: { position:'absolute', top:'50px', right:0, width:'220px', background:'var(--bg-elevated)', border:'1px solid var(--border)', borderRadius:'var(--radius-sm)', boxShadow:'0 20px 60px rgba(0,0,0,0.4)', zIndex:60, animation:'fadeIn 0.2s' } },
-        React.createElement('div', { style: { padding:'16px 18px', borderBottom:'1px solid var(--border)' } },
-          React.createElement('div', { style: { fontWeight:600, fontSize:'14px' } }, user?.name),
-          React.createElement('div', { style: { fontSize:'12px', color:'var(--text-muted)' } }, user?.role),
-          React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)', marginTop:'4px' } }, user?.email)
-        ),
-        React.createElement('button', {
-          onClick: () => { logout(); addToast('Logged out', 'info'); setOpen(false); },
-          style: { display:'flex', alignItems:'center', gap:'10px', padding:'12px 18px', width:'100%', border:'none', background:'transparent', color:'var(--text-secondary)', fontSize:'13px', cursor:'pointer', fontFamily:'inherit', transition:'background 0.2s' },
-          onMouseEnter: e => e.target.style.background = 'var(--surface-hover)',
-          onMouseLeave: e => e.target.style.background = 'transparent'
-        },
-          React.createElement('i', { className: 'fas fa-sign-out-alt' }),
-          'Sign Out'
-        )
-      )
-    );
-  }
-
-  function ComplaintListView({ complaints, onSelect, selectedId, onUpvote, session }) {
-    return React.createElement('div', { style: { marginTop:'16px' } },
-      complaints.length === 0 && React.createElement('div', { className: 'empty-state' },
-        React.createElement('i', { className: 'fas fa-inbox' }),
-        React.createElement('div', null, 'No complaints found')
-      ),
-      complaints.map(c => {
-        const priority = priorityConfig[c.priority] || priorityConfig.medium;
-        const isSelected = c.id === selectedId;
-        return React.createElement('div', {
-          key: c.id,
-          className: `complaint-row ${isSelected ? 'selected' : ''}`,
-          onClick: () => onSelect(c.id)
-        },
-          React.createElement('div', { style: { width:'4px', height:'32px', borderRadius:'4px', background: priority.color, flexShrink:0 } }),
-          React.createElement('div', { className: 'complaint-info' },
-            React.createElement('div', { className: 'complaint-title' }, c.subject),
-            React.createElement('div', { className: 'complaint-meta' },
-              React.createElement('span', null, c.id),
-              React.createElement('span', { className: `badge badge-priority-${c.priority}` }, c.priority.toUpperCase()),
-              React.createElement('span', { className: `badge badge-status-${c.status.replace(' ','-')}` }, c.status),
-              React.createElement('span', null, formatDate(c.createdAt)),
-              React.createElement(SLATimer, { complaint: c })
-            )
-          ),
-          React.createElement('button', {
-            className: `upvote-btn ${c.upvotedBy.includes(session?.userId) ? 'active' : ''}`,
-            onClick: (e) => { e.stopPropagation(); onUpvote(c.id); }
-          },
-            React.createElement('i', { className: 'fas fa-arrow-up' }),
-            c.upvotes
-          )
-        );
-      })
-    );
-  }
-
-  function ComplaintKanban({ complaints, onSelect, onUpvote, session }) {
-    const columns = ['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'];
-    const getColumnName = (s) => s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    
-    return React.createElement('div', { className: 'kanban-board' },
-      columns.map(col => {
-        const items = complaints.filter(c => c.status === col);
-        return React.createElement('div', { key: col, className: 'kanban-column' },
-          React.createElement('div', { className: 'kanban-header' },
-            React.createElement('span', { style: { fontWeight:600, fontSize:'13px' } }, getColumnName(col)),
-            React.createElement('span', { className: 'kanban-count' }, items.length)
-          ),
-          items.map(c => {
-            const priority = priorityConfig[c.priority] || priorityConfig.medium;
-            return React.createElement('div', {
-              key: c.id,
-              className: 'kanban-card',
-              onClick: () => onSelect(c.id)
-            },
-              React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'8px' } },
-                React.createElement('span', { style: { fontWeight:600, fontSize:'13px', flex:1 } }, c.subject),
-                React.createElement('span', { className: `badge badge-priority-${c.priority}`, style: { fontSize:'9px', padding:'2px 8px' } }, c.priority)
-              ),
-              React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)', marginTop:'4px' } }, c.id),
-              React.createElement('div', { className: 'progress-bar' },
-                React.createElement('div', { className: 'progress-fill', style: { width: col === 'resolved' || col === 'closed' ? '100%' : '30%' } })
-              ),
-              React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'8px' } },
-                React.createElement('span', { style: { fontSize:'11px', color:'var(--text-muted)' } }, formatDate(c.createdAt)),
-                React.createElement('button', {
-                  className: `upvote-btn ${c.upvotedBy.includes(session?.userId) ? 'active' : ''}`,
-                  style: { padding:'2px 10px', fontSize:'11px' },
-                  onClick: (e) => { e.stopPropagation(); onUpvote(c.id); }
-                },
-                  React.createElement('i', { className: 'fas fa-arrow-up' }),
-                  c.upvotes
-                )
-              )
-            );
-          })
-        );
-      })
-    );
-  }
-
-  function ComplaintDetailModal({ complaint, onClose }) {
-    const { data, session, updateData, addToast } = useData();
-    const [status, setStatus] = useState(complaint?.status || '');
-    const [assignment, setAssignment] = useState(complaint?.assignedTo || '');
-    const [resolution, setResolution] = useState(complaint?.resolution || '');
-    const [comment, setComment] = useState('');
-    const [activeTab, setActiveTab] = useState('details');
-    
-    if (!complaint) return null;
-    
-    const users = data.users;
-    const staffUsers = users.filter(u => u.role !== 'student');
-    const isStaff = session?.role !== 'student';
-    
-    const handleUpdate = () => {
-      const updated = {
-        ...complaint,
-        status: status || complaint.status,
-        assignedTo: assignment || complaint.assignedTo,
-        resolution: resolution || complaint.resolution,
-        updatedAt: Date.now()
-      };
-      if (status !== complaint.status) {
-        updated.timeline = [...complaint.timeline, { status, timestamp: Date.now(), note: `Status changed to ${status}` }];
-      }
-      if (assignment !== complaint.assignedTo && assignment) {
-        updated.timeline = [...updated.timeline, { status: 'assigned', timestamp: Date.now(), note: `Assigned to ${users.find(u => u.id === assignment)?.name || ''}` }];
-      }
-      updateData(prev => ({
-        ...prev,
-        complaints: prev.complaints.map(c => c.id === complaint.id ? updated : c)
-      }));
-      addToast('Complaint updated successfully', 'success');
-      onClose();
-    };
-    
-    const handleAddComment = () => {
-      if (!comment.trim()) return;
-      const newComment = {
-        id: 'c'+Date.now(),
-        userId: session.userId,
-        name: session.name,
-        role: session.role,
-        message: comment,
-        timestamp: Date.now(),
-        reactions: {}
-      };
-      updateData(prev => ({
-        ...prev,
-        complaints: prev.complaints.map(c => c.id === complaint.id ? {...c, comments: [...c.comments, newComment], updatedAt: Date.now()} : c)
-      }));
-      setComment('');
-      addToast('Comment added', 'info');
-    };
-    
-    const statusOptions = ['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'];
-    
-    return React.createElement('div', { className: 'modal-overlay', onClick: (e) => e.target === e.currentTarget && onClose() },
-      React.createElement('div', { className: 'modal-box' },
-        React.createElement('div', { className: 'modal-header' },
-          React.createElement('div', null,
-            React.createElement('div', { style: { fontSize:'18px', fontWeight:700 } }, complaint.subject),
-            React.createElement('div', { style: { fontSize:'12px', color:'var(--text-muted)', marginTop:'4px' } }, complaint.id)
-          ),
-          React.createElement('button', { className: 'modal-close', onClick: onClose }, React.createElement('i', { className: 'fas fa-times' }))
-        ),
-        React.createElement('div', { className: 'modal-body' },
-          React.createElement('div', { style: { display:'flex', gap:'8px', flexWrap:'wrap', marginBottom:'16px' } },
-            React.createElement('span', { className: `badge badge-priority-${complaint.priority}` }, complaint.priority.toUpperCase()),
-            React.createElement('span', { className: `badge badge-status-${complaint.status.replace(' ','-')}` }, complaint.status),
-            React.createElement('span', { style: { fontSize:'12px', color:'var(--text-muted)' } }, formatDate(complaint.createdAt)),
-            React.createElement(SLATimer, { complaint })
-          ),
-          React.createElement('div', { style: { display:'flex', gap:'8px', marginBottom:'16px', borderBottom:'1px solid var(--border)', paddingBottom:'8px' } },
-            ['details','comments','timeline'].map(tab => React.createElement('button', {
-              key: tab,
-              onClick: () => setActiveTab(tab),
-              style: { padding:'8px 16px', borderRadius:'8px', border:'none', background: activeTab === tab ? 'var(--surface-hover)' : 'transparent', color: activeTab === tab ? 'var(--text)' : 'var(--text-muted)', fontWeight:600, fontSize:'13px', cursor:'pointer', fontFamily:'inherit' }
-            }, tab.charAt(0).toUpperCase() + tab.slice(1)))
-          ),
-          activeTab === 'details' && React.createElement('div', null,
-            React.createElement('div', { style: { marginBottom:'12px' } },
-              React.createElement('div', { style: { fontWeight:600, fontSize:'13px', marginBottom:'4px' } }, 'Description'),
-              React.createElement('div', { style: { fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.6 } }, complaint.description)
-            ),
-            React.createElement('div', { style: { display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px' } },
-              React.createElement('div', null,
-                React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)' } }, 'Category'),
-                React.createElement('div', { style: { fontSize:'13px', fontWeight:500 } }, complaint.category)
-              ),
-              React.createElement('div', null,
-                React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)' } }, 'Location'),
-                React.createElement('div', { style: { fontSize:'13px', fontWeight:500 } }, complaint.location)
-              ),
-              React.createElement('div', null,
-                React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)' } }, 'Submitted By'),
-                React.createElement('div', { style: { fontSize:'13px', fontWeight:500 } }, complaint.anonymous ? 'Anonymous' : data.users.find(u => u.id === complaint.submittedBy)?.name || 'Unknown')
-              ),
-              React.createElement('div', null,
-                React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)' } }, 'Assigned To'),
-                React.createElement('div', { style: { fontSize:'13px', fontWeight:500 } }, complaint.assignedTo ? data.users.find(u => u.id === complaint.assignedTo)?.name || 'Unassigned' : 'Unassigned')
-              ),
-              complaint.resolution && React.createElement('div', { style: { gridColumn:'1/-1' } },
-                React.createElement('div', { style: { fontSize:'11px', color:'var(--text-muted)' } }, 'Resolution'),
-                React.createElement('div', { style: { fontSize:'13px', color:'var(--success)', fontWeight:500 } }, complaint.resolution)
-              )
-            ),
-            isStaff && React.createElement('div', { style: { marginTop:'20px', borderTop:'1px solid var(--border)', paddingTop:'16px' } },
-              React.createElement('div', { style: { fontWeight:600, fontSize:'13px', marginBottom:'12px' } }, 'Update Complaint'),
-              React.createElement('div', { className: 'form-row' },
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Status'),
-                  React.createElement('select', { value: status, onChange: e => setStatus(e.target.value) },
-                    statusOptions.map(s => React.createElement('option', { key: s, value: s }, s))
-                  )
-                ),
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Assign To'),
-                  React.createElement('select', { value: assignment, onChange: e => setAssignment(e.target.value) },
-                    React.createElement('option', { value: '' }, 'Unassigned'),
-                    staffUsers.map(u => React.createElement('option', { key: u.id, value: u.id }, u.name))
-                  )
-                )
-              ),
-              React.createElement('div', { className: 'form-group' },
-                React.createElement('label', null, 'Resolution'),
-                React.createElement('textarea', { value: resolution, onChange: e => setResolution(e.target.value), rows: 2, placeholder: 'Enter resolution details...' })
-              ),
-              React.createElement('button', { className: 'btn btn-primary', onClick: handleUpdate }, 'Update')
-            )
-          ),
-          activeTab === 'comments' && React.createElement('div', null,
-            complaint.comments.length === 0 && React.createElement('div', { style: { color:'var(--text-muted)', fontSize:'13px', padding:'12px 0' } }, 'No comments yet'),
-            complaint.comments.map(c => React.createElement('div', { key: c.id, className: 'comment' },
-              React.createElement('div', { className: 'comment-avatar', style: { background: 'rgba(99,102,241,0.15)', color: 'var(--primary-light)' } }, c.name.charAt(0)),
-              React.createElement('div', { className: 'comment-body' },
-                React.createElement('div', { className: 'comment-header' },
-                  React.createElement('span', { className: 'comment-author' }, c.name),
-                  React.createElement('span', { style: { fontSize:'11px', color:'var(--text-muted)' } }, formatRelative(c.timestamp))
-                ),
-                React.createElement('div', { className: 'comment-text' }, c.message),
-                React.createElement('div', { className: 'comment-actions' },
-                  React.createElement('button', { className: 'comment-action' }, React.createElement('i', { className: 'far fa-heart' }), ' Reply')
-                )
-              )
-            )),
-            session && React.createElement('div', { style: { marginTop:'16px' } },
-              React.createElement('div', { className: 'form-group', style: { marginBottom:'8px' } },
-                React.createElement('textarea', { value: comment, onChange: e => setComment(e.target.value), rows: 2, placeholder: 'Add a comment...' })
-              ),
-              React.createElement('button', { className: 'btn btn-primary btn-sm', onClick: handleAddComment }, 'Post Comment')
-            )
-          ),
-          activeTab === 'timeline' && React.createElement('div', { className: 'timeline' },
-            complaint.timeline.map((t, i) => React.createElement('div', { key: i, className: 'timeline-item' },
-              React.createElement('div', { className: 'timeline-time' }, formatDate(t.timestamp)),
-              React.createElement('div', { className: 'timeline-content', style: { fontWeight: i === complaint.timeline.length - 1 ? 600 : 400 } }, t.note)
-            ))
-          )
-        )
-      )
-    );
-  }
-
-  function DashboardView() {
-    const { data, session } = useData();
-    const complaints = data.complaints;
-    const total = complaints.length;
-    const resolved = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
-    const inProgress = complaints.filter(c => c.status === 'in progress' || c.status === 'assigned').length;
-    const critical = complaints.filter(c => c.priority === 'critical' && c.status !== 'resolved' && c.status !== 'closed').length;
-    
-    const recent = complaints.sort((a,b) => b.createdAt - a.createdAt).slice(0, 5);
-    
-    return React.createElement(React.Fragment, null,
-      React.createElement('div', { className: 'topbar' },
-        React.createElement('div', null,
-          React.createElement('div', { className: 'page-title' }, 'Dashboard'),
-          React.createElement('div', { className: 'page-subtitle' }, 'Live overview of complaint intelligence')
-        ),
-        React.createElement('div', { style: { display:'flex', gap:'8px', alignItems:'center' } },
-          React.createElement(NotificationBell, null),
-          React.createElement(UserMenu, null)
-        )
-      ),
-      React.createElement('div', { className: 'stats-grid' },
-        React.createElement(StatCard, { label: 'Total Complaints', value: total, icon: 'fa-ticket', color: '#818cf8', delta: '+12%', delay: 1 }),
-        React.createElement(StatCard, { label: 'Resolved', value: resolved, icon: 'fa-check-circle', color: '#4ade80', delta: '+8%', delay: 2 }),
-        React.createElement(StatCard, { label: 'In Progress', value: inProgress, icon: 'fa-spinner', color: '#a78bfa', delta: '-3%', delay: 3 }),
-        React.createElement(StatCard, { label: 'Critical', value: critical, icon: 'fa-fire', color: '#f87171', delta: '+2', delay: 4 })
-      ),
-      React.createElement('div', { style: { display:'grid', gridTemplateColumns: '1fr 1fr', gap:'20px', marginBottom:'24px' } },
-        React.createElement('div', { className: 'card' },
-          React.createElement('div', { className: 'card-header' },
-            React.createElement('span', { className: 'card-title' }, 'Recent Activity'),
-            React.createElement('span', { style: { fontSize:'12px', color:'var(--text-muted)' } }, 'Last 5')
-          ),
-          recent.map(c => React.createElement('div', { key: c.id, style: { display:'flex', justifyContent:'space-between', padding:'10px 0', borderBottom:'1px solid var(--border)', fontSize:'13px' } },
-            React.createElement('span', { style: { fontWeight:500, maxWidth:'60%', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' } }, c.subject),
-            React.createElement('span', { className: `badge badge-status-${c.status.replace(' ','-')}`, style: { fontSize:'9px', padding:'2px 8px' } }, c.status)
-          ))
-        ),
-        React.createElement('div', { className: 'card' },
-          React.createElement('div', { className: 'card-header' },
-            React.createElement('span', { className: 'card-title' }, 'Insights'),
-            React.createElement('i', { className: 'fas fa-robot', style: { color:'var(--accent-purple)' } })
-          ),
-          React.createElement('div', { className: 'insight-card' },
-            React.createElement('div', { className: 'insight-header' }, React.createElement('i', { className: 'fas fa-brain' }), 'AI Sentiment Analysis'),
-            React.createElement('div', { className: 'insight-text' }, 'Critical complaints are trending up by 15% this week. Recommended to assign additional staff to high-priority categories.')
-          ),
-          React.createElement('div', { className: 'insight-card' },
-            React.createElement('div', { className: 'insight-header' }, React.createElement('i', { className: 'fas fa-clock' }), 'SLA Performance'),
-            React.createElement('div', { className: 'insight-text' }, 'Average resolution time: 18.4 hours. ' + (critical > 0 ? `${critical} critical tickets require immediate attention.` : 'All SLAs are within target.'))
-          ),
-          React.createElement('div', { className: 'insight-card' },
-            React.createElement('div', { className: 'insight-header' }, React.createElement('i', { className: 'fas fa-user-graduate' }), 'Top Reporter'),
-            React.createElement('div', { className: 'insight-text' }, 'Maya Patel has submitted the most complaints this month (4).')
-          )
-        )
-      ),
-      React.createElement('div', { className: 'card' },
-        React.createElement('div', { className: 'card-header' },
-          React.createElement('span', { className: 'card-title' }, 'Complaint Distribution'),
-          React.createElement('div', { style: { display:'flex', gap:'8px' } },
-            React.createElement('span', { className: 'filter-chip active' }, 'All'),
-            React.createElement('span', { className: 'filter-chip' }, 'By Category'),
-            React.createElement('span', { className: 'filter-chip' }, 'By Priority')
-          )
-        ),
-        React.createElement('div', { style: { height:'160px', display:'flex', alignItems:'flex-end', gap:'8px', paddingTop:'20px' } },
-          ['Infrastructure', 'Examination', 'Library', 'IT', 'Harassment', 'Water', 'Transport'].map((cat, i) => {
-            const count = complaints.filter(c => c.category === cat).length;
-            const max = Math.max(1, ...['Infrastructure','Examination','Library','IT','Harassment','Water','Transport'].map(c => complaints.filter(x => x.category === c).length));
-            return React.createElement('div', { key: i, style: { flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:'4px' } },
-              React.createElement('div', { style: { height: (count/max)*140 + 20, width:'100%', background: 'linear-gradient(180deg, var(--primary), var(--accent-purple))', borderRadius:'6px 6px 0 0', minHeight:'4px', opacity:0.8, transition:'height 0.5s' } }),
-              React.createElement('span', { style: { fontSize:'9px', color:'var(--text-muted)', textAlign:'center' } }, cat)
-            );
-          })
-        )
-      )
-    );
-  }
-
-  function ComplaintsView() {
-    const { data, session, updateData, addToast } = useData();
-    const [view, setView] = useState('list');
-    const [selectedId, setSelectedId] = useState(null);
-    const [search, setSearch] = useState('');
-    const [filterStatus, setFilterStatus] = useState('all');
-    const [filterPriority, setFilterPriority] = useState('all');
-    const [showNewModal, setShowNewModal] = useState(false);
-    
-    const complaints = data.complaints;
-    const selectedComplaint = complaints.find(c => c.id === selectedId);
-    
-    const filtered = complaints.filter(c => {
-      if (filterStatus !== 'all' && c.status !== filterStatus) return false;
-      if (filterPriority !== 'all' && c.priority !== filterPriority) return false;
-      if (search && !c.subject.toLowerCase().includes(search.toLowerCase()) && !c.id.toLowerCase().includes(search.toLowerCase())) return false;
-      if (session?.role === 'student' && c.submittedBy !== session.userId) return false;
-      if (session?.role === 'staff' && c.assignedTo !== session.userId && c.submittedBy !== session.userId) return false;
-      return true;
-    });
-    
-    const handleUpvote = (id) => {
-      const complaint = complaints.find(c => c.id === id);
-      if (!complaint) return;
-      const already = complaint.upvotedBy.includes(session?.userId);
-      updateData(prev => ({
-        ...prev,
-        complaints: prev.complaints.map(c => c.id === id ? {
-          ...c,
-          upvotes: already ? c.upvotes - 1 : c.upvotes + 1,
-          upvotedBy: already ? c.upvotedBy.filter(u => u !== session?.userId) : [...c.upvotedBy, session?.userId]
-        } : c)
-      }));
-      if (!already) addToast('Upvoted!', 'success');
-    };
-    
-    const handleSelect = (id) => setSelectedId(id === selectedId ? null : id);
-    
-    const handleNewComplaint = (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const newComplaint = {
-        id: generateId(),
-        subject: form.subject.value,
-        description: form.description.value,
-        category: form.category.value,
-        subcategory: form.subcategory.value || 'General',
-        priority: form.priority.value,
-        status: 'submitted',
-        department: form.department.value || 'General',
-        location: form.location.value || 'Campus',
-        zone: 'academic',
-        anonymous: form.anonymous.checked,
-        submittedBy: session.userId,
-        assignedTo: null,
-        upvotes: 0,
-        upvotedBy: [],
-        attachments: [],
-        comments: [],
-        timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted by ' + (form.anonymous.checked ? 'Anonymous' : session.name) }],
-        resolution: '',
-        feedback: null,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        slaHours: parseInt(form.slaHours.value) || 24,
-        sentiment: 'neutral',
-        predictedResolve: 4
-      };
-      updateData(prev => ({
-        ...prev,
-        complaints: [newComplaint, ...prev.complaints],
-        notifications: [...prev.notifications, {
-          id: 'n'+Date.now(),
-          userId: session.userId,
-          type: 'status',
-          title: 'Complaint submitted',
-          message: `${newComplaint.id} - ${newComplaint.subject}`,
-          read: false,
-          createdAt: Date.now(),
-          icon: 'fa-pen',
-          color: '#818cf8'
-        }],
-        auditLogs: [...prev.auditLogs, { id: 'a'+Date.now(), actorId: session.userId, actorName: session.name, role: session.role, action: 'complaint_created', targetId: newComplaint.id, description: `Created complaint ${newComplaint.id}`, createdAt: Date.now() }]
-      }));
-      addToast('Complaint submitted successfully!', 'success');
-      setShowNewModal(false);
-    };
-    
-    return React.createElement(React.Fragment, null,
-      React.createElement('div', { className: 'topbar' },
-        React.createElement('div', null,
-          React.createElement('div', { className: 'page-title' }, 'Complaints'),
-          React.createElement('div', { className: 'page-subtitle' }, `${filtered.length} complaints matching filters`)
-        ),
-        React.createElement('div', { style: { display:'flex', gap:'8px', alignItems:'center', flexWrap:'wrap' } },
-          React.createElement('button', { className: 'btn btn-primary', onClick: () => setShowNewModal(true) },
-            React.createElement('i', { className: 'fas fa-plus' }), 'New Complaint'
-          ),
-          React.createElement('button', { className: `btn btn-ghost btn-sm ${view === 'list' ? 'active' : ''}`, onClick: () => setView('list') }, 'List'),
-          React.createElement('button', { className: `btn btn-ghost btn-sm ${view === 'kanban' ? 'active' : ''}`, onClick: () => setView('kanban') }, 'Kanban'),
-          React.createElement(NotificationBell, null),
-          React.createElement(UserMenu, null)
-        )
-      ),
-      React.createElement('div', { style: { display:'flex', gap:'12px', flexWrap:'wrap', marginBottom:'20px', alignItems:'center' } },
-        React.createElement('div', { className: 'search-bar', style: { maxWidth:'300px' } },
-          React.createElement('i', { className: 'fas fa-search' }),
-          React.createElement('input', { type: 'text', placeholder: 'Search complaints...', value: search, onChange: e => setSearch(e.target.value) })
-        ),
-        React.createElement('select', { value: filterStatus, onChange: e => setFilterStatus(e.target.value), style: { padding:'10px 16px', borderRadius:'var(--radius-sm)', border:'1px solid var(--border)', background:'var(--bg-elevated)', color:'var(--text)', fontSize:'13px', fontFamily:'inherit' } },
-          React.createElement('option', { value: 'all' }, 'All Status'),
-          ['submitted','under review','assigned','in progress','resolved','closed'].map(s => React.createElement('option', { key: s, value: s }, s))
-        ),
-        React.createElement('select', { value: filterPriority, onChange: e => setFilterPriority(e.target.value), style: { padding:'10px 16px', borderRadius:'var(--radius-sm)', border:'1px solid var(--border)', background:'var(--bg-elevated)', color:'var(--text)', fontSize:'13px', fontFamily:'inherit' } },
-          React.createElement('option', { value: 'all' }, 'All Priority'),
-          ['critical','high','medium','low'].map(p => React.createElement('option', { key: p, value: p }, p))
-        )
-      ),
-      view === 'list' ? 
-        React.createElement(ComplaintListView, { complaints: filtered, onSelect: handleSelect, selectedId, onUpvote: handleUpvote, session }) :
-        React.createElement(ComplaintKanban, { complaints: filtered, onSelect: handleSelect, onUpvote: handleUpvote, session }),
-      
-      selectedComplaint && React.createElement(ComplaintDetailModal, {
-        complaint: selectedComplaint,
-        onClose: () => setSelectedId(null)
-      }),
-      
-      showNewModal && React.createElement('div', { className: 'modal-overlay', onClick: (e) => e.target === e.currentTarget && setShowNewModal(false) },
-        React.createElement('div', { className: 'modal-box' },
-          React.createElement('div', { className: 'modal-header' },
-            React.createElement('span', { style: { fontSize:'18px', fontWeight:700 } }, 'New Complaint'),
-            React.createElement('button', { className: 'modal-close', onClick: () => setShowNewModal(false) }, React.createElement('i', { className: 'fas fa-times' }))
-          ),
-          React.createElement('div', { className: 'modal-body' },
-            React.createElement('form', { onSubmit: handleNewComplaint },
-              React.createElement('div', { className: 'form-group' },
-                React.createElement('label', null, 'Subject'),
-                React.createElement('input', { type: 'text', name: 'subject', required: true, placeholder: 'Brief subject' })
-              ),
-              React.createElement('div', { className: 'form-group' },
-                React.createElement('label', null, 'Description'),
-                React.createElement('textarea', { name: 'description', rows: 3, required: true, placeholder: 'Detailed description...' })
-              ),
-              React.createElement('div', { className: 'form-row' },
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Category'),
-                  React.createElement('select', { name: 'category', required: true },
-                    ['Infrastructure','Examination','Library','IT / Technology','Harassment / Misconduct','Water','Transport','Other'].map(c => React.createElement('option', { key: c, value: c }, c))
-                  )
-                ),
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Subcategory'),
-                  React.createElement('input', { type: 'text', name: 'subcategory', placeholder: 'e.g. HVAC, Plumbing' })
-                )
-              ),
-              React.createElement('div', { className: 'form-row' },
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Priority'),
-                  React.createElement('select', { name: 'priority', required: true },
-                    ['critical','high','medium','low'].map(p => React.createElement('option', { key: p, value: p }, p))
-                  )
-                ),
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Department'),
-                  React.createElement('input', { type: 'text', name: 'department', placeholder: 'e.g. Facilities, IT' })
-                )
-              ),
-              React.createElement('div', { className: 'form-row' },
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Location'),
-                  React.createElement('input', { type: 'text', name: 'location', placeholder: 'Building / Room' })
-                ),
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'SLA Hours'),
-                  React.createElement('input', { type: 'number', name: 'slaHours', defaultValue: 24, min: 1 })
-                )
-              ),
-              React.createElement('div', { className: 'form-group' },
-                React.createElement('label', { style: { display:'flex', alignItems:'center', gap:'8px', cursor:'pointer' } },
-                  React.createElement('input', { type: 'checkbox', name: 'anonymous' }),
-                  'Submit Anonymously'
-                )
-              ),
-              React.createElement('button', { type: 'submit', className: 'btn btn-primary' }, 'Submit Complaint')
-            )
+        React.createElement('div', { style: { marginTop:'24px', background:'rgba(255,248,255,0.5)', borderRadius:'20px', padding:'14px 18px', fontSize:'12px', color:'#3a2a5a' } },
+          React.createElement('div', { style: { fontWeight:600, marginBottom:'4px' } }, 'Demo accounts (password: demo)'),
+          React.createElement('div', { style: { display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2px 8px', fontSize:'11px' } },
+            React.createElement('span', null, 'admin@portal.demo'), React.createElement('span', { style: { color:'#6e50c8', fontWeight:600 } }, 'admin'),
+            React.createElement('span', null, 'student@portal.demo'), React.createElement('span', { style: { color:'#6e50c8', fontWeight:600 } }, 'student'),
+            React.createElement('span', null, 'teacher@portal.demo'), React.createElement('span', { style: { color:'#6e50c8', fontWeight:600 } }, 'teacher'),
+            React.createElement('span', null, 'staff@portal.demo'), React.createElement('span', { style: { color:'#6e50c8', fontWeight:600 } }, 'staff')
           )
         )
       )
@@ -1907,56 +279,471 @@
   }
 
   function App() {
-    const { session, loading } = useData();
-    const [page, setPage] = useState('dashboard');
-    const logout = useData().logout;
+    var _a = useData(), session = _a.session, logout = _a.logout, data = _a.data, updateData = _a.updateData, addToast = _a.addToast;
+    var _b = useState('dashboard'), activeView = _b[0], setActiveView = _b[1];
+    var _c = useState(''), searchQuery = _c[0], setSearchQuery = _c[1];
+    var _d = useState(null), selectedComplaint = _d[0], setSelectedComplaint = _d[1];
+    var _e = useState(true), loading = _e[0], setLoading = _e[1];
     
-    if (loading) return React.createElement('div', { style: { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--bg)' } },
-      React.createElement('div', { style: { fontSize:'24px', fontWeight:700, background:'linear-gradient(135deg,var(--primary),var(--accent-purple))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' } }, 'ResolveHub'),
-      React.createElement('div', { style: { position:'absolute', width:'60px', height:'60px', marginTop:'60px', border:'4px solid var(--border)', borderTopColor:'var(--primary)', borderRadius:'50%', animation:'spin 1s linear infinite' } })
-    );
-    
+    useEffect(function() {
+      var timer = setTimeout(function() { setLoading(false); }, 500);
+      return function() { clearTimeout(timer); };
+    }, []);
+
+    if (loading) {
+      return React.createElement('div', { className: 'loader' },
+        React.createElement('div', { className: 'spinner' }),
+        React.createElement('span', null, 'Loading ResolveHub...')
+      );
+    }
+
     if (!session) return React.createElement(Login, null);
     
-    return React.createElement('div', { className: 'app' },
-      React.createElement('nav', { className: 'sidebar' },
-        React.createElement('div', { className: 'nav-brand' },
-          'ResolveHub',
-          React.createElement('span', { className: 'badge' }, 'v2')
+    var user = data.users.find(function(u) { return u.id === session.userId; });
+    var isAdmin = session.role === 'admin';
+    var isStaff = session.role === 'staff';
+
+    var navItems = [
+      { id: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high' },
+      { id: 'heatmap', label: 'Heatmap', icon: 'fa-map' },
+      { id: 'complaints', label: 'Complaints', icon: 'fa-list' },
+      { id: 'leaderboard', label: 'Leaderboard', icon: 'fa-trophy' },
+      { id: 'new-complaint', label: 'New', icon: 'fa-plus-circle' },
+    ];
+    if (isAdmin) { navItems.push({ id: 'admin-dashboard', label: 'Analytics', icon: 'fa-chart-pie' }); navItems.push({ id: 'users', label: 'Users', icon: 'fa-users' }); navItems.push({ id: 'audit', label: 'Audit', icon: 'fa-history' }); }
+    navItems.push({ id: 'settings', label: 'Settings', icon: 'fa-sliders' });
+
+    var zones = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
+    var zoneLabels = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
+    var getHeatColor = function(count) {
+      if (count === 0) return 'rgba(110,80,200,0.05)';
+      if (count <= 2) return 'rgba(110,80,200,0.2)';
+      if (count <= 4) return 'rgba(212,160,80,0.4)';
+      if (count <= 6) return 'rgba(208,128,80,0.6)';
+      return 'rgba(208,96,96,0.8)';
+    };
+
+    function Dashboard() {
+      var userComplaints = data.complaints.filter(function(c) { return c.submittedBy === session.userId || c.assignedTo === session.userId; });
+      var pending = userComplaints.filter(function(c) { return !['resolved','closed','rejected'].includes(c.status); });
+      var inProgress = userComplaints.filter(function(c) { return c.status === 'in progress' || c.status === 'assigned'; });
+      var resolved = userComplaints.filter(function(c) { return c.status === 'resolved' || c.status === 'closed'; });
+      return React.createElement('div', { className: 'fade-in' },
+        React.createElement('div', { className: 'stats-grid' },
+          React.createElement(StatCard, { label: 'Total', value: userComplaints.length, icon: 'fa-folder-open', color: '#6e50c8' }),
+          React.createElement(StatCard, { label: 'Pending', value: pending.length, icon: 'fa-clock', color: '#d4a050' }),
+          React.createElement(StatCard, { label: 'In Progress', value: inProgress.length, icon: 'fa-spinner', color: '#8a6ed0' }),
+          React.createElement(StatCard, { label: 'Resolved', value: resolved.length, icon: 'fa-check-circle', color: '#4caf84' })
         ),
-        React.createElement('div', { style: { fontSize:'12px', color:'var(--text-muted)', marginBottom:'20px', paddingLeft:'12px' } }, session.name + ' · ' + session.role),
-        React.createElement('div', { className: 'nav-section' }, 'Main'),
-        React.createElement('button', { className: `nav-item ${page === 'dashboard' ? 'active' : ''}`, onClick: () => setPage('dashboard') },
-          React.createElement('i', { className: 'fas fa-chart-pie' }), 'Dashboard'
+        React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+          React.createElement('h3', { style: { fontSize:'16px', fontWeight:600, marginBottom:'14px', color:'#1a1028' } }, 'Recent Complaints'),
+          userComplaints.slice(0,5).map(function(c) { return React.createElement(ComplaintRow, { key: c.id, complaint: c, onClick: function() { setSelectedComplaint(c); } }); }),
+          userComplaints.length === 0 && React.createElement(EmptyState, { message: 'No complaints yet' })
+        )
+      );
+    }
+
+    function StatCard(props) {
+      var label = props.label, value = props.value, icon = props.icon, color = props.color;
+      return React.createElement('div', { className: 'stat-card card-hover' },
+        React.createElement('div', { className: 'stat-icon', style: { background: color+'18', color: color } }, React.createElement('i', { className: 'fas ' + icon })),
+        React.createElement('div', null,
+          React.createElement('div', { className: 'stat-value' }, value),
+          React.createElement('div', { className: 'stat-label' }, label)
+        )
+      );
+    }
+
+    function ComplaintRow(props) {
+      var complaint = props.complaint, onClick = props.onClick;
+      var hasUpvoted = complaint.upvotedBy && complaint.upvotedBy.includes(session.userId);
+      var handleUpvote = function(e) {
+        e.stopPropagation();
+        updateData(function(prev) {
+          var idx = prev.complaints.findIndex(function(c) { return c.id === complaint.id; });
+          if (idx > -1) {
+            if (prev.complaints[idx].upvotedBy && prev.complaints[idx].upvotedBy.includes(session.userId)) {
+              prev.complaints[idx].upvotes -= 1;
+              prev.complaints[idx].upvotedBy = prev.complaints[idx].upvotedBy.filter(function(id) { return id !== session.userId; });
+            } else {
+              prev.complaints[idx].upvotes += 1;
+              prev.complaints[idx].upvotedBy = (prev.complaints[idx].upvotedBy || []).concat([session.userId]);
+            }
+          }
+          return prev;
+        });
+      };
+      return React.createElement('div', { className: 'complaint-card', onClick: onClick },
+        React.createElement('div', { className: 'complaint-header' },
+          React.createElement('span', { className: 'complaint-subject' }, complaint.subject),
+          React.createElement('div', { style: { display:'flex', gap:'6px', alignItems:'center', flexWrap:'wrap' } },
+            React.createElement('button', { className: 'upvote-btn ' + (hasUpvoted ? 'upvoted' : ''), onClick: handleUpvote, style: { fontSize:'11px' } },
+              React.createElement('i', { className: 'fas fa-arrow-up' }), ' ', complaint.upvotes || 0
+            ),
+            React.createElement('span', { className: 'badge-priority', style: { background: getPriorityColor(complaint.priority)+'20', color: getPriorityColor(complaint.priority) } }, complaint.priority),
+            React.createElement('span', { className: 'badge-priority', style: { background: getStatusColor(complaint.status)+'20', color: getStatusColor(complaint.status) } }, complaint.status)
+          )
         ),
-        React.createElement('button', { className: `nav-item ${page === 'complaints' ? 'active' : ''}`, onClick: () => setPage('complaints') },
-          React.createElement('i', { className: 'fas fa-ticket' }), 'Complaints'
+        React.createElement('div', { className: 'complaint-meta' },
+          React.createElement('span', null, complaint.id),
+          React.createElement('span', null, '\u00B7'),
+          React.createElement('span', null, complaint.category),
+          React.createElement('span', null, '\u00B7'),
+          React.createElement('span', null, formatDate(complaint.createdAt))
+        )
+      );
+    }
+
+    function HeatmapView() {
+      var zoneCounts = {};
+      zones.forEach(function(z) { zoneCounts[z] = data.complaints.filter(function(c) { return c.zone === z; }).length; });
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('h3', { style: { fontSize:'18px', fontWeight:600, marginBottom:'16px', color:'#1a1028' } }, 'Campus Issue Heatmap'),
+        React.createElement('p', { style: { fontSize:'13px', color:'#7a6a8a', marginBottom:'16px' } }, 'Heat intensity shows complaint density per zone. Red zones need immediate attention.'),
+        React.createElement('div', { className: 'heatmap-grid' },
+          zones.map(function(z) { return React.createElement('div', { key: z, className: 'heat-cell', style: { background: getHeatColor(zoneCounts[z] || 0), border: '1px solid rgba(110,80,200,0.1)' } },
+            React.createElement('div', { style: { textAlign:'center' } },
+              React.createElement('div', { style: { fontSize:'11px', fontWeight:600 } }, zoneLabels[z]),
+              React.createElement('div', { style: { fontSize:'16px', fontWeight:700 } }, zoneCounts[z] || 0)
+            )
+          ); })
         ),
-        React.createElement('div', { style: { marginTop:'auto', paddingTop:'20px', borderTop:'1px solid var(--border)' } },
-          React.createElement('button', { className: 'btn btn-ghost', style: { width:'100%', justifyContent:'center' }, onClick: () => { logout(); } },
-            React.createElement('i', { className: 'fas fa-sign-out-alt' }), 'Sign Out'
+        React.createElement('div', { style: { display:'flex', gap:'16px', marginTop:'16px', fontSize:'11px', color:'#7a6a8a', flexWrap:'wrap' } },
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(110,80,200,0.05)', marginRight:'4px' } }), ' 0'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(110,80,200,0.2)', marginRight:'4px' } }), ' 1-2'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(212,160,80,0.4)', marginRight:'4px' } }), ' 3-4'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(208,128,80,0.6)', marginRight:'4px' } }), ' 5-6'),
+          React.createElement('span', null, React.createElement('span', { style: { display:'inline-block', width:'12px', height:'12px', borderRadius:'4px', background:'rgba(208,96,96,0.8)', marginRight:'4px' } }), ' 7+')
+        )
+      );
+    }
+
+    function LeaderboardView() {
+      var depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration'];
+      var deptStats = depts.map(function(d) {
+        var comps = data.complaints.filter(function(c) { return c.department === d; });
+        var resolved = comps.filter(function(c) { return c.status === 'resolved' || c.status === 'closed'; });
+        var total = comps.length || 1;
+        var avgTime = resolved.length ? Math.round(resolved.reduce(function(acc, c) {
+          var re = c.timeline && c.timeline.find(function(t) { return t.status === 'resolved'; });
+          return acc + (re ? (re.timestamp - c.createdAt) : 0);
+        }, 0) / resolved.length / (1000*60*60)) : 0;
+        var satisfaction = resolved.length ? Math.round(resolved.reduce(function(acc, c) { return acc + (c.feedback && c.feedback.rating || 3); }, 0) / resolved.length * 20) : 50;
+        return { name: d, resolved: resolved.length, total: comps.length, rate: Math.round((resolved.length/total)*100), avgTime: avgTime, satisfaction: Math.min(100, satisfaction) };
+      });
+      deptStats.sort(function(a,b) { return b.rate - a.rate || a.avgTime - b.avgTime; });
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('h3', { style: { fontSize:'18px', fontWeight:600, marginBottom:'16px', color:'#1a1028' } }, 'Department Performance Leaderboard'),
+        React.createElement('div', { style: { fontSize:'13px', color:'#7a6a8a', marginBottom:'12px' } }, 'Ranked by Resolution Rate · Higher is better'),
+        deptStats.map(function(d, i) { return React.createElement('div', { key: d.name, className: 'dept-score' },
+          React.createElement('span', { style: { fontWeight:700, fontSize:'14px', color:'#1a1028', minWidth:'24px' } }, i+1),
+          React.createElement('span', { style: { fontWeight:600, minWidth:'100px', fontSize:'13px' } }, d.name),
+          React.createElement('div', { className: 'bar' },
+            React.createElement('div', { className: 'bar-fill', style: { width: d.rate+'%' } })
+          ),
+          React.createElement('span', { style: { fontWeight:600, fontSize:'12px', minWidth:'36px', color:'#6e50c8' } }, d.rate+'%'),
+          React.createElement('span', { style: { fontSize:'11px', color:'#8a7aaa', minWidth:'40px' } }, d.avgTime+'h'),
+          React.createElement('span', { style: { fontSize:'11px', color:'#4caf84', minWidth:'36px' } }, '\u2605', d.satisfaction)
+        ); })
+      );
+    }
+
+    function ComplaintList() {
+      var complaints = data.complaints;
+      if (!isAdmin && !isStaff) complaints = complaints.filter(function(c) { return c.submittedBy === session.userId || !c.anonymous; });
+      else if (isStaff) complaints = complaints.filter(function(c) { return c.assignedTo === session.userId || !c.assignedTo; });
+      if (searchQuery) { var q = searchQuery.toLowerCase(); complaints = complaints.filter(function(c) { return c.id.toLowerCase().includes(q) || c.subject.toLowerCase().includes(q) || c.description.toLowerCase().includes(q); }); }
+      complaints.sort(function(a,b) { return (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt; });
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'12px' } },
+          React.createElement('span', { style: { fontSize:'13px', color:'#7a6a8a' } }, 'Sorted by popularity (upvotes)'),
+          React.createElement('span', { className: 'badge-priority', style: { background:'rgba(110,80,200,0.08)', color:'#6e50c8' } }, 'Crowd-sourced')
+        ),
+        complaints.length === 0 ? React.createElement(EmptyState, { message: 'No complaints found' }) :
+        complaints.map(function(c) { return React.createElement(ComplaintRow, { key: c.id, complaint: c, onClick: function() { setSelectedComplaint(c); } }); })
+      );
+    }
+
+    function ComplaintDetail(props) {
+      var complaint = props.complaint, onClose = props.onClose;
+      var _a = useData(), updateData = _a.updateData, addToast = _a.addToast, session = _a.session;
+      var _b = useState(''), comment = _b[0], setComment = _b[1];
+      if (!complaint) return null;
+      var handleAssign = function() {
+        updateData(function(prev) { var idx = prev.complaints.findIndex(function(c) { return c.id === complaint.id; }); if (idx > -1) { prev.complaints[idx].status = 'assigned'; prev.complaints[idx].assignedTo = 'u4'; prev.complaints[idx].timeline.push({ status: 'assigned', timestamp: Date.now(), note: 'Assigned to Staff' }); } return prev; });
+        addToast('Complaint assigned', 'success'); onClose();
+      };
+      var handleResolve = function() {
+        updateData(function(prev) { var idx = prev.complaints.findIndex(function(c) { return c.id === complaint.id; }); if (idx > -1) { prev.complaints[idx].status = 'resolved'; prev.complaints[idx].resolution = 'Resolved by admin'; prev.complaints[idx].timeline.push({ status: 'resolved', timestamp: Date.now(), note: 'Resolved' }); } return prev; });
+        addToast('Complaint resolved', 'success'); onClose();
+      };
+      var handleAddComment = function() {
+        if (!comment.trim()) return;
+        updateData(function(prev) { var idx = prev.complaints.findIndex(function(c) { return c.id === complaint.id; }); if (idx > -1) { prev.complaints[idx].comments.push({ id: 'c'+Date.now(), userId: session.userId, name: session.name, role: session.role, message: comment, timestamp: Date.now() }); } return prev; });
+        setComment(''); addToast('Comment added', 'info');
+      };
+      var elapsed = Math.floor((Date.now() - complaint.createdAt) / (1000*60));
+      var timerDisplay = elapsed > 60 ? Math.floor(elapsed/60) + 'h ' + elapsed%60 + 'm' : elapsed + 'm';
+      return React.createElement('div', { className: 'modal-overlay', onClick: function(e) { if (e.target === e.currentTarget) onClose(); } },
+        React.createElement('div', { className: 'modal-box slide-up' },
+          React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'start', marginBottom:'16px' } },
+            React.createElement('div', null,
+              React.createElement('h3', { style: { fontSize:'20px', fontWeight:700, color:'#1a1028' } }, complaint.subject),
+              React.createElement('div', { style: { fontSize:'13px', color:'#8a7aaa' } }, complaint.id, ' \u00B7 ', complaint.category)
+            ),
+            React.createElement('button', { onClick: onClose, style: { background:'none', border:'none', fontSize:'22px', color:'#8a7aaa', cursor:'pointer' } }, React.createElement('i', { className: 'fas fa-times' }))
+          ),
+          (complaint.priority === 'high' || complaint.priority === 'critical') ? React.createElement('div', { style: { background:'rgba(208,96,96,0.08)', padding:'8px 16px', borderRadius:'12px', marginBottom:'12px', display:'flex', alignItems:'center', gap:'12px' } },
+            React.createElement('i', { className: 'fas fa-clock', style: { color:'#d06060' } }),
+            React.createElement('span', { style: { fontWeight:600, fontSize:'13px' } }, 'High Priority \u00B7 Time since submission: '),
+            React.createElement('span', { className: 'timer-badge' }, timerDisplay)
+          ) : null,
+          React.createElement('p', { style: { color:'#3a2a5a', marginBottom:'16px', fontSize:'14px', lineHeight:1.6 } }, complaint.description),
+          React.createElement('div', { style: { display:'flex', gap:'16px', flexWrap:'wrap', fontSize:'13px', color:'#7a6a8a', marginBottom:'16px' } },
+            React.createElement('span', null, 'Priority: ', React.createElement('span', { style: { color: getPriorityColor(complaint.priority), fontWeight:600 } }, complaint.priority)),
+            React.createElement('span', null, 'Status: ', React.createElement('span', { style: { color: getStatusColor(complaint.status), fontWeight:600 } }, complaint.status)),
+            React.createElement('span', null, 'Location: ', complaint.location),
+            React.createElement('span', null, 'Upvotes: ', React.createElement('span', { style: { fontWeight:600, color:'#6e50c8' } }, complaint.upvotes || 0))
+          ),
+          isAdmin && complaint.status !== 'resolved' && complaint.status !== 'closed' ? React.createElement('div', { style: { display:'flex', gap:'8px', marginBottom:'16px' } },
+            React.createElement('button', { onClick: handleAssign, className: 'btn-primary', style: { padding:'8px 20px', borderRadius:'30px', fontSize:'13px' } }, 'Assign'),
+            React.createElement('button', { onClick: handleResolve, className: 'btn-primary', style: { padding:'8px 20px', borderRadius:'30px', fontSize:'13px', background:'#4caf84' } }, 'Resolve')
+          ) : null,
+          complaint.timeline && complaint.timeline.length > 0 ? React.createElement('div', { style: { marginBottom:'16px' } },
+            React.createElement('div', { style: { fontWeight:600, fontSize:'13px', color:'#3a2a5a', marginBottom:'6px' } }, 'Timeline'),
+            complaint.timeline.map(function(t, i) { return React.createElement('div', { key: i, className: 'timeline-item' },
+              React.createElement('span', { className: 'timeline-status' }, t.status),
+              React.createElement('span', { style: { flex:1 } }, t.note),
+              React.createElement('span', { style: { color:'#8a7aaa', fontSize:'11px' } }, formatDate(t.timestamp))
+            ); })
+          ) : null,
+          complaint.comments && complaint.comments.length > 0 ? React.createElement('div', { style: { marginBottom:'12px' } },
+            React.createElement('div', { style: { fontWeight:600, fontSize:'13px', color:'#3a2a5a', marginBottom:'6px' } }, 'Comments'),
+            complaint.comments.map(function(c) { return React.createElement('div', { key: c.id, style: { fontSize:'13px', padding:'6px 0', borderBottom:'1px solid rgba(110,80,200,0.06)', color:'#3a2a5a' } },
+              React.createElement('span', { style: { fontWeight:600 } }, c.name), ' ', React.createElement('span', { style: { color:'#8a7aaa', fontSize:'11px' } }, c.role), ': ', c.message
+            ); })
+          ) : null,
+          React.createElement('div', { style: { display:'flex', gap:'8px' } },
+            React.createElement('input', { type: 'text', value: comment, onChange: function(e) { setComment(e.target.value); }, placeholder: 'Add comment...', style: { flex:1, padding:'10px 16px', borderRadius:'30px', border:'1px solid rgba(110,80,200,0.15)', background:'rgba(255,248,255,0.5)', outline:'none' } }),
+            React.createElement('button', { onClick: handleAddComment, className: 'btn-primary', style: { padding:'10px 20px', borderRadius:'30px', fontSize:'13px' } }, 'Send')
+          ),
+          React.createElement('div', { style: { marginTop:'12px', padding:'12px', background:'rgba(110,80,200,0.04)', borderRadius:'12px', fontSize:'12px', color:'#7a6a8a' } },
+            React.createElement('i', { className: 'fas fa-shield-alt', style: { marginRight:'6px' } }),
+            'Media redaction active \u00B7 Auto-blur faces & metadata'
           )
         )
+      );
+    }
+
+    function ComplaintForm(props) {
+      var onSuccess = props.onSuccess;
+      var _a = useData(), updateData = _a.updateData, addToast = _a.addToast, session = _a.session;
+      var _b = useState({ subject:'', category:'Infrastructure', subcategory:'', description:'', priority:'medium', department:'', location:'', zone:'academic', anonymous:false }), form = _b[0], setForm = _b[1];
+      var _c = useState(false), loading = _c[0], setLoading = _c[1];
+      var categories = ['Infrastructure','Academic','Faculty','Examination','Hostel','Transport','Library','IT / Technology','Security','Cleanliness','Electricity','Water','Harassment / Misconduct','Administration','Other'];
+      var priorities = ['low','medium','high','critical'];
+      var zones = ['academic','hostel','library','cafeteria','admin','transport'];
+      var handleSubmit = function(e) {
+        e.preventDefault();
+        if (!form.subject || !form.description) { addToast('Subject and description required', 'error'); return; }
+        setLoading(true);
+        setTimeout(function() {
+          var newComplaint = { id: generateId(), subject: form.subject, description: form.description, category: form.category, subcategory: form.subcategory || 'General', priority: form.priority, status: 'submitted', department: form.department || 'General', location: form.location || 'Campus', zone: form.zone || 'academic', anonymous: form.anonymous, submittedBy: session.userId, assignedTo: null, upvotes: 0, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted' }], resolution: '', feedback: null, createdAt: Date.now(), updatedAt: Date.now() };
+          updateData(function(prev) { return ({}.assign({}, prev, { complaints: [newComplaint].concat(prev.complaints) })); });
+          addToast('Complaint ' + newComplaint.id + ' created', 'success');
+          onSuccess(); setLoading(false);
+        }, 400);
+      };
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'24px', maxWidth:'700px', margin:'0 auto' } },
+        React.createElement('form', { onSubmit: handleSubmit },
+          React.createElement('div', { className: 'form-group' },
+            React.createElement('label', null, 'Subject *'),
+            React.createElement('input', { type: 'text', value: form.subject, onChange: function(e) { setForm({}.assign({}, form, { subject: e.target.value })); }, required: true })
+          ),
+          React.createElement('div', { className: 'form-row' },
+            React.createElement('div', { className: 'form-group' },
+              React.createElement('label', null, 'Category'),
+              React.createElement('select', { value: form.category, onChange: function(e) { setForm({}.assign({}, form, { category: e.target.value })); } }, categories.map(function(c) { return React.createElement('option', { key: c }, c); }))
+            ),
+            React.createElement('div', { className: 'form-group' },
+              React.createElement('label', null, 'Priority'),
+              React.createElement('select', { value: form.priority, onChange: function(e) { setForm({}.assign({}, form, { priority: e.target.value })); } }, priorities.map(function(p) { return React.createElement('option', { key: p }, p); }))
+            )
+          ),
+          React.createElement('div', { className: 'form-group' },
+            React.createElement('label', null, 'Description *'),
+            React.createElement('textarea', { value: form.description, onChange: function(e) { setForm({}.assign({}, form, { description: e.target.value })); }, rows: 4, required: true })
+          ),
+          React.createElement('div', { className: 'form-row' },
+            React.createElement('div', { className: 'form-group' },
+              React.createElement('label', null, 'Department'),
+              React.createElement('input', { type: 'text', value: form.department, onChange: function(e) { setForm({}.assign({}, form, { department: e.target.value })); } })
+            ),
+            React.createElement('div', { className: 'form-group' },
+              React.createElement('label', null, 'Location'),
+              React.createElement('input', { type: 'text', value: form.location, onChange: function(e) { setForm({}.assign({}, form, { location: e.target.value })); } })
+            )
+          ),
+          React.createElement('div', { className: 'form-group' },
+            React.createElement('label', null, 'Campus Zone (for heatmap)'),
+            React.createElement('select', { value: form.zone, onChange: function(e) { setForm({}.assign({}, form, { zone: e.target.value })); } }, zones.map(function(z) { return React.createElement('option', { key: z, value: z }, z); }))
+          ),
+          React.createElement('div', { className: 'form-group', style: { display:'flex', alignItems:'center', gap:'10px' } },
+            React.createElement('input', { type: 'checkbox', checked: form.anonymous, onChange: function(e) { setForm({}.assign({}, form, { anonymous: e.target.checked })); }, style: { width:'auto' } }),
+            React.createElement('label', { style: { margin:0, cursor:'pointer' } }, 'Submit anonymously')
+          ),
+          React.createElement('button', { type: 'submit', disabled: loading, className: 'btn-primary', style: { padding:'14px 36px', borderRadius:'30px', fontSize:'16px', fontWeight:600, cursor:'pointer', width:'100%' } }, loading ? 'Submitting...' : 'Submit Complaint')
+        )
+      );
+    }
+
+    function AdminDashboard() {
+      var complaints = data.complaints;
+      var total = complaints.length;
+      var pending = complaints.filter(function(c) { return !['resolved','closed','rejected'].includes(c.status); }).length;
+      var resolved = complaints.filter(function(c) { return c.status === 'resolved' || c.status === 'closed'; }).length;
+      var critical = complaints.filter(function(c) { return c.priority === 'critical'; }).length;
+      var rate = total ? Math.round((resolved/total)*100) : 0;
+      var avgTime = 0;
+      var resolvedComplaints = complaints.filter(function(c) { return c.status === 'resolved' || c.status === 'closed'; });
+      if (resolvedComplaints.length) {
+        var times = resolvedComplaints.map(function(c) { var re = c.timeline && c.timeline.find(function(t) { return t.status === 'resolved'; }); return re ? re.timestamp - c.createdAt : c.updatedAt - c.createdAt; });
+        avgTime = Math.round(times.reduce(function(a,b) { return a+b; }, 0) / times.length / (1000*60*60));
+      }
+      var catMap = {}; complaints.forEach(function(c) { catMap[c.category] = (catMap[c.category]||0)+1; });
+      var priMap = {}; complaints.forEach(function(c) { priMap[c.priority] = (priMap[c.priority]||0)+1; });
+      var totalUpvotes = complaints.reduce(function(acc, c) { return acc + (c.upvotes || 0); }, 0);
+      return React.createElement('div', { className: 'fade-in' },
+        React.createElement('div', { className: 'stats-grid' },
+          React.createElement(StatCard, { label: 'Total', value: total, icon: 'fa-folder-open', color: '#6e50c8' }),
+          React.createElement(StatCard, { label: 'Pending', value: pending, icon: 'fa-clock', color: '#d4a050' }),
+          React.createElement(StatCard, { label: 'Resolved', value: resolved, icon: 'fa-check-circle', color: '#4caf84' }),
+          React.createElement(StatCard, { label: 'Critical', value: critical, icon: 'fa-exclamation-triangle', color: '#d06060' }),
+          React.createElement(StatCard, { label: 'Rate', value: rate+'%', icon: 'fa-percent', color: '#8a6ed0' }),
+          React.createElement(StatCard, { label: 'Avg Time', value: avgTime+'h', icon: 'fa-hourglass-half', color: '#6e8ad0' }),
+          React.createElement(StatCard, { label: 'Upvotes', value: totalUpvotes, icon: 'fa-arrow-up', color: '#c084e8' })
+        ),
+        React.createElement('div', { style: { display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px,1fr))', gap:'16px' } },
+          React.createElement('div', { className: 'glass', style: { borderRadius:'20px', padding:'18px' } },
+            React.createElement('h4', { style: { fontSize:'15px', fontWeight:600, marginBottom:'10px', color:'#1a1028' } }, 'Category'),
+            Object.entries(catMap).map(function(_a) {
+              var k = _a[0], v = _a[1];
+              return React.createElement('div', { key: k, style: { display:'flex', justifyContent:'space-between', padding:'6px 0', borderBottom:'1px solid rgba(110,80,200,0.06)', fontSize:'13px' } }, React.createElement('span', null, k), React.createElement('span', { style: { fontWeight:600, color:'#6e50c8' } }, v));
+            })
+          ),
+          React.createElement('div', { className: 'glass', style: { borderRadius:'20px', padding:'18px' } },
+            React.createElement('h4', { style: { fontSize:'15px', fontWeight:600, marginBottom:'10px', color:'#1a1028' } }, 'Priority'),
+            Object.entries(priMap).map(function(_a) {
+              var k = _a[0], v = _a[1];
+              return React.createElement('div', { key: k, style: { display:'flex', justifyContent:'space-between', padding:'6px 0', borderBottom:'1px solid rgba(110,80,200,0.06)', fontSize:'13px' } }, React.createElement('span', null, k), React.createElement('span', { style: { fontWeight:600, color: getPriorityColor(k) } }, v));
+            })
+          )
+        )
+      );
+    }
+
+    function UserManagement() {
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('h3', { style: { fontSize:'18px', fontWeight:600, marginBottom:'16px', color:'#1a1028' } }, 'Users'),
+        data.users.map(function(u) { return React.createElement('div', { key: u.id, style: { display:'flex', justifyContent:'space-between', padding:'10px 0', borderBottom:'1px solid rgba(110,80,200,0.06)' } },
+          React.createElement('span', { style: { fontWeight:500 } }, u.name, ' (', u.email, ')'),
+          React.createElement('span', { className: 'badge-priority', style: { background: 'rgba(110,80,200,0.08)', color:'#6e50c8', padding:'4px 16px' } }, u.role)
+        ); })
+      );
+    }
+
+    function AuditLogs() {
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px' } },
+        React.createElement('h3', { style: { fontSize:'18px', fontWeight:600, marginBottom:'16px', color:'#1a1028' } }, 'Audit Log'),
+        data.auditLogs.slice(0,30).map(function(a) { return React.createElement('div', { key: a.id, style: { display:'flex', justifyContent:'space-between', padding:'8px 0', borderBottom:'1px solid rgba(110,80,200,0.04)', fontSize:'13px' } },
+          React.createElement('span', { style: { fontWeight:500 } }, a.actorName),
+          React.createElement('span', { style: { color:'#7a6a8a' } }, a.action),
+          React.createElement('span', { style: { fontSize:'11px', color:'#8a7aaa' } }, formatDate(a.createdAt))
+        ); })
+      );
+    }
+
+    function Settings() {
+      var _a = useData(), updateData = _a.updateData, addToast = _a.addToast;
+      var _b = useState(data.settings && data.settings.theme || 'light'), theme = _b[0], setTheme = _b[1];
+      var handleReset = function() { if (confirm('Reset all demo data?')) { updateData(getDefaultData()); addToast('Demo data reset', 'success'); } };
+      var handleTheme = function(t) { setTheme(t); updateData(function(prev) { return ({}.assign({}, prev, { settings: {}.assign({}, prev.settings, { theme: t }) })); }); document.body.className = t === 'dark' ? 'dark' : ''; addToast('Theme: ' + t, 'info'); };
+      useEffect(function() { document.body.className = theme === 'dark' ? 'dark' : ''; }, [theme]);
+      return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'24px', maxWidth:'500px' } },
+        React.createElement('h3', { style: { fontSize:'20px', fontWeight:700, marginBottom:'20px', color:'#1a1028' } }, 'Settings'),
+        React.createElement('div', { style: { margin:'16px 0' } },
+          React.createElement('label', { style: { fontWeight:600, color:'#3a2a5a' } }, 'Theme'),
+          React.createElement('div', { style: { display:'flex', gap:'10px', marginTop:'8px' } },
+            React.createElement('button', { onClick: function() { handleTheme('light'); }, style: { padding:'10px 24px', borderRadius:'30px', border:'1px solid rgba(110,80,200,0.15)', background: theme==='light'?'#6e50c8':'transparent', color: theme==='light'?'white':'#3a2a5a', fontWeight:600, cursor:'pointer' } }, 'Light'),
+            React.createElement('button', { onClick: function() { handleTheme('dark'); }, style: { padding:'10px 24px', borderRadius:'30px', border:'1px solid rgba(110,80,200,0.15)', background: theme==='dark'?'#6e50c8':'transparent', color: theme==='dark'?'white':'#3a2a5a', fontWeight:600, cursor:'pointer' } }, 'Dark')
+          )
+        ),
+        React.createElement('button', { onClick: handleReset, style: { padding:'12px 28px', background:'#d06060', color:'white', border:'none', borderRadius:'30px', fontWeight:600, cursor:'pointer' } }, 'Reset Demo Data')
+      );
+    }
+
+    function EmptyState(props) {
+      var message = props.message;
+      return React.createElement('div', { className: 'empty-state' },
+        React.createElement('i', { className: 'fas fa-inbox' }),
+        React.createElement('p', null, message)
+      );
+    }
+
+    function renderView() {
+      switch(activeView) {
+        case 'dashboard': return React.createElement(Dashboard, null);
+        case 'heatmap': return React.createElement(HeatmapView, null);
+        case 'leaderboard': return React.createElement(LeaderboardView, null);
+        case 'complaints': return React.createElement(ComplaintList, null);
+        case 'new-complaint': return React.createElement(ComplaintForm, { onSuccess: function() { setActiveView('complaints'); addToast('Complaint submitted!', 'success'); } });
+        case 'admin-dashboard': return isAdmin ? React.createElement(AdminDashboard, null) : React.createElement('div', null, 'Access denied');
+        case 'users': return isAdmin ? React.createElement(UserManagement, null) : React.createElement('div', null, 'Access denied');
+        case 'audit': return isAdmin ? React.createElement(AuditLogs, null) : React.createElement('div', null, 'Access denied');
+        case 'settings': return React.createElement(Settings, null);
+        default: return React.createElement(Dashboard, null);
+      }
+    }
+
+    return React.createElement('div', { className: 'app-layout' },
+      React.createElement('div', { className: 'sidebar' },
+        React.createElement('div', { style: { display:'flex', alignItems:'center', gap:'12px', width:'100%', justifyContent:'space-between' } },
+          React.createElement('span', { className: 'sidebar-brand' }, 'ResolveHub'),
+          React.createElement('div', { className: 'user-badge' },
+            React.createElement('div', { className: 'avatar' }, user && user.name ? user.name[0] : 'U'),
+            React.createElement('span', { style: { fontSize:'13px', fontWeight:500, color:'#3a2a5a', display:'none' } }, user && user.name),
+            React.createElement('button', { onClick: function() { logout(); addToast('Logged out', 'info'); }, style: { background:'none', border:'none', color:'#8a7aaa', fontSize:'16px', cursor:'pointer' } }, React.createElement('i', { className: 'fas fa-sign-out-alt' }))
+          )
+        ),
+        React.createElement('div', { className: 'nav-scroll' },
+          navItems.map(function(item) { return React.createElement('button', { key: item.id, className: 'nav-item ' + (activeView === item.id ? 'active' : ''), onClick: function() { setActiveView(item.id); } },
+            React.createElement('i', { className: 'fas ' + item.icon, style: { marginRight:'6px' } }),
+            item.label
+          ); })
+        )
       ),
-      React.createElement('div', { className: 'main' },
-        page === 'dashboard' && React.createElement(DashboardView, null),
-        page === 'complaints' && React.createElement(ComplaintsView, null)
-      ),
-      React.createElement('div', { className: 'mobile-nav' },
-        ['dashboard','complaints'].map(p => React.createElement('button', { key: p, className: `mobile-nav-item ${page === p ? 'active' : ''}`, onClick: () => setPage(p) },
-          React.createElement('i', { className: `fas ${p === 'dashboard' ? 'fa-chart-pie' : 'fa-ticket'}` }),
-          p
-        ))
-      ),
-      React.createElement(ToastContainer, null)
+      React.createElement('div', { className: 'main-area' },
+        React.createElement('div', { className: 'top-bar' },
+          React.createElement('div', { className: 'top-bar-row' },
+            React.createElement('h1', { className: 'page-title' }, (navItems.find(function(n) { return n.id === activeView; }) || {}).label || 'Dashboard'),
+            React.createElement('div', { style: { display:'flex', gap:'8px', alignItems:'center', flexWrap:'wrap' } },
+              React.createElement('div', { className: 'search-wrap' },
+                React.createElement('i', { className: 'fas fa-search' }),
+                React.createElement('input', { type: 'text', placeholder: 'Search...', value: searchQuery, onChange: function(e) { setSearchQuery(e.target.value); } })
+              ),
+              React.createElement('button', { className: 'btn-new', onClick: function() { setActiveView('new-complaint'); } }, React.createElement('i', { className: 'fas fa-plus' }), 'New')
+            )
+          )
+        ),
+        renderView(),
+        selectedComplaint && React.createElement(ComplaintDetail, { complaint: selectedComplaint, onClose: function() { setSelectedComplaint(null); } }),
+        React.createElement(ToastContainer, null)
+      )
     );
   }
 
-  function Root() {
-    return React.createElement(DataProvider, null, React.createElement(App, null));
-  }
-
-  ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(Root, null));
+  var root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(React.createElement(DataProvider, null, React.createElement(App, null)));
 })();
 </script>
 </body>
