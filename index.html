@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* ... (all styles from the provided file remain exactly as given) ... */
     :root {
       --bg: #0a0e1a;
       --bg-elevated: #111827;
@@ -57,7 +56,6 @@
     ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 10px; }
     ::selection { background: var(--primary-glow); color: white; }
     
-    /* Animations */
     @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
     @keyframes slideIn { from { opacity:0; transform: translateX(-20px); } to { opacity:1; transform: translateX(0); } }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
@@ -65,7 +63,7 @@
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
     @keyframes glow { 0%,100% { box-shadow: 0 0 20px var(--primary-glow); } 50% { box-shadow: 0 0 40px var(--primary-glow); } }
     @keyframes countUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-    @keyframes ring { 0% { transform: scale(1); opacity:1; } 100% { transform: scale(1.5); opacity:0; } }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     
     .animate-fade { animation: fadeIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
     .animate-slide { animation: slideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
@@ -74,7 +72,6 @@
     .stagger-3 { animation-delay: 0.15s; opacity:0; }
     .stagger-4 { animation-delay: 0.2s; opacity:0; }
     
-    /* Glass */
     .glass {
       background: var(--surface);
       backdrop-filter: blur(20px);
@@ -84,7 +81,6 @@
     }
     .glass:hover { border-color: var(--border-hover); }
     
-    /* Layout */
     .app { display: flex; min-height: 100vh; }
     .sidebar {
       width: 260px;
@@ -116,7 +112,6 @@
     .page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
     .page-subtitle { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
     
-    /* Nav */
     .nav-brand {
       font-size: 22px;
       font-weight: 800;
@@ -184,7 +179,6 @@
       text-align: center;
     }
     
-    /* Stats */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -251,7 +245,6 @@
       color: var(--delta-color);
     }
     
-    /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -267,7 +260,6 @@
     }
     .card-title { font-size: 16px; font-weight: 700; margin: 0; }
     
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -297,7 +289,6 @@
     .btn-danger { background: var(--danger); color: white; }
     .btn-sm { padding: 6px 14px; font-size: 12px; }
     
-    /* Search & Filters */
     .search-bar {
       position: relative;
       flex: 1;
@@ -346,7 +337,6 @@
       background: rgba(99,102,241,0.08);
     }
     
-    /* Badges */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -368,7 +358,6 @@
     .badge-status-resolved { background: rgba(34,197,94,0.12); color: #4ade80; }
     .badge-status-closed { background: rgba(100,116,139,0.12); color: #64748b; }
     
-    /* Complaint List */
     .complaint-row {
       display: flex;
       align-items: center;
@@ -426,7 +415,6 @@
       color: var(--primary-light);
     }
     
-    /* Kanban */
     .kanban-board {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -484,7 +472,6 @@
       transition: width 0.5s ease;
     }
     
-    /* Calendar */
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -525,7 +512,6 @@
       bottom: 8px;
     }
     
-    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -570,7 +556,6 @@
     }
     .modal-close:hover { background: var(--surface-hover); color: var(--text); }
     
-    /* Timeline */
     .timeline { position: relative; padding-left: 24px; }
     .timeline::before {
       content: '';
@@ -607,7 +592,6 @@
       margin-top: 4px;
     }
     
-    /* Comments */
     .comment {
       display: flex;
       gap: 12px;
@@ -663,7 +647,6 @@
     }
     .comment-action:hover { color: var(--primary-light); }
     
-    /* Form */
     .form-group { margin-bottom: 20px; }
     .form-group label {
       display: block;
@@ -694,7 +677,6 @@
     }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     
-    /* Notifications */
     .notif-dropdown {
       position: absolute;
       top: 50px;
@@ -728,7 +710,6 @@
       flex-shrink: 0;
     }
     
-    /* Heatmap */
     .heatmap-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -756,7 +737,6 @@
       filter: blur(20px);
     }
     
-    /* Charts */
     .chart-bar {
       display: flex;
       align-items: flex-end;
@@ -793,7 +773,6 @@
       color: var(--text);
     }
     
-    /* Leaderboard */
     .leader-row {
       display: flex;
       align-items: center;
@@ -821,7 +800,6 @@
       transition: width 0.8s ease;
     }
     
-    /* AI Insight Cards */
     .insight-card {
       padding: 16px;
       border-radius: var(--radius-sm);
@@ -843,7 +821,6 @@
       line-height: 1.6;
     }
     
-    /* Timer */
     .sla-timer {
       font-family: var(--font-mono);
       font-size: 13px;
@@ -865,7 +842,6 @@
       color: #facc15;
     }
     
-    /* Empty State */
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -877,7 +853,6 @@
       opacity: 0.3;
     }
     
-    /* Toast */
     .toast-container {
       position: fixed;
       bottom: 24px;
@@ -905,7 +880,6 @@
     .toast-error { background: rgba(239,68,68,0.15); border-color: var(--danger); color: #f87171; }
     .toast-info { background: rgba(59,130,246,0.15); border-color: var(--info); color: #60a5fa; }
     
-    /* Mobile */
     .mobile-nav {
       display: none;
       position: fixed;
@@ -949,7 +923,6 @@
       .notif-dropdown { width: calc(100vw - 32px); right: -60px; }
     }
     
-    /* Skeleton */
     .skeleton {
       background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
       background-size: 200% 100%;
@@ -957,7 +930,6 @@
       border-radius: 8px;
     }
     
-    /* Checkbox */
     .checkbox {
       width: 18px; height: 18px;
       border-radius: 6px;
@@ -975,7 +947,6 @@
       color: white;
     }
     
-    /* Tooltip */
     .tooltip {
       position: relative;
     }
@@ -998,7 +969,6 @@
     }
     .tooltip:hover::after { opacity: 1; }
     
-    /* Scrollbar for horizontal */
     .h-scroll {
       display: flex;
       gap: 8px;
@@ -1012,8 +982,8 @@
 <body>
 <div id="root"></div>
 
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
 <script>
 (function() {
@@ -1024,7 +994,6 @@
   const STORAGE_KEY = 'resolvehub_extreme_v2';
   const SESSION_KEY = 'resolvehub_session_v2';
 
-  // ==================== DEFAULT DATA ====================
   const defaultUsers = [
     { id: 'u1', name: 'Alex Chen', email: 'admin@portal.demo', role: 'admin', department: 'Administration', avatar: 'AC', reputation: 1250, streak: 15, badges: ['super_admin','firefighter'] },
     { id: 'u2', name: 'Maya Patel', email: 'student@portal.demo', role: 'student', department: 'Engineering', avatar: 'MP', reputation: 340, streak: 5, badges: ['reporter'] },
@@ -1120,7 +1089,6 @@
   function loadSession() { try { const s = localStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; } }
   function saveSession(s) { if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
 
-  // ==================== CONTEXT ====================
   const DataContext = createContext(null);
   function DataProvider({ children }) {
     const [data, setData] = useState(() => loadData());
@@ -1171,7 +1139,6 @@
   }
   function useData() { return useContext(DataContext); }
 
-  // ==================== UTILS ====================
   const statusColors = {
     submitted: '#94a3b8', 'under review': '#facc15', assigned: '#60a5fa',
     'in progress': '#a78bfa', resolved: '#4ade80', closed: '#64748b',
@@ -1207,8 +1174,6 @@
     if (remaining < complaint.slaHours * 0.25) return { status: 'critical', text: `${Math.ceil(remaining)}h left`, class: 'warning' };
     return { status: 'safe', text: `${Math.floor(remaining)}h left`, class: 'safe' };
   }
-
-  // ==================== COMPONENTS ====================
 
   function ToastContainer() {
     const { toasts } = useData();
@@ -1317,7 +1282,7 @@
     const isPositive = delta && delta.startsWith('+');
     return React.createElement('div', { className: 'stat-card animate-fade stagger-' + delay, style: {'--glow-color': color+'20', '--icon-color': color} },
       React.createElement('div', { className: 'stat-icon', style: {background: color+'15', color} }, React.createElement('i', { className: `fas ${icon}` })),
-      React.createElement('div', { className: 'stat-value', style: {color} }, React.createElement(AnimatedCounter, { value: value })),
+      React.createElement('div', { className: 'stat-value', style: {color} }, typeof value === 'string' ? value : React.createElement(AnimatedCounter, { value: value })),
       React.createElement('div', { className: 'stat-label' }, label),
       delta && React.createElement('div', { className: 'stat-delta', style: {'--delta-bg': isPositive?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)', '--delta-color': isPositive?'#4ade80':'#f87171'} },
         React.createElement('i', { className: `fas fa-arrow-${isPositive?'up':'down'}` }), delta
@@ -1329,7 +1294,7 @@
     const { data, session, updateData } = useData();
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
-    const notifs = data.notifications.filter(n => n.userId === session.userId).sort((a,b) => b.createdAt - a.createdAt);
+    const notifs = data.notifications.filter(n => n.userId === session?.userId).sort((a,b) => b.createdAt - a.createdAt);
     const unread = notifs.filter(n => !n.read).length;
     
     useEffect(() => {
@@ -1348,9 +1313,11 @@
     const markAllRead = () => {
       updateData(prev => ({
         ...prev,
-        notifications: prev.notifications.map(n => n.userId === session.userId ? {...n, read: true} : n)
+        notifications: prev.notifications.map(n => n.userId === session?.userId ? {...n, read: true} : n)
       }));
     };
+
+    if (!session) return null;
 
     return React.createElement('div', { style: { position:'relative' }, ref },
       React.createElement('button', {
@@ -1422,7 +1389,7 @@
     );
   }
 
-  function ComplaintListView({ complaints, onSelect, selectedId, onUpvote }) {
+  function ComplaintListView({ complaints, onSelect, selectedId, onUpvote, session }) {
     return React.createElement('div', { style: { marginTop:'16px' } },
       complaints.length === 0 && React.createElement('div', { className: 'empty-state' },
         React.createElement('i', { className: 'fas fa-inbox' }),
@@ -1448,7 +1415,7 @@
             )
           ),
           React.createElement('button', {
-            className: `upvote-btn ${c.upvotedBy.includes('u2') ? 'active' : ''}`,
+            className: `upvote-btn ${c.upvotedBy.includes(session?.userId) ? 'active' : ''}`,
             onClick: (e) => { e.stopPropagation(); onUpvote(c.id); }
           },
             React.createElement('i', { className: 'fas fa-arrow-up' }),
@@ -1459,7 +1426,7 @@
     );
   }
 
-  function ComplaintKanban({ complaints, onSelect, onUpvote }) {
+  function ComplaintKanban({ complaints, onSelect, onUpvote, session }) {
     const columns = ['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'];
     const getColumnName = (s) => s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     
@@ -1489,7 +1456,7 @@
               React.createElement('div', { style: { display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'8px' } },
                 React.createElement('span', { style: { fontSize:'11px', color:'var(--text-muted)' } }, formatDate(c.createdAt)),
                 React.createElement('button', {
-                  className: `upvote-btn ${c.upvotedBy.includes('u2') ? 'active' : ''}`,
+                  className: `upvote-btn ${c.upvotedBy.includes(session?.userId) ? 'active' : ''}`,
                   style: { padding:'2px 10px', fontSize:'11px' },
                   onClick: (e) => { e.stopPropagation(); onUpvote(c.id); }
                 },
@@ -1504,7 +1471,7 @@
     );
   }
 
-  function ComplaintDetailModal({ complaint, onClose, onUpdate }) {
+  function ComplaintDetailModal({ complaint, onClose }) {
     const { data, session, updateData, addToast } = useData();
     const [status, setStatus] = useState(complaint?.status || '');
     const [assignment, setAssignment] = useState(complaint?.assignedTo || '');
@@ -1517,7 +1484,6 @@
     const users = data.users;
     const staffUsers = users.filter(u => u.role !== 'student');
     const isStaff = session?.role !== 'student';
-    const isAdmin = session?.role === 'admin';
     
     const handleUpdate = () => {
       const updated = {
@@ -1676,8 +1642,6 @@
     const resolved = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
     const inProgress = complaints.filter(c => c.status === 'in progress' || c.status === 'assigned').length;
     const critical = complaints.filter(c => c.priority === 'critical' && c.status !== 'resolved' && c.status !== 'closed').length;
-    const myComplaints = session ? complaints.filter(c => c.submittedBy === session.userId) : [];
-    const myAssigned = session ? complaints.filter(c => c.assignedTo === session.userId) : [];
     
     const recent = complaints.sort((a,b) => b.createdAt - a.createdAt).slice(0, 5);
     
@@ -1724,7 +1688,7 @@
           ),
           React.createElement('div', { className: 'insight-card' },
             React.createElement('div', { className: 'insight-header' }, React.createElement('i', { className: 'fas fa-user-graduate' }), 'Top Reporter'),
-            React.createElement('div', { className: 'insight-text' }, 'Maya Patel (u2) has submitted the most complaints this month (4).')
+            React.createElement('div', { className: 'insight-text' }, 'Maya Patel has submitted the most complaints this month (4).')
           )
         )
       ),
@@ -1846,7 +1810,7 @@
           React.createElement('div', { className: 'page-subtitle' }, `${filtered.length} complaints matching filters`)
         ),
         React.createElement('div', { style: { display:'flex', gap:'8px', alignItems:'center', flexWrap:'wrap' } },
-          session?.role !== 'student' && React.createElement('button', { className: 'btn btn-primary', onClick: () => setShowNewModal(true) },
+          React.createElement('button', { className: 'btn btn-primary', onClick: () => setShowNewModal(true) },
             React.createElement('i', { className: 'fas fa-plus' }), 'New Complaint'
           ),
           React.createElement('button', { className: `btn btn-ghost btn-sm ${view === 'list' ? 'active' : ''}`, onClick: () => setView('list') }, 'List'),
@@ -1870,13 +1834,12 @@
         )
       ),
       view === 'list' ? 
-        React.createElement(ComplaintListView, { complaints: filtered, onSelect: handleSelect, selectedId, onUpvote: handleUpvote }) :
-        React.createElement(ComplaintKanban, { complaints: filtered, onSelect: handleSelect, onUpvote: handleUpvote }),
+        React.createElement(ComplaintListView, { complaints: filtered, onSelect: handleSelect, selectedId, onUpvote: handleUpvote, session }) :
+        React.createElement(ComplaintKanban, { complaints: filtered, onSelect: handleSelect, onUpvote: handleUpvote, session }),
       
       selectedComplaint && React.createElement(ComplaintDetailModal, {
         complaint: selectedComplaint,
-        onClose: () => setSelectedId(null),
-        onUpdate: () => { setSelectedId(null); addToast('Updated', 'success'); }
+        onClose: () => setSelectedId(null)
       }),
       
       showNewModal && React.createElement('div', { className: 'modal-overlay', onClick: (e) => e.target === e.currentTarget && setShowNewModal(false) },
@@ -1946,16 +1909,14 @@
   function App() {
     const { session, loading } = useData();
     const [page, setPage] = useState('dashboard');
+    const logout = useData().logout;
     
     if (loading) return React.createElement('div', { style: { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--bg)' } },
       React.createElement('div', { style: { fontSize:'24px', fontWeight:700, background:'linear-gradient(135deg,var(--primary),var(--accent-purple))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' } }, 'ResolveHub'),
-      React.createElement('div', { style: { position:'absolute', width:'100px', height:'100px', border:'4px solid var(--border)', borderTopColor:'var(--primary)', borderRadius:'50%', animation:'spin 1s linear infinite' } })
+      React.createElement('div', { style: { position:'absolute', width:'60px', height:'60px', marginTop:'60px', border:'4px solid var(--border)', borderTopColor:'var(--primary)', borderRadius:'50%', animation:'spin 1s linear infinite' } })
     );
     
     if (!session) return React.createElement(Login, null);
-    
-    const isStaff = session.role !== 'student';
-    const isAdmin = session.role === 'admin';
     
     return React.createElement('div', { className: 'app' },
       React.createElement('nav', { className: 'sidebar' },
@@ -1969,82 +1930,17 @@
           React.createElement('i', { className: 'fas fa-chart-pie' }), 'Dashboard'
         ),
         React.createElement('button', { className: `nav-item ${page === 'complaints' ? 'active' : ''}`, onClick: () => setPage('complaints') },
-          React.createElement('i', { className: 'fas fa-ticket' }), 'Complaints',
-          React.createElement('span', { className: 'nav-badge' }, session.role === 'staff' ? data.complaints.filter(c => c.assignedTo === session.userId).length : data.complaints.filter(c => c.submittedBy === session.userId).length)
-        ),
-        isStaff && React.createElement('button', { className: `nav-item ${page === 'analytics' ? 'active' : ''}`, onClick: () => setPage('analytics') },
-          React.createElement('i', { className: 'fas fa-chart-line' }), 'Analytics'
-        ),
-        isAdmin && React.createElement('button', { className: `nav-item ${page === 'admin' ? 'active' : ''}`, onClick: () => setPage('admin') },
-          React.createElement('i', { className: 'fas fa-cog' }), 'Admin'
+          React.createElement('i', { className: 'fas fa-ticket' }), 'Complaints'
         ),
         React.createElement('div', { style: { marginTop:'auto', paddingTop:'20px', borderTop:'1px solid var(--border)' } },
-          React.createElement('button', { className: 'btn btn-ghost', style: { width:'100%', justifyContent:'center' }, onClick: () => { session && logout(); } },
+          React.createElement('button', { className: 'btn btn-ghost', style: { width:'100%', justifyContent:'center' }, onClick: () => { logout(); } },
             React.createElement('i', { className: 'fas fa-sign-out-alt' }), 'Sign Out'
           )
         )
       ),
       React.createElement('div', { className: 'main' },
         page === 'dashboard' && React.createElement(DashboardView, null),
-        page === 'complaints' && React.createElement(ComplaintsView, null),
-        page === 'analytics' && React.createElement('div', null,
-          React.createElement('div', { className: 'topbar' },
-            React.createElement('div', null,
-              React.createElement('div', { className: 'page-title' }, 'Analytics'),
-              React.createElement('div', { className: 'page-subtitle' }, 'Advanced insights & metrics')
-            ),
-            React.createElement('div', { style: { display:'flex', gap:'8px' } },
-              React.createElement(NotificationBell, null),
-              React.createElement(UserMenu, null)
-            )
-          ),
-          React.createElement('div', { className: 'stats-grid' },
-            React.createElement(StatCard, { label: 'Total Complaints', value: data.complaints.length, icon: 'fa-ticket', color: '#818cf8', delay: 1 }),
-            React.createElement(StatCard, { label: 'Avg Resolution Time', value: '18.4h', icon: 'fa-clock', color: '#4ade80', delay: 2 }),
-            React.createElement(StatCard, { label: 'SLA Compliance', value: '92%', icon: 'fa-check', color: '#a78bfa', delay: 3 }),
-            React.createElement(StatCard, { label: 'User Satisfaction', value: '4.2', icon: 'fa-star', color: '#facc15', delta: '+0.3', delay: 4 })
-          ),
-          React.createElement('div', { className: 'card' },
-            React.createElement('div', { className: 'card-header' },
-              React.createElement('span', { className: 'card-title' }, 'Heatmap: Complaints by Zone'),
-              React.createElement('span', { style: { fontSize:'12px', color:'var(--text-muted)' } }, 'Click for details')
-            ),
-            React.createElement('div', { className: 'heatmap-grid' },
-              ['Academic', 'Admin', 'Library', 'Hostel', 'Cafeteria', 'Transport'].map((zone, i) => {
-                const count = data.complaints.filter(c => c.zone === zone.toLowerCase()).length;
-                const intensity = Math.min(0.9, 0.2 + count / 8);
-                return React.createElement('div', { key: i, className: 'heat-cell', style: { background: `rgba(99,102,241,${intensity})`, borderColor: count > 0 ? 'var(--primary)' : 'var(--border)' } },
-                  React.createElement('div', { className: 'heat-glow', style: { background: `radial-gradient(circle, var(--primary), transparent)` } }),
-                  React.createElement('span', { style: { fontSize:'20px', fontWeight:700 } }, count),
-                  React.createElement('span', { style: { fontSize:'10px', color:'var(--text-muted)' } }, zone)
-                );
-              })
-            )
-          )
-        ),
-        page === 'admin' && React.createElement('div', null,
-          React.createElement('div', { className: 'topbar' },
-            React.createElement('div', null,
-              React.createElement('div', { className: 'page-title' }, 'Admin'),
-              React.createElement('div', { className: 'page-subtitle' }, 'System configuration & audit logs')
-            ),
-            React.createElement('div', { style: { display:'flex', gap:'8px' } },
-              React.createElement(NotificationBell, null),
-              React.createElement(UserMenu, null)
-            )
-          ),
-          React.createElement('div', { className: 'card' },
-            React.createElement('div', { className: 'card-header' },
-              React.createElement('span', { className: 'card-title' }, 'Audit Logs'),
-              React.createElement('span', { style: { fontSize:'12px', color:'var(--text-muted)' } }, 'Recent actions')
-            ),
-            data.auditLogs.slice(0, 10).map(log => React.createElement('div', { key: log.id, style: { display:'flex', justifyContent:'space-between', padding:'10px 0', borderBottom:'1px solid var(--border)', fontSize:'13px' } },
-              React.createElement('span', null, log.actorName + ' (' + log.role + ')'),
-              React.createElement('span', { style: { color:'var(--text-muted)' } }, log.action),
-              React.createElement('span', { style: { color:'var(--text-muted)', fontSize:'12px' } }, formatRelative(log.createdAt))
-            ))
-          )
-        )
+        page === 'complaints' && React.createElement(ComplaintsView, null)
       ),
       React.createElement('div', { className: 'mobile-nav' },
         ['dashboard','complaints'].map(p => React.createElement('button', { key: p, className: `mobile-nav-item ${page === p ? 'active' : ''}`, onClick: () => setPage(p) },
