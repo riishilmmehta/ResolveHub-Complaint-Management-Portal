@@ -113,7 +113,7 @@
       .form-row { grid-template-columns: 1fr; }
       .main-area { padding: 12px; }
       .modal-box { padding: 16px; }
-      .heatmap-grid { grid-template-columns: repeat(4, 1fr); }
+      .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (min-width: 768px) {
       .app-layout { flex-direction: row; }
@@ -130,7 +130,7 @@
   </style>
 </head>
 <body>
-<div id="root"><div class="loader"><div class="spinner"></div><span>Loading ResolveHub</span></div></div>
+<div id="root"></div>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -139,7 +139,7 @@
 (function() {
   const React = window.React;
   const ReactDOM = window.ReactDOM;
-  const { useState, useEffect, useCallback, useContext, createContext, useMemo } = React;
+  const { useState, useEffect, useCallback, useContext, createContext } = React;
 
   const STORAGE_KEY = 'resolvehub_data';
   const SESSION_KEY = 'resolvehub_session';
@@ -151,7 +151,6 @@
     { id: 'u4', name: 'Staff', email: 'staff@portal.demo', role: 'staff', department: 'Facilities', avatar: 'F' },
   ];
 
-  // Enhanced complaints with upvotes, location for heatmap, media
   const defaultComplaints = [
     { id: 'CMP-2026-0001', subject: 'Broken AC in lab 301', description: 'AC not cooling since monday. Room temp is 32°C.', category: 'Infrastructure', subcategory: 'HVAC', priority: 'high', status: 'in progress', department: 'Facilities', location: 'Building A', zone: 'academic', anonymous: false, submittedBy: 'u2', assignedTo: 'u4', upvotes: 5, upvotedBy: [], attachments: [], comments: [{ id: 'c1', userId: 'u4', name: 'Staff', role: 'staff', message: 'Technician dispatched, will fix today.', timestamp: Date.now()-200000 }], timeline: [{ status: 'submitted', timestamp: Date.now()-500000, note: 'Submitted' }, { status: 'assigned', timestamp: Date.now()-300000, note: 'Assigned to Staff' }, { status: 'in progress', timestamp: Date.now()-150000, note: 'Work in progress' }], resolution: '', feedback: null, createdAt: Date.now()-500000, updatedAt: Date.now()-100000 },
     { id: 'CMP-2026-0002', subject: 'Exam schedule conflict', description: 'Two major exams on same day. Need reschedule.', category: 'Examination', subcategory: 'Scheduling', priority: 'critical', status: 'under review', department: 'Examination', location: 'Online', zone: 'admin', anonymous: false, submittedBy: 'u3', assignedTo: null, upvotes: 12, upvotedBy: [], attachments: [], comments: [], timeline: [{ status: 'submitted', timestamp: Date.now()-400000, note: 'Submitted' }, { status: 'under review', timestamp: Date.now()-250000, note: 'Under review' }], resolution: '', feedback: null, createdAt: Date.now()-400000, updatedAt: Date.now()-200000 },
@@ -278,7 +277,23 @@
     const [activeView, setActiveView] = useState('dashboard');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedComplaint, setSelectedComplaint] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+      // Simulate loading
+      const timer = setTimeout(() => setLoading(false), 600);
+      return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+      return React.createElement('div', { className: 'loader' },
+        React.createElement('div', { className: 'spinner' }),
+        React.createElement('span', null, 'Loading ResolveHub...')
+      );
+    }
+
     if (!session) return React.createElement(Login, null);
+    
     const user = data.users.find(u => u.id === session.userId);
     const isAdmin = session.role === 'admin';
     const isStaff = session.role === 'staff';
@@ -293,7 +308,6 @@
     if (isAdmin) { navItems.push({ id: 'admin-dashboard', label: 'Analytics', icon: 'fa-chart-pie' }); navItems.push({ id: 'users', label: 'Users', icon: 'fa-users' }); navItems.push({ id: 'audit', label: 'Audit', icon: 'fa-history' }); }
     navItems.push({ id: 'settings', label: 'Settings', icon: 'fa-sliders' });
 
-    // Heatmap data: zones with complaint counts
     const zones = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
     const zoneLabels = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
     const getHeatColor = (count) => {
@@ -335,7 +349,6 @@
     }
 
     function ComplaintRow({ complaint, onClick }) {
-      const { updateData, session } = useData();
       const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
       const handleUpvote = (e) => {
         e.stopPropagation();
@@ -461,7 +474,6 @@
         updateData(prev => { const idx = prev.complaints.findIndex(c => c.id === complaint.id); if (idx > -1) { prev.complaints[idx].comments.push({ id: 'c'+Date.now(), userId: session.userId, name: session.name, role: session.role, message: comment, timestamp: Date.now() }); } return prev; });
         setComment(''); addToast('Comment added', 'info');
       };
-      // Calculate time elapsed for high priority
       const elapsed = Math.floor((Date.now() - complaint.createdAt) / (1000*60));
       const timerDisplay = elapsed > 60 ? `${Math.floor(elapsed/60)}h ${elapsed%60}m` : `${elapsed}m`;
       return React.createElement('div', { className: 'modal-overlay', onClick: (e) => { if (e.target === e.currentTarget) onClose(); } },
