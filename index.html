@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-  <title>ResolveHub · Complaint Portal</title>
+  <title>ResolveHub · Smart Complaint System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -45,7 +45,7 @@
 (function() {
   const React = window.React;
   const ReactDOM = window.ReactDOM;
-  const { useState, useEffect, useCallback, useContext, createContext } = React;
+  const { useState, useEffect, useCallback, useContext, createContext, useMemo } = React;
 
   const STORAGE_KEY = 'resolvehub_data';
   const SESSION_KEY = 'resolvehub_session';
@@ -189,6 +189,7 @@
     if (!session) return React.createElement(Login, null);
     const user = data.users.find(u => u.id === session.userId);
     const isAdmin = session.role === 'admin';
+    const isStaff = session.role === 'staff';
 
     function Dashboard() {
       const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
@@ -231,8 +232,8 @@
 
     function ComplaintList() {
       let complaints = data.complaints;
-      if (!isAdmin && session.role !== 'staff') complaints = complaints.filter(c => c.submittedBy === session.userId);
-      else if (session.role === 'staff') complaints = complaints.filter(c => c.assignedTo === session.userId || !c.assignedTo);
+      if (!isAdmin && !isStaff) complaints = complaints.filter(c => c.submittedBy === session.userId);
+      else if (isStaff) complaints = complaints.filter(c => c.assignedTo === session.userId || !c.assignedTo);
       if (searchQuery) { const q = searchQuery.toLowerCase(); complaints = complaints.filter(c => c.id.toLowerCase().includes(q) || c.subject.toLowerCase().includes(q) || c.description.toLowerCase().includes(q)); }
       complaints.sort((a,b) => b.createdAt - a.createdAt);
       return React.createElement('div', { className: 'glass', style: { borderRadius:'24px', padding:'20px', boxShadow:'0 4px 16px rgba(0,0,0,0.02)' } },
@@ -257,6 +258,18 @@
             React.createElement('span', null, 'Priority: ', React.createElement('span', { style: { color: getPriorityColor(complaint.priority), fontWeight:600 } }, complaint.priority)),
             React.createElement('span', null, 'Category: ', complaint.category),
             React.createElement('span', null, 'Submitted: ', formatDate(complaint.createdAt))
+          ),
+          complaint.timeline && complaint.timeline.length > 0 && React.createElement('div', { style: { marginTop:'12px' } },
+            React.createElement('div', { style: { fontWeight:600, fontSize:'13px', marginBottom:'6px' } }, 'Timeline'),
+            complaint.timeline.map((t, i) => React.createElement('div', { key: i, style: { display:'flex', gap:'12px', fontSize:'12px', padding:'4px 0', borderBottom:'1px solid rgba(0,0,0,0.03)' } },
+              React.createElement('span', { style: { fontWeight:500, color:'#0f172a' } }, t.status),
+              React.createElement('span', { style: { color:'#475569' } }, t.note),
+              React.createElement('span', { style: { color:'#94a3b8', marginLeft:'auto' } }, formatDate(t.timestamp))
+            ))
+          ),
+          isAdmin && complaint.status !== 'resolved' && complaint.status !== 'closed' && React.createElement('div', { style: { marginTop:'12px', display:'flex', gap:'8px' } },
+            React.createElement('button', { onClick: () => { updateData(prev => { const idx = prev.complaints.findIndex(c => c.id === complaint.id); if (idx > -1) { prev.complaints[idx].status = 'assigned'; prev.complaints[idx].timeline.push({ status: 'assigned', timestamp: Date.now(), note: 'Assigned by admin' }); } return prev; }); addToast('Complaint assigned', 'success'); }, className: 'btn-primary', style: { padding:'6px 16px', borderRadius:'30px', fontSize:'13px' } }, 'Assign'),
+            React.createElement('button', { onClick: () => { updateData(prev => { const idx = prev.complaints.findIndex(c => c.id === complaint.id); if (idx > -1) { prev.complaints[idx].status = 'resolved'; prev.complaints[idx].resolution = 'Resolved by admin'; prev.complaints[idx].timeline.push({ status: 'resolved', timestamp: Date.now(), note: 'Resolved' }); } return prev; }); addToast('Complaint resolved', 'success'); }, className: 'btn-primary', style: { padding:'6px 16px', borderRadius:'30px', fontSize:'13px', background:'#10b981' } }, 'Resolve')
           )
         )
       );
