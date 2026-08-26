@@ -15,8 +15,6 @@
 --gold-light:#e8d5a3;
 --cream:#f5efe6;
 --burgundy:#6b2e3e;
---charcoal:#2c2c2c;
---ivory:#faf8f5;
 --sage:#8a9a8a;
 --rose:#d4a0a0;
 --panel:rgba(255,252,248,.92);
@@ -39,47 +37,44 @@
 --line:rgba(245,239,230,.12);
 --shadow:0 8px 40px rgba(0,0,0,.3);
 }
-html,body{min-height:100%;width:100%}
+html,body{min-height:100%;width:100%;margin:0;padding:0}
 body{
 font-family:var(--font-sans);
 background:var(--cream);
 color:var(--text);
 overflow-x:hidden;
-background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 button,input,textarea,select{font:inherit;font-family:var(--font-sans)}
-button{cursor:pointer;transition:all .4s cubic-bezier(.4,0,.2,1)}
+button{cursor:pointer;transition:all .3s ease}
 ::selection{background:var(--gold);color:var(--navy)}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
-.app{display:flex;min-height:100vh;animation:fadeIn .6s ease}
+#root{min-height:100vh}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes slideUp{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes slideDown{0%{opacity:0;transform:translateY(-30px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes slideLeft{0%{opacity:0;transform:translateX(30px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes slideRight{0%{opacity:0;transform:translateX(-30px)}100%{opacity:1;transform:translateX(0)}}
 @keyframes scaleIn{0%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(201,168,76,.2)}50%{box-shadow:0 0 40px rgba(201,168,76,.4)}}
-@keyframes rotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes countUp{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
-.animate-slide-up{animation:slideUp .6s cubic-bezier(.4,0,.2,1) both}
-.animate-slide-down{animation:slideDown .6s cubic-bezier(.4,0,.2,1) both}
-.animate-slide-left{animation:slideLeft .6s cubic-bezier(.4,0,.2,1) both}
-.animate-scale{animation:scaleIn .5s cubic-bezier(.4,0,.2,1) both}
+.animate-fade{animation:fadeIn .5s ease both}
+.animate-slide-up{animation:slideUp .5s ease both}
+.animate-slide-down{animation:slideDown .5s ease both}
+.animate-slide-left{animation:slideLeft .5s ease both}
+.animate-slide-right{animation:slideRight .5s ease both}
+.animate-scale{animation:scaleIn .4s ease both}
 .animate-float{animation:float 3s ease-in-out infinite}
 .animate-glow{animation:glow 2s ease-in-out infinite}
-.animate-shimmer{background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);background-size:200% 100%;animation:shimmer 2s infinite}
-.stagger>*{animation:slideUp .5s cubic-bezier(.4,0,.2,1) both}
+.stagger>*{animation:slideUp .5s ease both}
 .stagger>*:nth-child(1){animation-delay:.05s}
 .stagger>*:nth-child(2){animation-delay:.1s}
 .stagger>*:nth-child(3){animation-delay:.15s}
 .stagger>*:nth-child(4){animation-delay:.2s}
 .stagger>*:nth-child(5){animation-delay:.25s}
-.stagger>*:nth-child(6){animation-delay:.3s}
-.stagger>*:nth-child(7){animation-delay:.35s}
-.stagger>*:nth-child(8){animation-delay:.4s}
+
 /* ===== SIDEBAR ===== */
 .sidebar{
 width:280px;
@@ -94,7 +89,7 @@ display:flex;
 flex-direction:column;
 z-index:20;
 overflow-y:auto;
-animation:slideLeft .5s ease;
+flex-shrink:0;
 }
 .sidebar .brand{
 display:flex;
@@ -113,16 +108,13 @@ place-items:center;
 color:var(--navy);
 font-size:24px;
 border:2px solid var(--gold-light);
-box-shadow:0 4px 20px rgba(201,168,76,.3);
 flex:none;
-animation:float 4s ease-in-out infinite;
 }
 .sidebar .brand h1{
 font-family:var(--font-serif);
 font-size:22px;
 font-weight:900;
 color:var(--gold);
-letter-spacing:-.5px;
 }
 .sidebar .brand span{
 display:block;
@@ -130,7 +122,6 @@ font-size:10px;
 color:var(--dim);
 letter-spacing:2px;
 text-transform:uppercase;
-font-weight:300;
 }
 .nav{display:flex;flex-direction:column;gap:3px;flex:1}
 .nav button{
@@ -145,13 +136,12 @@ align-items:center;
 gap:14px;
 font-size:14px;
 font-weight:500;
-transition:all .4s cubic-bezier(.4,0,.2,1);
-position:relative;
+transition:all .3s ease;
 }
 .nav button:hover{
 background:rgba(201,168,76,.08);
 color:var(--text);
-transform:translateX(6px) scale(1.02);
+transform:translateX(4px);
 }
 .nav button.active{
 background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));
@@ -167,17 +157,8 @@ height:60%;
 width:3px;
 background:var(--gold);
 border-radius:0 3px 3px 0;
-animation:slideDown .3s ease;
 }
-.nav i{width:22px;text-align:center;font-size:16px}
-.section-label{
-font-size:9px;
-color:var(--dim);
-text-transform:uppercase;
-letter-spacing:2px;
-padding:20px 14px 8px;
-font-weight:600;
-}
+.nav i{width:22px;text-align:center;font-size:16px;position:relative}
 .sidebar-bottom{
 margin-top:auto;
 border-top:2px solid rgba(201,168,76,.15);
@@ -190,9 +171,7 @@ gap:12px;
 padding:10px 6px;
 border-radius:var(--r);
 background:rgba(201,168,76,.06);
-transition:all .3s ease;
 }
-.user-card:hover{background:rgba(201,168,76,.12);transform:scale(1.02)}
 .user-card .avatar{
 width:40px;height:40px;
 border-radius:50%;
@@ -204,11 +183,9 @@ color:var(--navy);
 font-size:16px;
 border:2px solid var(--gold-light);
 flex:none;
-transition:all .3s ease;
 }
-.user-card:hover .avatar{transform:rotate(10deg) scale(1.1)}
 .user-card .info{flex:1;min-width:0}
-.user-card .info strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-card .info strong{display:block;font-size:13px}
 .user-card .info small{color:var(--dim);font-size:10px;text-transform:capitalize}
 .user-card .logout-btn{
 width:34px;height:34px;
@@ -218,10 +195,14 @@ background:transparent;
 color:var(--muted);
 display:grid;
 place-items:center;
-transition:all .4s cubic-bezier(.4,0,.2,1);
+transition:all .3s ease;
 }
-.user-card .logout-btn:hover{background:rgba(201,168,76,.15);color:var(--gold);transform:rotate(90deg) scale(1.1)}
-.main{flex:1;min-width:0;padding:30px 36px 50px;max-width:1600px;margin:auto;width:100%;animation:fadeIn .8s ease}
+.user-card .logout-btn:hover{background:rgba(201,168,76,.15);color:var(--gold);transform:rotate(90deg)}
+
+/* ===== MAIN ===== */
+.app{display:flex;min-height:100vh}
+.main{flex:1;min-width:0;padding:30px 36px 50px;max-width:1600px;margin:auto;width:100%}
+
 /* ===== TOPBAR ===== */
 .topbar{
 display:flex;
@@ -231,22 +212,15 @@ justify-content:space-between;
 margin-bottom:28px;
 padding-bottom:16px;
 border-bottom:2px solid var(--line);
-animation:slideDown .5s ease;
 }
 .topbar .title h1{
 font-family:var(--font-serif);
 font-size:30px;
 font-weight:900;
-letter-spacing:-.5px;
 color:var(--text);
 }
-.topbar .title p{
-color:var(--muted);
-font-size:13px;
-margin-top:4px;
-font-weight:400;
-}
-.topbar .title p i{color:var(--gold);margin-right:6px;animation:float 3s ease-in-out infinite}
+.topbar .title p{color:var(--muted);font-size:13px;margin-top:4px}
+.topbar .title p i{color:var(--gold);margin-right:6px}
 .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .search{
 position:relative;
@@ -259,7 +233,6 @@ top:50%;
 transform:translateY(-50%);
 color:var(--dim);
 font-size:14px;
-transition:all .3s ease;
 }
 .search input{
 padding-left:42px;
@@ -271,12 +244,10 @@ font-size:13px;
 color:var(--text);
 outline:none;
 width:100%;
-transition:all .4s cubic-bezier(.4,0,.2,1);
-font-family:var(--font-sans);
+transition:all .3s ease;
 }
-.search input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,168,76,.15);transform:scale(1.02)}
-.search input:focus + i,.search input:focus ~ i{color:var(--gold)}
-.search input::placeholder{color:var(--dim)}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+
 /* ===== BUTTONS ===== */
 .btn{
 border:1px solid var(--line);
@@ -288,30 +259,17 @@ font-weight:600;
 display:inline-flex;
 align-items:center;
 gap:8px;
-transition:all .4s cubic-bezier(.4,0,.2,1);
+transition:all .3s ease;
 font-size:13px;
-font-family:var(--font-sans);
-position:relative;
-overflow:hidden;
 }
-.btn::after{
-content:'';
-position:absolute;
-inset:0;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
-transform:translateX(-100%);
-transition:transform .6s;
-}
-.btn:hover::after{transform:translateX(100%)}
-.btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:var(--shadow)}
-.btn:active{transform:scale(.95)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
 .btn.primary{
 background:linear-gradient(135deg,var(--gold),#b8953a);
 border-color:var(--gold);
 color:var(--navy);
 box-shadow:0 4px 20px rgba(201,168,76,.25);
 }
-.btn.primary:hover{box-shadow:0 8px 35px rgba(201,168,76,.4);transform:translateY(-3px) scale(1.02)}
+.btn.primary:hover{box-shadow:0 6px 30px rgba(201,168,76,.35)}
 .btn.success{
 background:rgba(138,154,138,.15);
 border-color:var(--sage);
@@ -330,6 +288,7 @@ border-color:var(--gold);
 color:var(--gold);
 }
 .btn.outline:hover{background:var(--gold);color:var(--navy)}
+
 /* ===== PANELS ===== */
 .panel{
 background:var(--panel);
@@ -337,9 +296,7 @@ border:1px solid var(--line);
 border-radius:var(--r);
 box-shadow:var(--shadow);
 backdrop-filter:blur(10px);
-transition:all .4s cubic-bezier(.4,0,.2,1);
 }
-.panel:hover{box-shadow:0 12px 50px rgba(26,35,50,.12)}
 .panel.pad{padding:22px}
 .panel .head{
 display:flex;
@@ -348,16 +305,9 @@ align-items:center;
 gap:12px;
 margin-bottom:16px;
 }
-.panel .head h3{
-font-family:var(--font-serif);
-font-size:18px;
-font-weight:700;
-}
-.panel .head p{
-color:var(--muted);
-font-size:12px;
-margin-top:3px;
-}
+.panel .head h3{font-family:var(--font-serif);font-size:18px;font-weight:700}
+.panel .head p{color:var(--muted);font-size:12px;margin-top:3px}
+
 /* ===== STATS ===== */
 .stats{
 display:grid;
@@ -367,16 +317,13 @@ margin-bottom:20px;
 }
 .stat-card{
 padding:20px 22px;
-position:relative;
-overflow:hidden;
 background:var(--panel);
 border:1px solid var(--line);
 border-radius:var(--r);
 box-shadow:var(--shadow);
-transition:all .5s cubic-bezier(.4,0,.2,1);
-cursor:default;
+transition:all .3s ease;
 }
-.stat-card:hover{transform:translateY(-6px) scale(1.02);border-color:var(--gold);box-shadow:0 12px 50px rgba(201,168,76,.15)}
+.stat-card:hover{transform:translateY(-4px);border-color:var(--gold)}
 .stat-card .icon{
 width:44px;height:44px;
 border-radius:50%;
@@ -385,17 +332,9 @@ place-items:center;
 margin-bottom:14px;
 font-size:18px;
 border:1px solid;
-transition:all .5s cubic-bezier(.4,0,.2,1);
 }
-.stat-card:hover .icon{transform:rotate(10deg) scale(1.1)}
-.stat-card .number{
-font-size:30px;
-font-weight:900;
-font-family:var(--font-serif);
-letter-spacing:-1px;
-animation:countUp .6s ease;
-}
-.stat-card .label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+.stat-card .number{font-size:30px;font-weight:900;font-family:var(--font-serif)}
+.stat-card .label{font-size:12px;color:var(--muted);margin-top:4px}
 .stat-card .badge{
 position:absolute;right:16px;top:16px;
 font-size:9px;
@@ -404,11 +343,12 @@ border-radius:20px;
 font-weight:600;
 background:rgba(201,168,76,.12);
 color:var(--gold);
-animation:pulse 2s ease-in-out infinite;
 }
+
 /* ===== GRIDS ===== */
 .grid2{display:grid;grid-template-columns:1.4fr .6fr;gap:18px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+
 /* ===== COMPLAINT ROW ===== */
 .complaint-row{
 padding:14px 18px;
@@ -417,14 +357,10 @@ display:flex;
 align-items:center;
 gap:14px;
 cursor:pointer;
-transition:all .4s cubic-bezier(.4,0,.2,1);
+transition:all .3s ease;
 }
 .complaint-row:last-child{border-bottom:0}
-.complaint-row:hover{
-background:rgba(201,168,76,.06);
-transform:translateX(6px) scale(1.01);
-border-left:3px solid var(--gold);
-}
+.complaint-row:hover{background:rgba(201,168,76,.05);transform:translateX(4px)}
 .complaint-row .avatar-sm{
 width:36px;height:36px;
 border-radius:50%;
@@ -435,16 +371,16 @@ font-weight:700;
 color:var(--navy);
 font-size:13px;
 flex:none;
-transition:all .3s ease;
 }
-.complaint-row:hover .avatar-sm{transform:scale(1.1) rotate(5deg)}
 .complaint-row .content{flex:1;min-width:0}
-.complaint-row .content b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.complaint-row .content b{font-size:14px;display:block}
 .complaint-row .content .meta{
 display:flex;gap:8px;flex-wrap:wrap;
 color:var(--dim);font-size:10px;margin-top:4px;
 }
 .complaint-row .badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+/* ===== BADGES ===== */
 .badge{
 padding:4px 10px;
 border-radius:20px;
@@ -453,14 +389,13 @@ font-weight:700;
 text-transform:uppercase;
 letter-spacing:.5px;
 border:1px solid;
-transition:all .3s ease;
 }
-.badge:hover{transform:scale(1.05)}
 .badge-gold{color:var(--gold);border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.08)}
 .badge-navy{color:var(--navy);border-color:rgba(26,35,50,.2);background:rgba(26,35,50,.06)}
 .badge-sage{color:var(--sage);border-color:rgba(138,154,138,.3);background:rgba(138,154,138,.08)}
 .badge-rose{color:var(--rose);border-color:rgba(212,160,160,.3);background:rgba(212,160,160,.08)}
 .badge-burgundy{color:var(--burgundy);border-color:rgba(107,46,62,.3);background:rgba(107,46,62,.08)}
+
 /* ===== FILTERS ===== */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .filters select,.filters input{
@@ -471,12 +406,11 @@ background:var(--panel);
 color:var(--text);
 outline:none;
 font-size:12px;
-font-family:var(--font-sans);
 min-width:140px;
-transition:all .4s cubic-bezier(.4,0,.2,1);
+transition:all .3s ease;
 }
-.filters select:focus,.filters input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,168,76,.12);transform:scale(1.02)}
-.filters select option{background:var(--panel-dark);color:var(--text)}
+.filters select:focus,.filters input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+
 /* ===== FORM ===== */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field{display:flex;flex-direction:column;gap:6px}
@@ -496,23 +430,21 @@ background:var(--panel);
 color:var(--text);
 outline:none;
 font-size:13px;
-font-family:var(--font-sans);
-transition:all .4s cubic-bezier(.4,0,.2,1);
 width:100%;
+transition:all .3s ease;
 }
-.field .input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,168,76,.12);transform:scale(1.01)}
-.field .input::placeholder{color:var(--dim)}
+.field .input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
 .field textarea.input{resize:vertical;min-height:100px}
+
 /* ===== MODAL ===== */
 .modal{
 position:fixed;inset:0;
 background:rgba(26,35,50,.7);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(8px);
 z-index:100;
 display:grid;
 place-items:center;
 padding:20px;
-animation:fadeIn .3s ease;
 }
 .modal-box{
 width:min(820px,100%);
@@ -523,7 +455,6 @@ border:1px solid var(--line);
 border-radius:16px;
 box-shadow:var(--shadow);
 padding:28px;
-animation:scaleIn .4s cubic-bezier(.4,0,.2,1);
 }
 .modal-box .modal-head{
 display:flex;
@@ -533,11 +464,8 @@ margin-bottom:20px;
 padding-bottom:14px;
 border-bottom:2px solid var(--line);
 }
-.modal-box .modal-head h2{
-font-family:var(--font-serif);
-font-size:22px;
-font-weight:700;
-}
+.modal-box .modal-head h2{font-family:var(--font-serif);font-size:22px;font-weight:700}
+
 /* ===== TIMELINE ===== */
 .timeline{position:relative;padding-left:24px;margin:12px 0 18px}
 .timeline::before{
@@ -550,13 +478,7 @@ opacity:.3;
 .timeline .event{
 position:relative;
 padding:0 0 18px 16px;
-animation:slideUp .4s ease both;
 }
-.timeline .event:nth-child(1){animation-delay:.05s}
-.timeline .event:nth-child(2){animation-delay:.1s}
-.timeline .event:nth-child(3){animation-delay:.15s}
-.timeline .event:nth-child(4){animation-delay:.2s}
-.timeline .event:nth-child(5){animation-delay:.25s}
 .timeline .event::before{
 content:'';
 position:absolute;left:-4px;top:4px;
@@ -564,18 +486,18 @@ width:12px;height:12px;
 border-radius:50%;
 background:var(--gold);
 border:2px solid var(--panel);
-box-shadow:0 0 0 4px rgba(201,168,76,.2);
-transition:all .3s ease;
+box-shadow:0 0 0 3px rgba(201,168,76,.2);
 }
-.timeline .event:hover::before{transform:scale(1.3);box-shadow:0 0 0 6px rgba(201,168,76,.3)}
 .timeline .event b{font-size:12px;text-transform:capitalize;color:var(--gold)}
 .timeline .event p{font-size:11px;color:var(--muted);margin-top:3px}
 .timeline .event small{color:var(--dim);font-size:9px;display:block;margin-top:2px}
+
 /* ===== COMMENTS ===== */
-.comment{padding:10px 0;border-top:1px solid var(--line);animation:slideUp .3s ease}
+.comment{padding:10px 0;border-top:1px solid var(--line)}
 .comment .author{font-weight:600;font-size:12px}
 .comment .author small{color:var(--dim);font-weight:400;font-size:10px;margin-left:8px}
-.comment p{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
+.comment p{font-size:13px;color:var(--muted);margin-top:4px}
+
 /* ===== LOGIN ===== */
 .login-page{
 min-height:100vh;
@@ -583,7 +505,6 @@ display:grid;
 place-items:center;
 padding:20px;
 background:var(--cream);
-background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 .login-box{
 width:min(540px,100%);
@@ -593,16 +514,6 @@ border:2px solid var(--gold);
 border-radius:16px;
 box-shadow:var(--shadow);
 position:relative;
-animation:scaleIn .6s cubic-bezier(.4,0,.2,1);
-}
-.login-box::before{
-content:'';
-position:absolute;inset:-3px;
-background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--gold));
-border-radius:18px;
-z-index:-1;
-opacity:.3;
-animation:glow 3s ease-in-out infinite;
 }
 .login-box .crest{
 width:72px;height:72px;
@@ -614,22 +525,9 @@ place-items:center;
 font-size:32px;
 color:var(--navy);
 border:3px solid var(--gold-light);
-animation:float 4s ease-in-out infinite;
 }
-.login-box h1{
-font-family:var(--font-serif);
-font-size:34px;
-font-weight:900;
-text-align:center;
-color:var(--text);
-}
-.login-box .subtitle{
-text-align:center;
-color:var(--muted);
-font-size:13px;
-margin-top:4px;
-}
-.login-box .subtitle i{color:var(--gold);margin-right:4px}
+.login-box h1{font-family:var(--font-serif);font-size:34px;font-weight:900;text-align:center}
+.login-box .subtitle{text-align:center;color:var(--muted);font-size:13px;margin-top:4px}
 .role-grid{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -642,22 +540,21 @@ border:2px solid var(--line);
 border-radius:var(--r);
 background:transparent;
 text-align:center;
-transition:all .4s cubic-bezier(.4,0,.2,1);
+transition:all .3s ease;
 cursor:pointer;
 }
-.role-card:hover{transform:translateY(-6px) scale(1.03);border-color:var(--gold);box-shadow:0 8px 30px rgba(201,168,76,.15)}
-.role-card.selected{border-color:var(--gold);background:rgba(201,168,76,.08);transform:translateY(-4px) scale(1.02)}
-.role-card i{font-size:28px;margin-bottom:8px;display:block;transition:all .3s ease}
-.role-card:hover i{transform:scale(1.2) rotate(5deg)}
+.role-card:hover{transform:translateY(-3px);border-color:var(--gold)}
+.role-card.selected{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.role-card i{font-size:28px;margin-bottom:8px;display:block}
 .role-card b{display:block;font-size:14px}
 .role-card small{color:var(--dim);font-size:10px}
+
 /* ===== MOBILE ===== */
 .mobile-nav{display:none}
 .table{width:100%;border-collapse:collapse}
 .table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}
-.table th{color:var(--dim);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.5px}
-.table tr{transition:all .3s ease}
-.table tr:hover{background:rgba(201,168,76,.05)}
+.table th{color:var(--dim);font-weight:600;text-transform:uppercase;font-size:10px}
+
 /* ===== TOAST ===== */
 .toast-wrap{
 position:fixed;right:20px;bottom:20px;z-index:300;
@@ -675,14 +572,14 @@ display:flex;
 gap:10px;
 align-items:center;
 font-size:12px;
-animation:slideUp .4s cubic-bezier(.4,0,.2,1);
+animation:slideUp .3s ease;
 }
 .toast.success{border-left-color:var(--sage)}
 .toast.error{border-left-color:var(--burgundy)}
-.toast i{animation:float 2s ease-in-out infinite}
-/* ===== CHART CONTAINER ===== */
+
+/* ===== CHART ===== */
 .chart-container{position:relative;height:250px;padding:10px}
-/* ===== RESPONSIVE ===== */
+
 @media(max-width:1150px){.stats{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
 @media(max-width:800px){
 .sidebar{display:none}
@@ -706,7 +603,6 @@ border:1px solid var(--gold);
 border-radius:14px;
 padding:6px;
 gap:2px;
-animation:slideUp .5s ease;
 }
 .mobile-nav button{
 flex:1;
@@ -717,10 +613,8 @@ padding:8px 4px;
 border-radius:10px;
 font-size:9px;
 font-weight:500;
-transition:all .3s ease;
 }
 .mobile-nav button.active{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));color:var(--gold)}
-.mobile-nav button:hover{transform:scale(1.05)}
 .mobile-nav i{display:block;font-size:16px;margin-bottom:2px}
 }
 </style>
@@ -730,9 +624,8 @@ transition:all .3s ease;
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script>
-(()=>{
-'use strict';
-const {useState,useEffect,useMemo,useCallback,useRef,createElement} = React;
+// ===== REACT COMPONENTS =====
+const {useState,useEffect,useMemo,useRef,createElement} = React;
 
 // ===== CONSTANTS =====
 const STATUSES = ['submitted','reviewing','assigned','in_progress','resolved','closed','rejected'];
@@ -746,10 +639,10 @@ const PRIORITY_MAP = {
   'Harassment/Misconduct':'critical','Other':'medium'
 };
 const ROLES = [
-  {id:'admin',name:'Administrator',icon:'fa-user-shield',color:'#c9a84c',desc:'Full Control'},
-  {id:'student',name:'Student',icon:'fa-user-graduate',color:'#8a9a8a',desc:'Submit & Track'},
-  {id:'teacher',name:'Teacher',icon:'fa-chalkboard-user',color:'#d4a0a0',desc:'Faculty Access'},
-  {id:'staff',name:'Staff (IT)',icon:'fa-user-tie',color:'#6b2e3e',desc:'IT Department'}
+  {id:'admin',name:'Administrator',icon:'fa-user-shield',color:'#c9a84c'},
+  {id:'student',name:'Student',icon:'fa-user-graduate',color:'#8a9a8a'},
+  {id:'teacher',name:'Teacher',icon:'fa-chalkboard-user',color:'#d4a0a0'},
+  {id:'staff',name:'Staff (IT)',icon:'fa-user-tie',color:'#6b2e3e'}
 ];
 
 // ===== DEFAULT DATA =====
@@ -758,14 +651,13 @@ const DEFAULT_USERS = [
   {id:'u2',name:'Student User',email:'student@demo.com',role:'student',department:'General'},
   {id:'u3',name:'Dr. Teacher',email:'teacher@demo.com',role:'teacher',department:'Academics'},
   {id:'u4',name:'IT Staff',email:'staff@demo.com',role:'staff',department:'IT'},
-  {id:'u5',name:'Facilities Staff',email:'facilities@demo.com',role:'staff',department:'Facilities'},
-  {id:'u6',name:'Library Staff',email:'library@demo.com',role:'staff',department:'Library'}
+  {id:'u5',name:'Facilities Staff',email:'facilities@demo.com',role:'staff',department:'Facilities'}
 ];
 
 const seedComplaints = [
-  {id:'CMP-001',title:'Broken AC in Lab 301',description:'AC not cooling properly, students unable to work comfortably.',category:'Infrastructure',priority:'high',status:'assigned',department:'Facilities',zone:'Academic Lab',location:'Building A',submittedBy:'u2',assignedTo:'u5',createdAt:Date.now()-86400000*2,updatedAt:Date.now()-86400000*1.5,timeline:[{status:'submitted',timestamp:Date.now()-86400000*2,note:'Complaint submitted'},{status:'reviewing',timestamp:Date.now()-86400000*1.8,note:'Under review'},{status:'assigned',timestamp:Date.now()-86400000*1.5,note:'Assigned to Facilities'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false,reviewedBy:null},
-  {id:'CMP-002',title:'Exam Schedule Conflict',description:'Two major exams scheduled on same day.',category:'Examination',priority:'critical',status:'reviewing',department:'Examination',zone:'Admin Block',location:'Academic Block',submittedBy:'u3',assignedTo:null,createdAt:Date.now()-86400000*1.5,updatedAt:Date.now()-86400000*1.2,timeline:[{status:'submitted',timestamp:Date.now()-86400000*1.5,note:'Complaint submitted'},{status:'reviewing',timestamp:Date.now()-86400000*1.2,note:'Under review by department'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false,reviewedBy:null},
-  {id:'CMP-003',title:'WiFi Connectivity Issue',description:'No reliable WiFi in hostel block C.',category:'IT/Technical',priority:'high',status:'in_progress',department:'IT',zone:'Hostel',location:'Hostel C',submittedBy:'u2',assignedTo:'u4',createdAt:Date.now()-86400000*3,updatedAt:Date.now()-86400000*1,timeline:[{status:'submitted',timestamp:Date.now()-86400000*3,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*2.5,note:'Assigned to IT'},{status:'in_progress',timestamp:Date.now()-86400000*1,note:'Work in progress'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false,reviewedBy:null}
+  {id:'CMP-001',title:'Broken AC in Lab 301',description:'AC not cooling properly, students unable to work comfortably.',category:'Infrastructure',priority:'high',status:'assigned',department:'Facilities',zone:'Academic Lab',location:'Building A',submittedBy:'u2',assignedTo:'u5',createdAt:Date.now()-86400000*2,updatedAt:Date.now()-86400000*1.5,timeline:[{status:'submitted',timestamp:Date.now()-86400000*2,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*1.5,note:'Assigned to Facilities'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false},
+  {id:'CMP-002',title:'Exam Schedule Conflict',description:'Two major exams scheduled on same day.',category:'Examination',priority:'critical',status:'reviewing',department:'Examination',zone:'Admin Block',location:'Academic Block',submittedBy:'u3',assignedTo:null,createdAt:Date.now()-86400000*1.5,updatedAt:Date.now()-86400000*1.2,timeline:[{status:'submitted',timestamp:Date.now()-86400000*1.5,note:'Complaint submitted'},{status:'reviewing',timestamp:Date.now()-86400000*1.2,note:'Under review'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false},
+  {id:'CMP-003',title:'WiFi Connectivity Issue',description:'No reliable WiFi in hostel block C.',category:'IT/Technical',priority:'high',status:'in_progress',department:'IT',zone:'Hostel',location:'Hostel C',submittedBy:'u2',assignedTo:'u4',createdAt:Date.now()-86400000*3,updatedAt:Date.now()-86400000*1,timeline:[{status:'submitted',timestamp:Date.now()-86400000*3,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*2.5,note:'Assigned to IT'},{status:'in_progress',timestamp:Date.now()-86400000*1,note:'Work in progress'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false}
 ];
 
 function generateId(){ return 'CMP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substring(2,6).toUpperCase(); }
@@ -777,12 +669,9 @@ function App(){
   const [query,setQuery]=useState('');
   const [selected,setSelected]=useState(null);
   const [toasts,setToasts]=useState([]);
-  const [theme,setTheme]=useState(localStorage.getItem('theme')||'light');
+  const [theme,setTheme]=useState('light');
   const [complaints,setComplaints]=useState([]);
   const [users,setUsers]=useState([]);
-  const [notifications,setNotifications]=useState([]);
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
 
   // Load data
   useEffect(()=>{
@@ -792,7 +681,6 @@ function App(){
         const d = JSON.parse(saved);
         setComplaints(d.complaints||[]);
         setUsers(d.users||[]);
-        setNotifications(d.notifications||[]);
       }catch(e){}
     } else {
       setUsers(DEFAULT_USERS);
@@ -802,23 +690,24 @@ function App(){
     if(sess) {
       try { setUser(JSON.parse(sess)); } catch(e){}
     }
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme) setTheme(savedTheme);
   },[]);
 
   useEffect(()=>{
-    if(users.length && complaints.length){
-      localStorage.setItem('complaint_data',JSON.stringify({complaints,users,notifications}));
+    if(users.length || complaints.length){
+      localStorage.setItem('complaint_data',JSON.stringify({complaints,users}));
     }
-  },[complaints,users,notifications]);
+  },[complaints,users]);
 
   useEffect(()=>{
     document.documentElement.dataset.theme=theme;
     localStorage.setItem('theme',theme);
   },[theme]);
 
-  const currentUser = user || null;
+  const currentUser = user;
   const isAdmin = currentUser?.role==='admin';
   const isStaff = currentUser?.role==='staff';
-  const isTeacher = currentUser?.role==='teacher';
   const isStudent = currentUser?.role==='student';
 
   function addToast(msg,type='info'){
@@ -867,8 +756,7 @@ function App(){
       feedback:'',
       approved:false,
       resolvedBy:null,
-      departmentApproved:false,
-      reviewedBy:null
+      departmentApproved:false
     };
     setComplaints(prev=>[newC,...prev]);
     addToast(`Complaint ${newC.id} submitted`,'success');
@@ -893,7 +781,7 @@ function App(){
       assignedTo: assignedTo,
       department: department || staffUser?.department,
       status:'assigned'
-    },`Assigned to ${staffUser?.name||'Staff'} (${staffUser?.department||department})`);
+    },`Assigned to ${staffUser?.name||'Staff'}`);
     addToast(`Complaint assigned to ${staffUser?.name||'Staff'}`,'success');
   }
 
@@ -939,14 +827,11 @@ function App(){
     if(isStaff){
       return list.filter(c=>c.department===currentUser?.department || c.assignedTo===currentUser?.id);
     }
-    if(isTeacher){
-      return list.filter(c=>c.department===currentUser?.department || c.submittedBy===currentUser?.id);
-    }
     if(isStudent){
       return list.filter(c=>c.submittedBy===currentUser?.id);
     }
     return list;
-  },[complaints,query,currentUser,isAdmin,isStaff,isTeacher,isStudent]);
+  },[complaints,query,currentUser,isAdmin,isStaff,isStudent]);
 
   const stats = useMemo(()=>{
     const total=visibleComplaints.length;
@@ -954,8 +839,7 @@ function App(){
     const resolved=visibleComplaints.filter(c=>c.status==='resolved' || c.status==='closed').length;
     const approved=visibleComplaints.filter(c=>c.approved).length;
     const critical=visibleComplaints.filter(c=>c.priority==='critical').length;
-    const assigned=visibleComplaints.filter(c=>c.assignedTo).length;
-    return {total,pending,resolved,approved,critical,assigned};
+    return {total,pending,resolved,approved,critical};
   },[visibleComplaints]);
 
   if(!currentUser){
@@ -967,29 +851,12 @@ function App(){
       createElement(Sidebar, {view:view, setView:setView, user:currentUser, logout:logout, isAdmin:isAdmin}),
       createElement('main', {className:'main'},
         createElement(Topbar, {view:view, setView:setView, query:query, setQuery:setQuery, theme:theme, setTheme:setTheme, user:currentUser}),
-        view==='dashboard' && createElement(Dashboard, {
-          stats:stats,
-          complaints:visibleComplaints,
-          setSelected:setSelected,
-          setView:setView,
-          user:currentUser,
-          isAdmin:isAdmin,
-          isStaff:isStaff,
-          chartRef:chartRef,
-          chartInstance:chartInstance
-        }),
-        view==='complaints' && createElement(ComplaintsList, {
-          complaints:visibleComplaints,
-          setSelected:setSelected,
-          setView:setView,
-          user:currentUser,
-          isAdmin:isAdmin,
-          isStaff:isStaff
-        }),
+        view==='dashboard' && createElement(Dashboard, {stats:stats, complaints:visibleComplaints, setSelected:setSelected, setView:setView}),
+        view==='complaints' && createElement(ComplaintsList, {complaints:visibleComplaints, setSelected:setSelected, setView:setView, isAdmin:isAdmin, isStaff:isStaff}),
         view==='new' && createElement(NewComplaint, {user:currentUser, onSubmit:saveComplaint}),
-        view==='analytics' && isAdmin && createElement(Analytics, {complaints:complaints, users:users}),
+        view==='analytics' && isAdmin && createElement(Analytics, {complaints:complaints}),
         view==='users' && isAdmin && createElement(UserManagement, {users:users}),
-        view==='audit' && isAdmin && createElement(AuditLog, {complaints:complaints, users:users}),
+        view==='audit' && isAdmin && createElement(AuditLog, {complaints:complaints}),
         view==='settings' && createElement(Settings, {theme:theme, setTheme:setTheme})
       ),
       createElement(MobileNav, {view:view, setView:setView})
@@ -1000,7 +867,6 @@ function App(){
       isAdmin:isAdmin,
       isStaff:isStaff,
       onClose:()=>setSelected(null),
-      onUpdate:updateComplaint,
       onComment:addComment,
       onResolve:resolveComplaint,
       onApprove:approveComplaint,
@@ -1022,18 +888,18 @@ function App(){
 function LoginPage({onLogin,theme,setTheme}){
   const [selected,setSelected]=useState(null);
   return createElement('div', {className:'login-page'},
-    createElement('div', {className:'login-box pop'},
+    createElement('div', {className:'login-box animate-scale'},
       createElement('button', {className:'btn icon', onClick:()=>setTheme(theme==='dark'?'light':'dark'), style:{position:'absolute',top:16,right:16,zIndex:5,background:'transparent',border:'1px solid var(--line)'}},
         createElement('i', {className:'fas '+(theme==='dark'?'fa-sun':'fa-moon')})
       ),
       createElement('div', {className:'crest animate-float'}, createElement('i', {className:'fas fa-scale-balanced'})),
       createElement('h1', null, 'ResolveHub'),
-      createElement('p', {className:'subtitle'}, createElement('i', {className:'fas fa-crown'}), ' Smart Complaint System · Classic Edition'),
+      createElement('p', {className:'subtitle'}, createElement('i', {className:'fas fa-crown'}), ' Smart Complaint System'),
       createElement('div', {className:'role-grid'},
         ROLES.map(r=>createElement('button', {key:r.id, className:'role-card '+(selected===r.id?'selected':''), onClick:()=>setSelected(r.id)},
           createElement('i', {className:'fas '+r.icon, style:{color:r.color}}),
           createElement('b', null, r.name),
-          createElement('small', null, r.desc)
+          createElement('small', null, r.id==='staff'?'IT Department':r.id==='admin'?'Full Access':r.id==='teacher'?'Faculty':'General User')
         ))
       ),
       createElement('button', {className:'btn primary', style:{width:'100%',padding:'14px',justifyContent:'center'}, onClick:()=>selected&&onLogin(selected), disabled:!selected},
@@ -1076,9 +942,9 @@ function Sidebar({view,setView,user,logout,isAdmin}){
 }
 
 // ===== TOPBAR =====
-function Topbar({view,setView,query,setQuery,theme,setTheme,user}){
+function Topbar({view,setView,query,setQuery,theme,setTheme}){
   const titles = {dashboard:'Command Center',complaints:'Complaint Intelligence',new:'Report an Issue',analytics:'Analytics',users:'User Management',audit:'Audit Trail',settings:'Settings'};
-  return createElement('div', {className:'topbar'},
+  return createElement('div', {className:'topbar animate-slide-down'},
     createElement('div', {className:'title'},
       createElement('h1', null, titles[view]||'ResolveHub'),
       createElement('p', null, createElement('i', {className:'fas fa-clock'}), ' ', new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}))
@@ -1098,21 +964,21 @@ function Topbar({view,setView,query,setQuery,theme,setTheme,user}){
   );
 }
 
-// ===== DASHBOARD WITH CHART =====
-function Dashboard({stats,complaints,setSelected,setView,user,isAdmin,isStaff,chartRef,chartInstance}){
+// ===== DASHBOARD =====
+function Dashboard({stats,complaints,setSelected,setView}){
   const recent = [...complaints].sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
-  const chartCanvas = useRef(null);
-  const chart = useRef(null);
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
 
   useEffect(()=>{
-    if(!chartCanvas.current) return;
-    if(chart.current) chart.current.destroy();
+    if(!chartRef.current || typeof Chart === 'undefined') return;
+    if(chartInstance.current) chartInstance.current.destroy();
     
-    const ctx = chartCanvas.current.getContext('2d');
+    const ctx = chartRef.current.getContext('2d');
     const statusCounts = STATUSES.map(s => complaints.filter(c=>c.status===s).length);
     const colors = ['#c9a84c','#d4a0a0','#8a9a8a','#c9a84c','#8a9a8a','#1a2332','#6b2e3e'];
     
-    chart.current = new Chart(ctx, {
+    chartInstance.current = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: STATUSES,
@@ -1128,65 +994,49 @@ function Dashboard({stats,complaints,setSelected,setView,user,isAdmin,isStaff,ch
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              padding: 12,
-              usePointStyle: true,
-              pointStyle: 'circle',
-              font: { family: 'Inter', size: 10 }
-            }
-          },
-          animation: {
-            animateRotate: true,
-            duration: 2000
-          }
+          legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, font: { size: 10 } } },
+          animation: { animateRotate: true, duration: 2000 }
         },
         cutout: '65%'
       }
     });
 
-    return ()=> { if(chart.current) chart.current.destroy(); };
+    return ()=> { if(chartInstance.current) chartInstance.current.destroy(); };
   },[complaints]);
 
-  return createElement('div', {className:'animate-slide-up'},
+  return createElement('div', {className:'animate-fade'},
     createElement('div', {className:'stats stagger'},
       createElement('div', {className:'stat-card'}, 
         createElement('div', {className:'icon', style:{color:'var(--gold)',borderColor:'rgba(201,168,76,.3)'}}, createElement('i', {className:'fas fa-folder-open'})),
         createElement('div', {className:'number'}, stats.total),
-        createElement('div', {className:'label'}, 'Total Cases'),
-        createElement('div', {className:'badge'}, '+12%')
+        createElement('div', {className:'label'}, 'Total Cases')
       ),
       createElement('div', {className:'stat-card'}, 
         createElement('div', {className:'icon', style:{color:'var(--burgundy)',borderColor:'rgba(107,46,62,.3)'}}, createElement('i', {className:'fas fa-clock'})),
         createElement('div', {className:'number'}, stats.pending),
-        createElement('div', {className:'label'}, 'Pending'),
-        createElement('div', {className:'badge'}, 'Needs Action')
+        createElement('div', {className:'label'}, 'Pending')
       ),
       createElement('div', {className:'stat-card'}, 
         createElement('div', {className:'icon', style:{color:'var(--sage)',borderColor:'rgba(138,154,138,.3)'}}, createElement('i', {className:'fas fa-check-circle'})),
         createElement('div', {className:'number'}, stats.resolved),
-        createElement('div', {className:'label'}, 'Resolved'),
-        createElement('div', {className:'badge'}, stats.total?Math.round(stats.resolved/stats.total*100)+'%':'0%')
+        createElement('div', {className:'label'}, 'Resolved')
       ),
       createElement('div', {className:'stat-card'}, 
         createElement('div', {className:'icon', style:{color:'var(--gold)',borderColor:'rgba(201,168,76,.3)'}}, createElement('i', {className:'fas fa-crown'})),
         createElement('div', {className:'number'}, stats.approved),
-        createElement('div', {className:'label'}, 'Approved'),
-        createElement('div', {className:'badge'}, 'Admin OK')
+        createElement('div', {className:'label'}, 'Approved')
       ),
       createElement('div', {className:'stat-card'}, 
         createElement('div', {className:'icon', style:{color:'var(--rose)',borderColor:'rgba(212,160,160,.3)'}}, createElement('i', {className:'fas fa-triangle-exclamation'})),
         createElement('div', {className:'number'}, stats.critical),
-        createElement('div', {className:'label'}, 'Critical'),
-        createElement('div', {className:'badge'}, 'Urgent')
+        createElement('div', {className:'label'}, 'Critical')
       )
     ),
     createElement('div', {className:'grid2'},
       createElement('div', {className:'panel pad animate-slide-left'},
         createElement('div', {className:'head'},
           createElement('div', null, createElement('h3', null, 'Recent Activity'), createElement('p', null, 'Latest complaints from your workspace')),
-          createElement('button', {className:'btn sm outline', onClick:()=>setView('complaints')}, 'View All ', createElement('i', {className:'fas fa-arrow-right'}))
+          createElement('button', {className:'btn sm outline', onClick:()=>setView('complaints')}, 'View All')
         ),
         recent.length ? recent.map(c=>createElement(ComplaintRow, {key:c.id, complaint:c, onClick:setSelected})) : 
           createElement('div', {style:{textAlign:'center',color:'var(--dim)',padding:30}}, 
@@ -1198,7 +1048,7 @@ function Dashboard({stats,complaints,setSelected,setView,user,isAdmin,isStaff,ch
           createElement('div', null, createElement('h3', null, 'Status Distribution'), createElement('p', null, 'Complaint breakdown by status'))
         ),
         createElement('div', {className:'chart-container'},
-          createElement('canvas', {ref:chartCanvas})
+          createElement('canvas', {ref:chartRef})
         )
       )
     )
@@ -1233,7 +1083,7 @@ function ComplaintRow({complaint,onClick}){
 }
 
 // ===== COMPLAINTS LIST =====
-function ComplaintsList({complaints,setSelected,setView,user,isAdmin,isStaff}){
+function ComplaintsList({complaints,setSelected,setView,isAdmin,isStaff}){
   const [filterStatus,setFilterStatus]=useState('all');
   const [filterPriority,setFilterPriority]=useState('all');
   const filtered = complaints.filter(c=>filterStatus==='all'||c.status===filterStatus).filter(c=>filterPriority==='all'||c.priority===filterPriority);
@@ -1345,7 +1195,7 @@ function NewComplaint({user,onSubmit}){
 }
 
 // ===== COMPLAINT DETAIL =====
-function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComment,onResolve,onApprove,onRate,onAssign,users,departments}){
+function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onResolve,onApprove,onRate,onAssign,users,departments}){
   const [comment,setComment]=useState('');
   const [resolution,setResolution]=useState('');
   const [rating,setRating]=useState(0);
@@ -1410,22 +1260,19 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComm
         )
       ),
 
-      // Assigned To
       complaint.assignedTo && createElement('div', {className:'panel pad', style:{marginBottom:16,background:'rgba(138,154,138,.06)'}},
         createElement('b', {style:{color:'var(--sage)'}}, createElement('i', {className:'fas fa-user-check'}), ' Assigned To'),
         createElement('p', {style:{fontSize:13,color:'var(--text)',marginTop:4}}, users.find(u=>u.id===complaint.assignedTo)?.name||'Staff'),
         createElement('small', {className:'dim'}, 'Department: ', complaint.department)
       ),
 
-      // Resolution
       complaint.resolution && createElement('div', {className:'panel pad', style:{marginBottom:16,background:'rgba(138,154,138,.06)',borderColor:'var(--sage)'}},
         createElement('b', {style:{color:'var(--sage)'}}, createElement('i', {className:'fas fa-check-circle'}), ' Resolution'),
         createElement('p', {style:{fontSize:13,color:'var(--text)',marginTop:4}}, complaint.resolution),
         complaint.resolvedBy && createElement('small', {className:'dim'}, 'Resolved by: ', users.find(u=>u.id===complaint.resolvedBy)?.name||'Staff')
       ),
 
-      // Timeline
-      !isResolved && complaint.timeline && createElement('div', {className:'timeline'},
+      complaint.timeline && createElement('div', {className:'timeline'},
         complaint.timeline.map((t,i)=>createElement('div', {key:i, className:'event'},
           createElement('b', null, t.status),
           createElement('p', null, t.note),
@@ -1434,7 +1281,7 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComm
       ),
 
       // Admin: Assign
-      {canAssign && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
+      canAssign && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
         createElement('div', {className:'head'},
           createElement('h3', {style:{color:'var(--gold)'}}, createElement('i', {className:'fas fa-user-plus'}), ' Assign Complaint')
         ),
@@ -1465,28 +1312,28 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComm
               createElement('button', {className:'btn', onClick:()=>setShowAssign(false)}, 'Cancel')
             )
           )
-      )},
+      ),
 
       // Staff: Resolve
-      {canResolve && createElement('div', {className:'panel pad', style:{marginBottom:16}},
+      canResolve && createElement('div', {className:'panel pad', style:{marginBottom:16}},
         createElement('div', {className:'head'}, createElement('h3', null, 'Resolve This Complaint')),
         createElement('textarea', {className:'input', value:resolution, onChange:e=>setResolution(e.target.value), placeholder:'Describe how this issue was resolved...', rows:2}),
         createElement('button', {className:'btn success', style:{marginTop:8}, onClick:()=>{if(resolution.trim()){onResolve(complaint.id,resolution);}}},
           createElement('i', {className:'fas fa-check-double'}), ' Mark Resolved'
         )
-      )},
+      ),
 
       // Admin: Approve
-      {canApprove && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
+      canApprove && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
         createElement('div', {className:'head'}, createElement('h3', {style:{color:'var(--gold)'}}, 'Admin Approval')),
-        createElement('p', {style:{fontSize:12,color:'var(--muted)',marginBottom:8}}, 'This complaint has been resolved by the department. Approve to close it officially.'),
+        createElement('p', {style:{fontSize:12,color:'var(--muted)',marginBottom:8}}, 'This complaint has been resolved. Approve to close it officially.'),
         createElement('button', {className:'btn primary', onClick:()=>onApprove(complaint.id)},
           createElement('i', {className:'fas fa-crown'}), ' Approve & Close'
         )
-      )},
+      ),
 
       // User: Rate
-      {canRate && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
+      canRate && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
         createElement('div', {className:'head'}, createElement('h3', null, 'Rate Resolution')),
         createElement('div', {style:{display:'flex',gap:6,marginBottom:8}},
           [1,2,3,4,5].map(n=>createElement('button', {key:n, className:'btn icon', style:{color:n<=rating?'var(--gold)':'var(--dim)'}, onClick:()=>setRating(n)},
@@ -1497,14 +1344,14 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComm
         createElement('button', {className:'btn primary', style:{marginTop:8}, onClick:()=>{if(rating){onRate(complaint.id,rating,feedback);}}},
           createElement('i', {className:'fas fa-comment'}), ' Submit Feedback'
         )
-      )},
+      ),
 
       // Comments
       createElement('div', {className:'head', style:{marginTop:12}}, createElement('h3', null, 'Comments')),
-      complaint.comments?.map(c=>createElement('div', {key:c.id, className:'comment'},
+      (complaint.comments||[]).map(c=>createElement('div', {key:c.id, className:'comment'},
         createElement('div', {className:'author'}, c.name, createElement('small', null, '@', c.role, ' · ', new Date(c.timestamp).toLocaleString())),
         createElement('p', null, c.message)
-      )) || createElement('p', {className:'dim', style:{fontSize:12}}, 'No comments yet'),
+      )),
       
       createElement('div', {style:{display:'flex',gap:8,marginTop:12}},
         createElement('input', {className:'input', value:comment, onChange:e=>setComment(e.target.value), placeholder:'Add a comment...', onKeyDown:e=>e.key==='Enter'&&addComment()}),
@@ -1515,20 +1362,19 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComm
 }
 
 // ===== ANALYTICS =====
-function Analytics({complaints,users}){
-  const [chartData, setChartData] = useState(null);
-  const chartCanvas = useRef(null);
-  const chart = useRef(null);
+function Analytics({complaints}){
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
 
   useEffect(()=>{
-    if(!chartCanvas.current) return;
-    if(chart.current) chart.current.destroy();
+    if(!chartRef.current || typeof Chart === 'undefined') return;
+    if(chartInstance.current) chartInstance.current.destroy();
 
-    const ctx = chartCanvas.current.getContext('2d');
+    const ctx = chartRef.current.getContext('2d');
     const catCounts = CATEGORIES.map(c => complaints.filter(comp=>comp.category===c).length);
     const colors = ['#c9a84c','#d4a0a0','#8a9a8a','#6b2e3e','#1a2332','#c9a84c','#d4a0a0','#8a9a8a','#6b2e3e','#1a2332','#c9a84c','#d4a0a0','#8a9a8a','#6b2e3e'];
 
-    chart.current = new Chart(ctx, {
+    chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: CATEGORIES,
@@ -1538,33 +1384,21 @@ function Analytics({complaints,users}){
           backgroundColor: colors.map(c=>c+'99'),
           borderColor: colors,
           borderWidth: 2,
-          borderRadius: 6,
-          hoverBackgroundColor: colors.map(c=>c+'cc')
+          borderRadius: 6
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          animation: {
-            duration: 2000,
-            easing: 'easeInOutQuart'
-          }
-        },
+        plugins: { legend: { display: false }, animation: { duration: 2000 } },
         scales: {
-          y: {
-            beginAtZero: true,
-            grid: { color: 'rgba(26,35,50,.06)' }
-          },
-          x: {
-            grid: { display: false }
-          }
+          y: { beginAtZero: true, grid: { color: 'rgba(26,35,50,.06)' } },
+          x: { grid: { display: false } }
         }
       }
     });
 
-    return ()=> { if(chart.current) chart.current.destroy(); };
+    return ()=> { if(chartInstance.current) chartInstance.current.destroy(); };
   },[complaints]);
 
   return createElement('div', {className:'animate-slide-up'},
@@ -1574,7 +1408,7 @@ function Analytics({complaints,users}){
           createElement('div', null, createElement('h3', null, 'Category Analytics'), createElement('p', null, 'Complaint distribution by category'))
         ),
         createElement('div', {className:'chart-container', style:{height:300}},
-          createElement('canvas', {ref:chartCanvas})
+          createElement('canvas', {ref:chartRef})
         )
       ),
       createElement('div', {className:'panel pad'},
@@ -1612,7 +1446,7 @@ function Analytics({complaints,users}){
 function UserManagement({users}){
   return createElement('div', {className:'animate-slide-up panel pad'},
     createElement('div', {className:'head'},
-      createElement('div', null, createElement('h3', null, 'User Management'), createElement('p', null, 'All registered users and their roles'))
+      createElement('div', null, createElement('h3', null, 'User Management'), createElement('p', null, 'All registered users'))
     ),
     createElement('table', {className:'table', style:{marginTop:12}},
       createElement('thead', null,
@@ -1634,7 +1468,7 @@ function UserManagement({users}){
 }
 
 // ===== AUDIT LOG =====
-function AuditLog({complaints,users}){
+function AuditLog({complaints}){
   return createElement('div', {className:'animate-slide-up panel pad'},
     createElement('div', {className:'head'},
       createElement('div', null, createElement('h3', null, 'Audit Trail'), createElement('p', null, 'Recent activity log'))
@@ -1663,7 +1497,7 @@ function Settings({theme,setTheme}){
       )
     ),
     createElement('p', {className:'muted', style:{fontSize:11,marginTop:16}},
-      createElement('i', {className:'fas fa-database'}), ' Data is stored locally in your browser. All features work offline.'
+      createElement('i', {className:'fas fa-database'}), ' Data is stored locally in your browser.'
     ),
     createElement('div', {style:{marginTop:12,padding:12,background:'rgba(201,168,76,.06)',borderRadius:'var(--r)',fontSize:11}},
       createElement('b', null, createElement('i', {className:'fas fa-info-circle'}), ' Features:'),
@@ -1692,7 +1526,6 @@ function MobileNav({view,setView}){
 
 // ===== RENDER =====
 ReactDOM.createRoot(document.getElementById('root')).render(createElement(App));
-})();
 </script>
 </body>
 </html>
