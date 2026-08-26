@@ -4,213 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
   <meta name="theme-color" content="#6C3CE1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>ResolveHub · Luxury Resolution</title>
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    /* ===== LUXURY DESIGN SYSTEM ===== */
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     :root {
-      /* Premium Color Palette */
       --primary: #6C3CE1;
       --primary-light: #8B5CF6;
       --primary-dark: #5B2CC1;
       --secondary: #EC4899;
-      --secondary-light: #F472B6;
-      --accent: #06D6A0;
-      --accent-light: #34D399;
       --gold: #F59E0B;
-      --gold-light: #FCD34D;
+      --accent: #06D6A0;
       --rose: #F43F5E;
-      --rose-light: #FB7185;
-      
-      /* Gradients */
       --gradient-primary: linear-gradient(135deg, #6C3CE1 0%, #EC4899 100%);
-      --gradient-secondary: linear-gradient(135deg, #06D6A0 0%, #3B82F6 100%);
       --gradient-gold: linear-gradient(135deg, #F59E0B 0%, #FCD34D 100%);
-      --gradient-rose: linear-gradient(135deg, #F43F5E 0%, #EC4899 100%);
-      --gradient-dark: linear-gradient(135deg, #0F0C29, #302B63, #24243E);
-      --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%);
-      
-      /* Colors */
       --bg-primary: #0F0C29;
       --bg-secondary: #1A1640;
       --bg-card: rgba(26, 22, 64, 0.6);
-      --bg-elevated: rgba(255,255,255,0.08);
       --text-primary: #FFFFFF;
       --text-secondary: rgba(255,255,255,0.7);
       --text-tertiary: rgba(255,255,255,0.4);
       --border: rgba(255,255,255,0.08);
-      --border-glow: rgba(108,60,225,0.3);
-      
-      /* Sizes */
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --radius-xl: 32px;
-      --radius-full: 9999px;
-      
-      /* Shadows */
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-      --shadow-md: 0 8px 32px rgba(0,0,0,0.3);
-      --shadow-lg: 0 20px 64px rgba(0,0,0,0.4);
       --shadow-glow: 0 0 40px rgba(108,60,225,0.3);
-      --shadow-glow-pink: 0 0 40px rgba(236,72,153,0.3);
-      
-      /* Animations */
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
-    }
-
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
+      --radius-lg: 24px;
+      --radius-full: 9999px;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { 
-      background: var(--gradient-primary); 
-      border-radius: var(--radius-full);
+      min-height: 100vh;
     }
 
     /* ===== ANIMATIONS ===== */
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      33% { transform: translateY(-20px) rotate(2deg); }
-      66% { transform: translateY(10px) rotate(-2deg); }
-    }
-
-    @keyframes float-slow {
-      0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-30px) scale(1.02); }
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(108,60,225,0.3); }
-      50% { box-shadow: 0 0 60px rgba(108,60,225,0.6); }
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -200% center; }
-      100% { background-position: 200% center; }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px) scale(0.96); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
     @keyframes fadeInScale {
-      from { opacity: 0; transform: scale(0.8) rotate(-5deg); }
-      to { opacity: 1; transform: scale(1) rotate(0deg); }
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(60px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-60px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
     }
 
-    @keyframes rotateIn {
-      from { opacity: 0; transform: rotate(-180deg) scale(0.5); }
-      to { opacity: 1; transform: rotate(0deg) scale(1); }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
     }
 
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.8; }
-    }
-
-    @keyframes confetti-fall {
-      0% { transform: translateY(-100vh) rotate(0deg) scale(1); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
-    }
-
-    @keyframes gradient-move {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    @keyframes blink-cursor {
-      50% { border-color: transparent; }
-    }
-
-    @keyframes ripple {
-      0% { transform: scale(0); opacity: 0.5; }
-      100% { transform: scale(4); opacity: 0; }
-    }
-
-    @keyframes shimmer-text {
-      0% { background-position: -200% center; }
-      100% { background-position: 200% center; }
-    }
-
-    /* ===== ANIMATION CLASSES ===== */
+    .animate-fade-scale { animation: fadeInScale 0.6s ease forwards; }
+    .animate-slide-up { animation: slideUp 0.6s ease forwards; }
     .animate-float { animation: float 6s ease-in-out infinite; }
-    .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
-    .animate-fade-up { animation: fadeInUp 0.8s var(--ease-out-expo) forwards; }
-    .animate-fade-scale { animation: fadeInScale 0.6s var(--ease-out-expo) forwards; }
-    .animate-slide-right { animation: slideInRight 0.7s var(--ease-out-expo) forwards; }
-    .animate-slide-left { animation: slideInLeft 0.7s var(--ease-out-expo) forwards; }
-    .animate-rotate-in { animation: rotateIn 0.8s var(--ease-out-expo) forwards; }
-    .animate-breathe { animation: breathe 3s ease-in-out infinite; }
-    .animate-gradient { animation: gradient-move 8s ease infinite; background-size: 200% 200%; }
 
-    .animate-stagger > *:nth-child(1) { animation-delay: 0.05s; }
-    .animate-stagger > *:nth-child(2) { animation-delay: 0.1s; }
-    .animate-stagger > *:nth-child(3) { animation-delay: 0.15s; }
-    .animate-stagger > *:nth-child(4) { animation-delay: 0.2s; }
-    .animate-stagger > *:nth-child(5) { animation-delay: 0.25s; }
-    .animate-stagger > *:nth-child(6) { animation-delay: 0.3s; }
-
-    /* ===== GLASSMORPHISM ===== */
+    /* ===== GLASS ===== */
     .glass {
       background: var(--bg-card);
-      backdrop-filter: blur(40px) saturate(180%);
-      -webkit-backdrop-filter: blur(40px) saturate(180%);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      transition: all 0.5s var(--ease-out-expo);
-    }
-
-    .glass:hover {
-      border-color: var(--border-glow);
-      box-shadow: var(--shadow-lg), var(--shadow-glow);
-    }
-
-    .glass-premium {
-      background: var(--gradient-glass);
-      backdrop-filter: blur(60px) saturate(200%);
-      -webkit-backdrop-filter: blur(60px) saturate(200%);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
 
     /* ===== BUTTONS ===== */
@@ -219,1139 +91,84 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 14px 32px;
+      padding: 12px 28px;
       border-radius: var(--radius-full);
       border: none;
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
+      transition: all 0.3s ease;
       font-family: 'Inter', sans-serif;
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.3px;
+      color: white;
     }
-
-    .btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .btn:hover::after { opacity: 1; }
 
     .btn-primary {
       background: var(--gradient-primary);
-      color: white;
       box-shadow: var(--shadow-glow);
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: var(--shadow-glow), 0 12px 48px rgba(108,60,225,0.4);
-    }
-
-    .btn-secondary {
-      background: var(--gradient-secondary);
-      color: white;
-      box-shadow: 0 4px 24px rgba(6,214,160,0.3);
-    }
-
-    .btn-secondary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 40px rgba(6,214,160,0.4);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 60px rgba(108,60,225,0.4);
     }
 
     .btn-gold {
       background: var(--gradient-gold);
       color: #1A1640;
-      box-shadow: 0 4px 24px rgba(245,158,11,0.3);
     }
 
     .btn-gold:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 40px rgba(245,158,11,0.4);
+      transform: translateY(-2px) scale(1.02);
     }
 
     .btn-ghost {
       background: rgba(255,255,255,0.05);
-      color: var(--text-secondary);
       border: 1px solid var(--border);
     }
 
     .btn-ghost:hover {
       background: rgba(255,255,255,0.1);
-      color: var(--text-primary);
-      transform: translateY(-2px);
     }
 
     .btn-sm {
-      padding: 8px 20px;
+      padding: 8px 18px;
       font-size: 12px;
-    }
-
-    .btn-lg {
-      padding: 18px 40px;
-      font-size: 16px;
-    }
-
-    .btn-icon {
-      width: 48px;
-      height: 48px;
-      padding: 0;
-      border-radius: var(--radius-full);
-    }
-
-    /* ===== BADGES ===== */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 16px;
-      border-radius: var(--radius-full);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-
-    .badge-status {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-secondary);
-    }
-
-    .badge-status .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      animation: breathe 2s ease-in-out infinite;
     }
 
     /* ===== INPUTS ===== */
     .input {
       width: 100%;
       padding: 14px 20px;
-      border-radius: var(--radius-md);
+      border-radius: 16px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.05);
       color: var(--text-primary);
       font-size: 14px;
       font-family: 'Inter', sans-serif;
-      transition: all 0.4s var(--ease-out-expo);
+      transition: all 0.3s ease;
       outline: none;
-      backdrop-filter: blur(10px);
     }
 
     .input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(108,60,225,0.15), var(--shadow-glow);
-      background: rgba(255,255,255,0.08);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(245,158,11,0.1);
     }
 
     .input::placeholder {
       color: var(--text-tertiary);
-      font-weight: 400;
     }
 
-    .input-premium {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 16px 24px;
-      font-size: 15px;
-    }
-
-    .input-premium:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 4px rgba(245,158,11,0.1), 0 8px 32px rgba(0,0,0,0.2);
-    }
-
-    /* ===== LAYOUT ===== */
-    .app-shell {
-      display: flex;
-      min-height: 100vh;
-      background: var(--bg-primary);
-      position: relative;
-    }
-
-    /* ===== BACKGROUND EFFECTS ===== */
-    .bg-effects {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .bg-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.3;
-      animation: float-slow 12s ease-in-out infinite;
-    }
-
-    .bg-orb-1 {
-      width: 600px;
-      height: 600px;
-      background: var(--primary);
-      top: -200px;
-      right: -200px;
-      animation-delay: 0s;
-    }
-
-    .bg-orb-2 {
-      width: 500px;
-      height: 500px;
-      background: var(--secondary);
-      bottom: -150px;
-      left: -150px;
-      animation-delay: 3s;
-    }
-
-    .bg-orb-3 {
-      width: 400px;
-      height: 400px;
-      background: var(--gold);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: 6s;
-      opacity: 0.15;
-    }
-
-    .bg-grid {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 80px 80px;
-    }
-
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-      width: 280px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 32px 20px;
-      background: var(--bg-card);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      border-right: 1px solid var(--border);
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.5s var(--ease-out-expo);
-    }
-
-    .sidebar-brand {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      padding: 0 12px;
-      margin-bottom: 4px;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-    }
-
-    .sidebar-brand::after {
-      content: '✦';
-      position: absolute;
-      right: -8px;
-      top: -4px;
-      font-size: 16px;
-      background: var(--gradient-gold);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: rotateIn 2s ease-in-out infinite;
-    }
-
-    .sidebar-subtitle {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      padding: 0 12px;
-      margin-bottom: 24px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
-      margin: 8px -4px;
-      padding: 0 4px;
-    }
-
-    .nav-item {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      border: none;
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
-      margin-bottom: 4px;
-      font-family: 'Inter', sans-serif;
-      text-align: left;
-      position: relative;
-    }
-
-    .nav-item:hover {
-      background: rgba(255,255,255,0.05);
-      color: var(--text-primary);
-      transform: translateX(4px);
-    }
-
-    .nav-item.active {
-      background: var(--gradient-primary);
-      color: white;
-      box-shadow: var(--shadow-glow);
-      transform: translateX(4px);
-    }
-
-    .nav-item .nav-icon {
-      width: 24px;
-      text-align: center;
-      font-size: 16px;
-    }
-
-    .nav-item .nav-badge {
-      margin-left: auto;
-      padding: 2px 12px;
-      border-radius: var(--radius-full);
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(255,255,255,0.1);
-      color: var(--text-secondary);
-    }
-
-    .nav-item.active .nav-badge {
-      background: rgba(255,255,255,0.2);
-      color: white;
-    }
-
-    /* ===== SIDEBAR FOOTER ===== */
-    .sidebar-footer {
-      margin-top: auto;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    .user-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      background: rgba(255,255,255,0.03);
-      transition: all 0.4s var(--ease-out-expo);
-      cursor: pointer;
-    }
-
-    .user-card:hover {
-      background: rgba(255,255,255,0.06);
-    }
-
-    .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      color: white;
-      flex-shrink: 0;
-      background: var(--gradient-primary);
-      box-shadow: var(--shadow-glow);
-      position: relative;
-    }
-
-    .avatar::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 50%;
-      background: var(--gradient-gold);
-      opacity: 0.3;
-      z-index: -1;
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-
-    .avatar-sm {
-      width: 36px;
-      height: 36px;
-      font-size: 13px;
-    }
-
-    .avatar-lg {
-      width: 64px;
-      height: 64px;
-      font-size: 24px;
-    }
-
-    .avatar-ring {
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 20px rgba(245,158,11,0.3);
-    }
-
-    /* ===== MAIN AREA ===== */
-    .main-area {
-      flex: 1;
-      padding: 32px 40px;
-      max-width: 1440px;
-      margin: 0 auto;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===== TOPBAR ===== */
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-    }
-
-    .page-title {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .page-subtitle {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-      font-weight: 400;
-    }
-
-    .search-wrap {
-      position: relative;
-      flex: 1;
-      max-width: 360px;
-      min-width: 200px;
-    }
-
-    .search-wrap i {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-tertiary);
-      font-size: 14px;
-    }
-
-    .search-wrap input {
-      padding-left: 48px;
-      border-radius: var(--radius-full);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      height: 48px;
-    }
-
-    .search-wrap input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 4px rgba(245,158,11,0.1);
-    }
-
-    /* ===== STATS ===== */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      padding: 24px;
-      border-radius: var(--radius-lg);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(20px);
-      transition: all 0.5s var(--ease-out-expo);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 100%;
-      height: 100%;
-      background: var(--gradient-primary);
-      opacity: 0;
-      transition: all 0.6s var(--ease-out-expo);
-      border-radius: 50%;
-      filter: blur(40px);
-    }
-
-    .stat-card:hover::before {
-      opacity: 0.1;
-      transform: scale(2);
-    }
-
-    .stat-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--border-glow);
-      box-shadow: var(--shadow-lg), var(--shadow-glow);
-    }
-
-    .stat-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-      background: var(--gradient-primary);
-      box-shadow: var(--shadow-glow);
-      margin-bottom: 12px;
-    }
-
-    .stat-icon.gold { background: var(--gradient-gold); }
-    .stat-icon.green { background: var(--gradient-secondary); }
-    .stat-icon.rose { background: var(--gradient-rose); }
-    .stat-icon.purple { background: var(--gradient-primary); }
-
-    .stat-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--text-primary);
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      margin-top: 4px;
-    }
-
-    .stat-trend {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 8px;
-      padding: 4px 12px;
-      border-radius: var(--radius-full);
-      background: rgba(6,214,160,0.15);
-      color: var(--accent);
-    }
-
-    .stat-trend.down {
-      background: rgba(244,63,94,0.15);
-      color: var(--rose);
-    }
-
-    /* ===== COMPLAINT ROW ===== */
-    .complaint-row {
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      position: relative;
-    }
-
-    .complaint-row:last-child { border-bottom: none; }
-
-    .complaint-row:hover {
-      background: rgba(255,255,255,0.03);
-      transform: translateX(4px);
-    }
-
-    .complaint-row::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 3px;
-      height: 0;
-      background: var(--gradient-primary);
-      transition: height 0.4s var(--ease-out-expo);
-      border-radius: 0 4px 4px 0;
-    }
-
-    .complaint-row:hover::before {
-      height: 60%;
-    }
-
-    .complaint-info { flex: 1; min-width: 0; }
-    .complaint-subject { 
-      font-weight: 700; 
-      font-size: 15px; 
-      color: var(--text-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .complaint-meta {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-
-    .complaint-meta .divider {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--text-tertiary);
-    }
-
-    .complaint-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    /* ===== UPVOTE ===== */
-    .upvote-btn {
+    /* ===== BADGE ===== */
+    .badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 16px;
+      padding: 4px 14px;
       border-radius: var(--radius-full);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    .upvote-btn:hover {
-      background: rgba(108,60,225,0.1);
-      border-color: var(--primary);
-      color: var(--primary);
-      transform: scale(1.05);
-    }
-
-    .upvote-btn.upvoted {
-      background: rgba(108,60,225,0.15);
-      border-color: var(--primary);
-      color: var(--primary);
-      box-shadow: var(--shadow-glow);
-    }
-
-    /* ===== MODAL ===== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeInUp 0.3s ease;
-    }
-
-    .modal-box {
-      max-width: 720px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: var(--radius-xl);
-      padding: 32px;
-      background: var(--bg-card);
-      backdrop-filter: blur(60px);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
-      animation: fadeInScale 0.5s var(--ease-out-expo) forwards;
-    }
-
-    .modal-box::-webkit-scrollbar { width: 3px; }
-
-    /* ===== TOAST ===== */
-    .toast-container {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 420px;
-      width: 100%;
-      pointer-events: none;
-    }
-
-    .toast {
-      padding: 16px 24px;
-      border-radius: var(--radius-lg);
-      backdrop-filter: blur(40px);
-      font-weight: 600;
-      font-size: 14px;
-      border-left: 4px solid;
-      box-shadow: var(--shadow-lg);
-      pointer-events: auto;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      animation: slideInRight 0.5s var(--ease-out-expo) forwards;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-    }
-
-    .toast-success { border-color: var(--accent); }
-    .toast-success i { color: var(--accent); }
-
-    .toast-error { border-color: var(--rose); }
-    .toast-error i { color: var(--rose); }
-
-    .toast-info { border-color: var(--primary); }
-    .toast-info i { color: var(--primary); }
-
-    /* ===== HEATMAP ===== */
-    .heatmap-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    @media (min-width: 640px) {
-      .heatmap-grid { grid-template-columns: repeat(6, 1fr); }
-    }
-
-    .heat-cell {
-      aspect-ratio: 1;
-      border-radius: var(--radius-lg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.5s var(--ease-out-expo);
-      border: 1px solid rgba(255,255,255,0.05);
-      background: var(--bg-card);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .heat-cell::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--gradient-primary);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .heat-cell:hover::before {
-      opacity: 0.1;
-    }
-
-    .heat-cell:hover {
-      transform: scale(1.08) translateY(-4px);
-      border-color: var(--border-glow);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .heat-label {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: capitalize;
-      position: relative;
-      z-index: 1;
-    }
-
-    .heat-value {
-      font-size: 28px;
-      font-weight: 800;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===== KANBAN ===== */
-    .kanban-board {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .kanban-column {
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(20px);
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    .kanban-column:hover {
-      border-color: var(--border-glow);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .kanban-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      font-weight: 700;
-      font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text-secondary);
-    }
-
-    .kanban-count {
-      padding: 2px 14px;
-      border-radius: var(--radius-full);
-      font-size: 11px;
-      background: rgba(255,255,255,0.05);
-      color: var(--text-secondary);
-    }
-
-    .kanban-card {
-      padding: 16px;
-      border-radius: var(--radius-md);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    .kanban-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px) scale(1.01);
-      border-color: var(--border-glow);
-      background: rgba(255,255,255,0.05);
-    }
-
-    /* ===== FORM ===== */
-    .form-group { margin-bottom: 20px; }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-      letter-spacing: 0.3px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 480px) {
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    .form-group .input,
-    .form-group select {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px 18px;
-      color: var(--text-primary);
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.4s var(--ease-out-expo);
-      outline: none;
-      width: 100%;
-    }
-
-    .form-group .input:focus,
-    .form-group select:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 4px rgba(245,158,11,0.1);
-      background: rgba(255,255,255,0.05);
-    }
-
-    .form-group select option {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-    }
-
-    /* ===== CHECKBOX ===== */
-    .checkbox-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-    }
-
-    .checkbox-wrap input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      accent-color: var(--gold);
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    /* ===== TIMELINE ===== */
-    .timeline-item {
-      display: flex;
-      gap: 16px;
-      padding: 14px 0;
-      position: relative;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: 16px;
-      top: 40px;
-      bottom: -12px;
-      width: 2px;
-      background: var(--border);
-      border-radius: 2px;
-    }
-
-    .timeline-item:last-child::before { display: none; }
-
-    .timeline-dot {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: white;
-      z-index: 1;
-      box-shadow: 0 0 20px rgba(108,60,225,0.3);
-    }
-
-    .timeline-content {
-      flex: 1;
-    }
-
-    .timeline-status {
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--text-primary);
-      text-transform: capitalize;
-    }
-
-    .timeline-note {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-
-    .timeline-time {
-      font-size: 11px;
-      color: var(--text-tertiary);
-      margin-top: 4px;
-    }
-
-    /* ===== DEPARTMENT BARS ===== */
-    .dept-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .dept-bar-bg {
-      flex: 1;
-      height: 8px;
-      border-radius: var(--radius-full);
-      background: rgba(255,255,255,0.05);
-      overflow: hidden;
-    }
-
-    .dept-bar-fill {
-      height: 100%;
-      border-radius: var(--radius-full);
-      background: var(--gradient-primary);
-      transition: width 1s var(--ease-out-expo);
-    }
-
-    .dept-bar-fill.gold { background: var(--gradient-gold); }
-    .dept-bar-fill.green { background: var(--gradient-secondary); }
-    .dept-bar-fill.rose { background: var(--gradient-rose); }
-
-    /* ===== ROLE SELECTOR ===== */
-    .role-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
-    }
-
-    .role-card {
-      padding: 24px;
-      border-radius: var(--radius-lg);
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.5s var(--ease-out-expo);
-      border: 2px solid var(--border);
-      background: var(--bg-card);
-      backdrop-filter: blur(20px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .role-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--gradient-primary);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .role-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      border-color: var(--border-glow);
-      box-shadow: var(--shadow-lg), var(--shadow-glow);
-    }
-
-    .role-card:hover::before {
-      opacity: 0.05;
-    }
-
-    .role-card.selected {
-      border-color: var(--gold);
-      box-shadow: 0 0 40px rgba(245,158,11,0.2), var(--shadow-lg);
-    }
-
-    .role-card .role-icon {
-      font-size: 36px;
-      margin-bottom: 10px;
-      display: block;
-      position: relative;
-      z-index: 1;
-    }
-
-    .role-card .role-name {
-      font-weight: 700;
-      font-size: 15px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .role-card .role-email {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===== ACTIVITY ===== */
-    .activity-item {
-      display: flex;
-      gap: 16px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      align-items: flex-start;
-    }
-
-    .activity-item:last-child { border-bottom: none; }
-
-    .activity-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-      background: var(--gradient-primary);
-    }
-
-    /* ===== NOTIFICATION CENTER ===== */
-    .notification-dropdown {
-      position: absolute;
-      top: calc(100% + 12px);
-      right: 0;
-      width: 380px;
-      max-height: 480px;
-      overflow-y: auto;
-      border-radius: var(--radius-lg);
-      background: var(--bg-card);
-      backdrop-filter: blur(40px);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
-      z-index: 60;
-      animation: fadeInScale 0.3s var(--ease-out-expo) forwards;
-    }
-
-    .notification-dropdown::-webkit-scrollbar { width: 3px; }
-
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
-    }
-
-    .empty-state i {
-      font-size: 56px;
-      opacity: 0.2;
-      margin-bottom: 20px;
-      display: block;
-    }
-
-    /* ===== CONFETTI ===== */
-    .confetti-piece {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      top: -10px;
-      z-index: 99999;
-      animation: confetti-fall var(--duration, 3s) linear forwards;
-      animation-delay: var(--delay, 0s);
     }
 
     /* ===== LOGIN ===== */
@@ -1362,17 +179,50 @@
       justify-content: center;
       padding: 20px;
       position: relative;
+      background: var(--bg-primary);
+    }
+
+    .login-bg-effects {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .login-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.3;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .login-orb-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--primary);
+      top: -200px;
+      right: -100px;
+    }
+
+    .login-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--secondary);
+      bottom: -150px;
+      left: -100px;
+      animation-delay: 3s;
     }
 
     .login-box {
       max-width: 520px;
       width: 100%;
-      border-radius: var(--radius-xl);
       padding: 48px 40px;
       background: var(--bg-card);
       backdrop-filter: blur(60px);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
+      border-radius: 32px;
+      box-shadow: 0 20px 64px rgba(0,0,0,0.4);
       position: relative;
       z-index: 1;
     }
@@ -1385,64 +235,519 @@
     .login-brand h1 {
       font-size: 40px;
       font-weight: 900;
-      letter-spacing: -1.5px;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
     .login-brand p {
       color: var(--text-secondary);
       font-size: 15px;
-      font-weight: 500;
       margin-top: 4px;
     }
 
-    .login-brand .luxury-badge {
-      display: inline-block;
-      padding: 4px 16px;
-      border-radius: var(--radius-full);
-      font-size: 10px;
+    .role-selector {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .role-card {
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .role-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(108,60,225,0.3);
+    }
+
+    .role-card.selected {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(245,158,11,0.15);
+    }
+
+    .role-card .role-icon {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .role-card .role-name {
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      background: var(--gradient-gold);
+      font-size: 14px;
+    }
+
+    .role-card .role-email {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 260px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(40px);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand {
+      font-size: 26px;
+      font-weight: 900;
+      padding: 0 12px;
+      margin-bottom: 4px;
+      background: var(--gradient-primary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      border: 1px solid rgba(245,158,11,0.2);
-      margin-top: 8px;
+    }
+
+    .sidebar-subtitle {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      padding: 0 12px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      text-align: left;
+      margin-bottom: 4px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .nav-item .nav-icon {
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      background: var(--gradient-primary);
+      flex-shrink: 0;
+    }
+
+    .avatar-sm {
+      width: 32px;
+      height: 32px;
+      font-size: 13px;
+    }
+
+    /* ===== MAIN ===== */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .main-area {
+      flex: 1;
+      padding: 28px 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      overflow-y: auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 320px;
+      min-width: 180px;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
+    }
+
+    .search-wrap input {
+      padding-left: 44px;
+      border-radius: var(--radius-full);
+    }
+
+    /* ===== STATS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(108,60,225,0.3);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: var(--gradient-primary);
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ===== COMPLAINT ROW ===== */
+    .complaint-row {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .complaint-row:last-child { border-bottom: none; }
+
+    .complaint-row:hover {
+      background: rgba(255,255,255,0.03);
+      transform: translateX(4px);
+    }
+
+    .complaint-info { flex: 1; min-width: 0; }
+    .complaint-subject { font-weight: 700; font-size: 15px; }
+    .complaint-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .complaint-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .upvote-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upvote-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .upvote-btn.upvoted {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(245,158,11,0.1);
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      background: var(--bg-card);
+      backdrop-filter: blur(60px);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      box-shadow: 0 20px 64px rgba(0,0,0,0.4);
+    }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .toast {
+      padding: 14px 20px;
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      font-weight: 600;
+      font-size: 14px;
+      border-left: 4px solid;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .toast-success { border-color: var(--accent); }
+    .toast-success i { color: var(--accent); }
+    .toast-error { border-color: var(--rose); }
+    .toast-error i { color: var(--rose); }
+    .toast-info { border-color: var(--primary); }
+    .toast-info i { color: var(--primary); }
+
+    /* ===== EMPTY ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      opacity: 0.2;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    /* ===== HEATMAP ===== */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .heatmap-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    .heat-cell {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: var(--bg-card);
+    }
+
+    .heat-cell:hover {
+      transform: scale(1.08);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .heat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .heat-value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    /* ===== KANBAN ===== */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .kanban-column {
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+
+    .kanban-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+
+    .kanban-count {
+      padding: 2px 12px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .kanban-card {
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .kanban-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(108,60,225,0.3);
+      box-shadow: var(--shadow-glow);
     }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      .main-area { padding: 24px 28px; }
-    }
-
     @media (max-width: 768px) {
       .app-shell { flex-direction: column; }
-      
+
       .sidebar {
         width: 100%;
         height: auto;
         position: relative;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        padding: 16px 20px;
+        padding: 12px 16px;
         flex-direction: row;
         align-items: center;
         overflow-x: auto;
       }
 
-      .sidebar-brand {
-        font-size: 22px;
-        margin-bottom: 0;
-        margin-right: 16px;
-        flex-shrink: 0;
-      }
-
-      .sidebar-brand::after { display: none; }
+      .sidebar-brand { font-size: 20px; margin-right: 16px; flex-shrink: 0; }
       .sidebar-subtitle { display: none; }
 
       .sidebar-nav {
@@ -1452,12 +757,11 @@
         margin: 0;
         overflow-x: auto;
         flex: 1;
-        padding: 0;
       }
 
       .nav-item {
         width: auto;
-        padding: 8px 16px;
+        padding: 8px 14px;
         margin-bottom: 0;
         white-space: nowrap;
         font-size: 13px;
@@ -1465,167 +769,79 @@
 
       .nav-item span { display: none; }
       .nav-item .nav-icon { font-size: 18px; }
-      .nav-item .nav-badge { display: none; }
-
       .sidebar-footer { display: none; }
+
       .main-area { padding: 16px; }
-
-      .page-title { font-size: 24px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .stat-card { padding: 16px; }
-      .stat-icon { width: 44px; height: 44px; font-size: 18px; }
-      .stat-value { font-size: 24px; }
-      .modal-box { padding: 24px; margin: 12px; }
-      .heatmap-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .page-title { font-size: 22px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-card { padding: 14px; }
+      .stat-icon { width: 40px; height: 40px; font-size: 16px; }
+      .stat-value { font-size: 22px; }
+      .modal-box { padding: 20px; margin: 10px; }
       .role-selector { grid-template-columns: repeat(2, 1fr); }
-      .kanban-board { grid-template-columns: 1fr; }
       .login-box { padding: 32px 24px; }
-
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-      }
-
+      .topbar { flex-direction: column; align-items: stretch; }
       .search-wrap { max-width: 100%; }
-
-      .complaint-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 16px;
-      }
-
-      .complaint-actions {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-      }
-
-      .toast-container {
-        bottom: 16px;
-        right: 16px;
-        max-width: calc(100% - 32px);
-      }
-
-      .notification-dropdown {
-        width: 100%;
-        right: 0;
-        left: 0;
-      }
+      .complaint-row { flex-direction: column; align-items: stretch; gap: 10px; }
+      .complaint-actions { flex-wrap: wrap; }
     }
 
     @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .stat-card { padding: 12px; }
-      .stat-icon { width: 36px; height: 36px; font-size: 14px; }
-      .stat-value { font-size: 20px; }
-      .page-title { font-size: 20px; }
-      .main-area { padding: 12px; }
-      .sidebar { padding: 12px 16px; }
-      .role-selector { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .role-card { padding: 16px; }
-    }
-
-    @media (max-width: 380px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
-      .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
       .role-selector { grid-template-columns: 1fr; }
+      .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* ===== UTILITY ===== */
-    .text-gradient {
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    /* ===== CONFETTI ===== */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      z-index: 99999;
+      animation: confettiFall 3s linear forwards;
     }
 
-    .text-gradient-gold {
-      background: var(--gradient-gold);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @keyframes confettiFall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
 
-    .gap-2 { gap: 8px; }
-    .gap-4 { gap: 16px; }
-    .gap-6 { gap: 24px; }
-    .gap-8 { gap: 32px; }
-
-    .mt-2 { margin-top: 8px; }
-    .mt-4 { margin-top: 16px; }
-    .mt-6 { margin-top: 24px; }
-    .mt-8 { margin-top: 32px; }
-
-    .mb-2 { margin-bottom: 8px; }
-    .mb-4 { margin-bottom: 16px; }
-    .mb-6 { margin-bottom: 24px; }
-    .mb-8 { margin-bottom: 32px; }
-
-    .flex { display: flex; }
-    .flex-center { display: flex; align-items: center; justify-content: center; }
-    .flex-between { display: flex; align-items: center; justify-content: space-between; }
-    .flex-col { flex-direction: column; }
-    .gap-2 { gap: 8px; }
-    .gap-4 { gap: 16px; }
-    .gap-6 { gap: 24px; }
-
-    .w-full { width: 100%; }
-    .text-center { text-align: center; }
-    .text-sm { font-size: 13px; }
-    .text-xs { font-size: 11px; }
-    .text-muted { color: var(--text-secondary); }
-    .text-muted-light { color: var(--text-tertiary); }
-    .font-bold { font-weight: 700; }
-    .font-extrabold { font-weight: 800; }
-    .font-black { font-weight: 900; }
-    .tracking-tight { letter-spacing: -0.5px; }
-    .tracking-wide { letter-spacing: 0.5px; }
-    .uppercase { text-transform: uppercase; }
-
-    .relative { position: relative; }
-    .absolute { position: absolute; }
-    .inset-0 { inset: 0; }
-    .z-10 { z-index: 10; }
-    .z-20 { z-index: 20; }
-    .z-30 { z-index: 30; }
-
-    .rounded-lg { border-radius: var(--radius-lg); }
-    .rounded-full { border-radius: var(--radius-full); }
-
-    .shadow-glow { box-shadow: var(--shadow-glow); }
-    .shadow-glow-pink { box-shadow: var(--shadow-glow-pink); }
-
-    .border-glow { border-color: var(--border-glow); }
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
-  <!-- ===== REACT ===== -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  
-  <script>
-    // ===== MAIN APPLICATION =====
-    (function() {
-      if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
-        document.getElementById('root').innerHTML = `
-          <div style="height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px; font-family:'Inter',sans-serif; padding:20px; text-align:center; background:#0F0C29; color:white;">
-            <div style="font-size:48px;">✨</div>
-            <h2 style="color:white;">ResolveHub</h2>
-            <p style="color:rgba(255,255,255,0.6); max-width:400px;">Loading your luxury experience...</p>
-            <button onclick="location.reload()" style="padding:12px 32px; background:linear-gradient(135deg,#6C3CE1,#EC4899); color:white; border:none; border-radius:30px; font-weight:600; cursor:pointer;">Retry</button>
-          </div>
-        `;
-        return;
-      }
+  <!-- Load React -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
-      const { useState, useEffect, useCallback, useContext, useRef, createRef, useMemo } = React;
+  <script>
+    // Wait for React to load
+    if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+      document.getElementById('root').innerHTML = `
+        <div style="height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;font-family:'Inter',sans-serif;padding:20px;text-align:center;background:#0F0C29;color:white;">
+          <div style="font-size:48px;">✨</div>
+          <h2>ResolveHub</h2>
+          <p style="color:rgba(255,255,255,0.6);">Loading luxury experience...</p>
+          <button onclick="location.reload()" style="padding:12px 32px;background:linear-gradient(135deg,#6C3CE1,#EC4899);color:white;border:none;border-radius:30px;font-weight:600;cursor:pointer;font-size:14px;">Retry</button>
+        </div>
+      `;
+    } else {
+      // React is loaded, now render the app
+      const { useState, useEffect, useCallback, useContext, useRef, createContext } = React;
 
       // ===== CONSTANTS =====
-      const STORAGE_KEY = 'resolvehub_luxury_v3';
-      const SESSION_KEY = 'resolvehub_session_v3';
+      const STORAGE_KEY = 'resolvehub_v3';
+      const SESSION_KEY = 'resolvehub_session';
+
+      function generateId() { return 'CMP-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 100000)).padStart(5, '0'); }
+      function timeAgo(ts) { const s = Math.floor((Date.now() - ts) / 1000); if (s < 60) return 'Just now'; if (s < 3600) return Math.floor(s / 60) + 'm ago'; if (s < 86400) return Math.floor(s / 3600) + 'h ago'; return Math.floor(s / 86400) + 'd ago'; }
+      function formatDate(ts) { if (!ts) return ''; return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+      function getGreeting() { const h = new Date().getHours(); if (h < 12) return 'Good morning'; if (h < 17) return 'Good afternoon'; return 'Good evening'; }
 
       const STATUS_COLORS = {
         submitted: '#6C3CE1',
@@ -1633,9 +849,7 @@
         assigned: '#3B82F6',
         'in progress': '#8B5CF6',
         resolved: '#06D6A0',
-        closed: '#64748B',
-        reopened: '#F43F5E',
-        rejected: '#F43F5E'
+        closed: '#64748B'
       };
 
       const PRIORITY_COLORS = {
@@ -1648,15 +862,11 @@
       const ZONES = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
       const ZONE_LABELS = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
       const CATEGORIES = ['Infrastructure', 'Academic', 'Faculty', 'Examination', 'Hostel', 'Transport', 'Library', 'IT / Technology', 'Security', 'Cleanliness', 'Electricity', 'Water', 'Harassment / Misconduct', 'Administration', 'Other'];
-      const PRIORITIES = ['low', 'medium', 'high', 'critical'];
 
       function getStatusColor(s) { return STATUS_COLORS[(s || '').toLowerCase()] || '#94A3B8'; }
       function getPriorityColor(p) { return PRIORITY_COLORS[(p || '').toLowerCase()] || '#94A3B8'; }
-      function formatDate(ts) { if (!ts) return ''; const d = new Date(ts); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
-      function timeAgo(ts) { const s = Math.floor((Date.now() - ts) / 1000); const intervals = { y: 31536000, m: 2592000, w: 604800, d: 86400, h: 3600, n: 60 }; for (let [k, v] of Object.entries(intervals)) { const c = Math.floor(s / v); if (c > 0) return c + ' ' + k + (c > 1 ? 's' : '') + ' ago'; } return 'Just now'; }
-      function generateId() { return 'CMP-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 100000)).padStart(5, '0'); }
-      function getGreeting() { const h = new Date().getHours(); if (h < 12) return 'Good morning'; if (h < 17) return 'Good afternoon'; return 'Good evening'; }
 
+      // ===== DEFAULT DATA =====
       const defaultUsers = [
         { id: 'u1', name: 'Admin', email: 'admin@portal.demo', role: 'admin', department: 'Administration' },
         { id: 'u2', name: 'Student', email: 'student@portal.demo', role: 'student', department: 'Engineering' },
@@ -1693,15 +903,20 @@
             for (const k in def) if (!(k in parsed)) parsed[k] = def[k];
             return parsed;
           }
-        } catch (e) { }
+        } catch (e) {}
         return getDefaultData();
       }
+
       function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-      function loadSession() { try { const s = localStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; } }
+
+      function loadSession() {
+        try { const s = localStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; }
+      }
+
       function saveSession(s) { if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
 
       // ===== CONTEXT =====
-      const DataContext = React.createContext(null);
+      const DataContext = createContext(null);
 
       function DataProvider({ children }) {
         const [data, setData] = useState(loadData);
@@ -1740,37 +955,31 @@
 
         const updateData = useCallback((fn) => setData(prev => typeof fn === 'function' ? fn(prev) : fn), []);
 
-        return React.createElement(
-          DataContext.Provider,
-          { value: { data, setData, updateData, session, login, logout, toasts, addToast } },
-          children
-        );
+        const value = { data, setData, updateData, session, login, logout, toasts, addToast };
+
+        return React.createElement(DataContext.Provider, { value }, children);
       }
 
-      function useData() { return React.useContext(DataContext); }
+      function useData() { return useContext(DataContext); }
 
       // ===== COMPONENTS =====
-      function Badge({ children, color, className = '' }) {
-        return React.createElement('span', {
-          className: `badge badge-status ${className}`,
-          style: { borderColor: color + '44', color: color }
-        },
-          React.createElement('span', { className: 'dot', style: { background: color } }),
-          children
-        );
-      }
-
-      function Avatar({ name, size, ring = false }) {
+      function Avatar({ name, size }) {
         return React.createElement('div', {
-          className: `avatar ${size === 'sm' ? 'avatar-sm' : ''} ${size === 'lg' ? 'avatar-lg' : ''} ${ring ? 'avatar-ring' : ''}`
+          className: `avatar ${size === 'sm' ? 'avatar-sm' : ''}`
         }, name ? name[0].toUpperCase() : 'U');
       }
 
-      function EmptyState({ icon = 'fa-inbox', message, submessage = '' }) {
-        return React.createElement('div', { className: 'empty-state animate-fade-up' },
-          React.createElement('i', { className: `fas ${icon}` }),
-          React.createElement('p', { style: { fontWeight: 600, fontSize: 18, color: 'var(--text-primary)' } }, message),
-          submessage && React.createElement('p', { style: { fontSize: 13, color: 'var(--text-tertiary)' } }, submessage)
+      function Badge({ children, color }) {
+        return React.createElement('span', {
+          className: 'badge',
+          style: { background: color + '22', color: color, border: '1px solid ' + color + '44' }
+        }, children);
+      }
+
+      function EmptyState({ message, icon = 'fa-inbox' }) {
+        return React.createElement('div', { className: 'empty-state' },
+          React.createElement('i', { className: 'fas ' + icon }),
+          React.createElement('p', { style: { fontWeight: 600 } }, message)
         );
       }
 
@@ -1791,19 +1000,17 @@
         const [pieces, setPieces] = useState([]);
         useEffect(() => {
           if (!active) return;
-          const colors = ['#6C3CE1', '#EC4899', '#06D6A0', '#F59E0B', '#3B82F6', '#F43F5E', '#8B5CF6', '#FCD34D'];
-          const shapes = ['■', '●', '▲', '★', '♦'];
-          const newPieces = Array.from({ length: 60 }).map((_, i) => ({
+          const colors = ['#6C3CE1', '#EC4899', '#F59E0B', '#06D6A0', '#3B82F6', '#F43F5E'];
+          const newPieces = Array.from({ length: 40 }).map((_, i) => ({
             id: i,
             left: Math.random() * 100 + 'vw',
             bg: colors[Math.floor(Math.random() * colors.length)],
-            delay: Math.random() * 0.8 + 's',
-            duration: (2.5 + Math.random() * 2.5) + 's',
-            size: (6 + Math.random() * 10) + 'px',
-            shape: shapes[Math.floor(Math.random() * shapes.length)]
+            delay: Math.random() * 0.5 + 's',
+            duration: (2 + Math.random() * 2) + 's',
+            size: (6 + Math.random() * 8) + 'px'
           }));
           setPieces(newPieces);
-          const timer = setTimeout(() => setPieces([]), 5000);
+          const timer = setTimeout(() => setPieces([]), 4000);
           return () => clearTimeout(timer);
         }, [active]);
         if (!pieces.length) return null;
@@ -1814,20 +1021,19 @@
               className: 'confetti-piece',
               style: {
                 left: p.left,
-                color: p.bg,
-                fontSize: p.size,
+                background: p.bg,
+                width: p.size,
+                height: p.size,
                 animationDelay: p.delay,
-                animationDuration: p.duration,
-                '--delay': p.delay,
-                '--duration': p.duration
+                animationDuration: p.duration
               }
-            }, p.shape)
+            })
           )
         );
       }
 
       function NotificationCenter() {
-        const { data, session, updateData } = useData();
+        const { data, session } = useData();
         const [open, setOpen] = useState(false);
         const ref = useRef();
         const userNotes = data.notifications.filter(n => n.userId === session?.userId);
@@ -1841,46 +1047,52 @@
 
         return React.createElement('div', { ref: ref, style: { position: 'relative' } },
           React.createElement('button', {
-            className: 'btn btn-ghost btn-sm btn-icon',
+            className: 'btn btn-ghost btn-sm',
             onClick: () => setOpen(!open),
-            style: { position: 'relative' }
+            style: { position: 'relative', padding: '8px 12px' }
           },
-            React.createElement('i', { className: 'fas fa-bell', style: { fontSize: 18 } }),
+            React.createElement('i', { className: 'fas fa-bell' }),
             unread.length > 0 && React.createElement('span', {
               style: {
-                position: 'absolute', top: -2, right: -2,
-                width: 20, height: 20,
+                position: 'absolute',
+                top: -4,
+                right: -4,
+                width: 18,
+                height: 18,
                 borderRadius: '50%',
-                background: 'var(--gradient-rose)',
+                background: 'var(--rose)',
                 color: 'white',
                 fontSize: 10,
                 fontWeight: 800,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 20px rgba(244,63,94,0.4)'
+                justifyContent: 'center'
               }
             }, unread.length)
           ),
-          open && React.createElement('div', { className: 'notification-dropdown' },
-            React.createElement('div', { style: { padding: '16px 20px', borderBottom: '1px solid var(--border)', fontWeight: 700, fontSize: 15, display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
-              'Notifications',
-              React.createElement('span', { style: { fontSize: 11, color: 'var(--text-tertiary)', fontWeight: 400 } }, unread.length + ' unread')
-            ),
+          open && React.createElement('div', {
+            style: {
+              position: 'absolute',
+              top: 'calc(100% + 8px)',
+              right: 0,
+              width: 340,
+              maxHeight: 400,
+              overflow: 'auto',
+              borderRadius: 16,
+              background: 'var(--bg-card)',
+              backdropFilter: 'blur(40px)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 20px 64px rgba(0,0,0,0.4)',
+              zIndex: 60
+            }
+          },
+            React.createElement('div', { style: { padding: '14px 18px', borderBottom: '1px solid var(--border)', fontWeight: 700 } }, 'Notifications'),
             userNotes.length === 0 ?
-              React.createElement('div', { style: { padding: 30, textAlign: 'center', color: 'var(--text-secondary)' } },
-                React.createElement('i', { className: 'fas fa-bell-slash', style: { fontSize: 32, opacity: 0.2, display: 'block', marginBottom: 12 } }),
-                'No notifications'
-              ) :
+              React.createElement('div', { style: { padding: 20, textAlign: 'center', color: 'var(--text-secondary)' } }, 'No notifications') :
               userNotes.map(n =>
                 React.createElement('div', {
                   key: n.id,
-                  style: {
-                    padding: '12px 20px',
-                    borderBottom: '1px solid var(--border)',
-                    opacity: n.read ? 0.6 : 1,
-                    transition: 'all 0.3s ease'
-                  }
+                  style: { padding: '12px 18px', borderBottom: '1px solid var(--border)', opacity: n.read ? 0.6 : 1 }
                 },
                   React.createElement('div', { style: { fontWeight: 600, fontSize: 13 } }, n.title),
                   React.createElement('div', { style: { fontSize: 12, color: 'var(--text-secondary)' } }, n.message),
@@ -1900,10 +1112,10 @@
         if (session) return null;
 
         const roles = [
-          { id: 'admin', name: 'Admin', email: 'admin@portal.demo', icon: 'fa-user-shield', color: '#6C3CE1', description: 'Full access & analytics' },
-          { id: 'student', name: 'Student', email: 'student@portal.demo', icon: 'fa-user-graduate', color: '#06D6A0', description: 'Submit & track issues' },
-          { id: 'teacher', name: 'Teacher', email: 'teacher@portal.demo', icon: 'fa-chalkboard-teacher', color: '#F59E0B', description: 'Report & monitor' },
-          { id: 'staff', name: 'Staff', email: 'staff@portal.demo', icon: 'fa-user-tie', color: '#3B82F6', description: 'Handle assignments' }
+          { id: 'admin', name: 'Admin', email: 'admin@portal.demo', icon: 'fa-user-shield', color: '#6C3CE1' },
+          { id: 'student', name: 'Student', email: 'student@portal.demo', icon: 'fa-user-graduate', color: '#06D6A0' },
+          { id: 'teacher', name: 'Teacher', email: 'teacher@portal.demo', icon: 'fa-chalkboard-teacher', color: '#F59E0B' },
+          { id: 'staff', name: 'Staff', email: 'staff@portal.demo', icon: 'fa-user-tie', color: '#3B82F6' }
         ];
 
         const handleLogin = () => {
@@ -1920,24 +1132,21 @@
               addToast(r.error, 'error');
             }
             setLoading(false);
-          }, 600);
+          }, 500);
         };
 
         return React.createElement('div', { className: 'login-container' },
-          React.createElement('div', { className: 'bg-effects' },
-            React.createElement('div', { className: 'bg-orb bg-orb-1' }),
-            React.createElement('div', { className: 'bg-orb bg-orb-2' }),
-            React.createElement('div', { className: 'bg-orb bg-orb-3' }),
-            React.createElement('div', { className: 'bg-grid' })
+          React.createElement('div', { className: 'login-bg-effects' },
+            React.createElement('div', { className: 'login-orb login-orb-1' }),
+            React.createElement('div', { className: 'login-orb login-orb-2' })
           ),
           React.createElement('div', { className: 'login-box animate-fade-scale' },
             React.createElement('div', { className: 'login-brand' },
               React.createElement('h1', null, 'ResolveHub'),
-              React.createElement('p', null, 'Luxury Complaint Management'),
-              React.createElement('div', { className: 'luxury-badge' }, '✦ Premium ✦')
+              React.createElement('p', null, 'Luxury Complaint Management')
             ),
-            React.createElement('div', { style: { marginBottom: 24 } },
-              React.createElement('label', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase' } }, 'Select Your Role'),
+            React.createElement('div', { style: { marginBottom: 20 } },
+              React.createElement('label', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' } }, 'Select Your Role'),
               React.createElement('div', { className: 'role-selector' },
                 roles.map(role =>
                   React.createElement('div', {
@@ -1949,17 +1158,16 @@
                       React.createElement('i', { className: `fas ${role.icon}` })
                     ),
                     React.createElement('div', { className: 'role-name' }, role.name),
-                    React.createElement('div', { className: 'role-email' }, role.email),
-                    React.createElement('div', { style: { fontSize: 11, color: 'var(--text-tertiary)', marginTop: 4 } }, role.description)
+                    React.createElement('div', { className: 'role-email' }, role.email)
                   )
                 )
               )
             ),
             React.createElement('button', {
-              className: 'btn btn-primary btn-lg',
+              className: 'btn btn-primary',
               onClick: handleLogin,
               disabled: loading,
-              style: { width: '100%', padding: '16px', fontSize: 16 }
+              style: { width: '100%', padding: '14px', fontSize: 16, borderRadius: 30 }
             },
               loading ?
                 React.createElement(React.Fragment, null,
@@ -1969,9 +1177,9 @@
                   React.createElement('i', { className: 'fas fa-sign-in-alt' }), ' Continue as ' + (selectedRole?.name || 'Guest')
                 )
             ),
-            React.createElement('div', { style: { marginTop: 24, padding: 16, borderRadius: 'var(--radius-lg)', background: 'rgba(255,255,255,0.03)', fontSize: 12, color: 'var(--text-secondary)', textAlign: 'center' } },
-              React.createElement('i', { className: 'fas fa-info-circle', style: { marginRight: 8 } }),
-              'Select a role to login. No password required for demo.'
+            React.createElement('div', { style: { marginTop: 20, padding: 14, borderRadius: 12, background: 'rgba(255,255,255,0.03)', fontSize: 12, color: 'var(--text-secondary)', textAlign: 'center' } },
+              React.createElement('i', { className: 'fas fa-info-circle', style: { marginRight: 6 } }),
+              'Select a role to login. No password required.'
             )
           )
         );
@@ -1985,12 +1193,6 @@
         const [selectedComplaint, setSelectedComplaint] = useState(null);
         const [confetti, setConfetti] = useState(false);
         const [viewMode, setViewMode] = useState('list');
-        const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-        useEffect(() => {
-          const theme = data.settings?.theme || 'dark';
-          document.body.style.background = theme === 'dark' ? '#0F0C29' : '#F8FAFC';
-        }, [data.settings?.theme]);
 
         if (!session) return React.createElement(Login, null);
 
@@ -2004,6 +1206,7 @@
           { id: 'leaderboard', label: 'Leaderboard', icon: 'fa-trophy' },
           { id: 'new-complaint', label: 'New Issue', icon: 'fa-plus-circle' },
         ];
+
         if (isAdmin) {
           navItems.push({ id: 'admin-dashboard', label: 'Analytics', icon: 'fa-chart-pie' });
           navItems.push({ id: 'users', label: 'Users', icon: 'fa-users' });
@@ -2013,26 +1216,23 @@
 
         const currentNav = navItems.find(n => n.id === activeView);
 
-        // ===== SUB-COMPONENTS =====
-        function StatCard({ label, value, icon, color, trend, trendValue }) {
-          return React.createElement('div', { className: 'stat-card animate-stagger' },
-            React.createElement('div', { className: `stat-icon ${color}` },
+        // ===== STAT CARD =====
+        function StatCard({ label, value, icon, color }) {
+          return React.createElement('div', { className: 'stat-card animate-slide-up' },
+            React.createElement('div', { className: 'stat-icon', style: { background: color } },
               React.createElement('i', { className: `fas ${icon}` })
             ),
-            React.createElement('div', null,
-              React.createElement('div', { className: 'stat-value' }, value),
-              React.createElement('div', { className: 'stat-label' }, label),
-              trend && React.createElement('div', { className: `stat-trend ${trend}` },
-                React.createElement('i', { className: `fas ${trend === 'up' ? 'fa-arrow-up' : 'fa-arrow-down'}` }),
-                trendValue
-              )
-            )
+            React.createElement('div', { className: 'stat-value' }, value),
+            React.createElement('div', { className: 'stat-label' }, label)
           );
         }
 
+        // ===== COMPLAINT ROW =====
         function ComplaintRow({ complaint }) {
           const { session, updateData } = useData();
           const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
+          const submitter = data.users.find(u => u.id === complaint.submittedBy);
+
           const handleUpvote = (e) => {
             e.stopPropagation();
             updateData(prev => {
@@ -2048,16 +1248,16 @@
               return { ...prev, complaints: next };
             });
           };
-          const submitter = data.users.find(u => u.id === complaint.submittedBy);
-          return React.createElement('div', { className: 'complaint-row animate-slide-left', onClick: () => setSelectedComplaint(complaint) },
+
+          return React.createElement('div', { className: 'complaint-row', onClick: () => setSelectedComplaint(complaint) },
             React.createElement(Avatar, { name: complaint.anonymous ? '?' : (submitter?.name || 'U'), size: 'sm' }),
             React.createElement('div', { className: 'complaint-info' },
               React.createElement('div', { className: 'complaint-subject' }, complaint.subject),
               React.createElement('div', { className: 'complaint-meta' },
                 React.createElement('span', null, complaint.id),
-                React.createElement('span', { className: 'divider' }),
+                React.createElement('span', null, '·'),
                 React.createElement('span', null, complaint.category),
-                React.createElement('span', { className: 'divider' }),
+                React.createElement('span', null, '·'),
                 React.createElement('span', null, timeAgo(complaint.createdAt))
               )
             ),
@@ -2071,43 +1271,43 @@
           );
         }
 
+        // ===== DASHBOARD =====
         function Dashboard() {
           const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
-          const pending = userComplaints.filter(c => !['resolved', 'closed', 'rejected'].includes(c.status));
+          const pending = userComplaints.filter(c => !['resolved', 'closed'].includes(c.status));
           const inProgress = userComplaints.filter(c => ['in progress', 'assigned'].includes(c.status));
           const resolved = userComplaints.filter(c => ['resolved', 'closed'].includes(c.status));
 
-          return React.createElement('div', { className: 'animate-fade-up' },
-            React.createElement('div', { style: { marginBottom: 28 } },
-              React.createElement('h1', { className: 'page-title' }, getGreeting() + ', ' + user?.name + ' ✨'),
-              React.createElement('div', { className: 'page-subtitle' }, "Here's your luxury resolution dashboard.")
+          return React.createElement('div',
+            null,
+            React.createElement('div', { style: { marginBottom: 24 } },
+              React.createElement('h1', { className: 'page-title' }, getGreeting() + ', ' + user?.name),
+              React.createElement('div', { className: 'page-subtitle' }, "Here's your resolution dashboard.")
             ),
             React.createElement('div', { className: 'stats-grid' },
-              React.createElement(StatCard, { label: 'Total Issues', value: userComplaints.length, icon: 'fa-folder-open', color: 'purple' }),
-              React.createElement(StatCard, { label: 'Pending', value: pending.length, icon: 'fa-clock', color: 'gold', trend: pending.length > 0 ? 'up' : 'down', trendValue: pending.length + ' waiting' }),
-              React.createElement(StatCard, { label: 'In Progress', value: inProgress.length, icon: 'fa-spinner', color: 'rose' }),
-              React.createElement(StatCard, { label: 'Resolved', value: resolved.length, icon: 'fa-check-circle', color: 'green', trend: 'up', trendValue: (resolved.length / Math.max(1, userComplaints.length) * 100).toFixed(0) + '% rate' })
+              React.createElement(StatCard, { label: 'Total', value: userComplaints.length, icon: 'fa-folder-open', color: '#6C3CE1' }),
+              React.createElement(StatCard, { label: 'Pending', value: pending.length, icon: 'fa-clock', color: '#F59E0B' }),
+              React.createElement(StatCard, { label: 'In Progress', value: inProgress.length, icon: 'fa-spinner', color: '#8B5CF6' }),
+              React.createElement(StatCard, { label: 'Resolved', value: resolved.length, icon: 'fa-check-circle', color: '#06D6A0' })
             ),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
-              React.createElement('h3', { style: { fontSize: 16, fontWeight: 700, marginBottom: 16, color: 'var(--text-primary)' } },
-                React.createElement('i', { className: 'fas fa-clock', style: { marginRight: 10, color: 'var(--gold)' } }),
-                'Recent Activity'
-              ),
+            React.createElement('div', { className: 'glass', style: { padding: 24 } },
+              React.createElement('h3', { style: { fontSize: 16, fontWeight: 700, marginBottom: 16 } }, 'Recent Complaints'),
               userComplaints.slice(0, 5).map(c => React.createElement(ComplaintRow, { key: c.id, complaint: c })),
-              userComplaints.length === 0 && React.createElement(EmptyState, { message: 'No complaints yet', submessage: 'Start by reporting an issue' })
+              userComplaints.length === 0 && React.createElement(EmptyState, { message: 'No complaints yet' })
             )
           );
         }
 
+        // ===== HEATMAP =====
         function HeatmapView() {
           const zoneCounts = {};
           ZONES.forEach(z => { zoneCounts[z] = data.complaints.filter(c => c.zone === z).length; });
           const maxCount = Math.max(...Object.values(zoneCounts), 1);
 
-          return React.createElement('div', { className: 'animate-fade-up' },
+          return React.createElement('div',
+            null,
             React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Campus Heatmap'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, 'Visualize issue distribution across campus'),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+            React.createElement('div', { className: 'glass', style: { padding: 24 } },
               React.createElement('div', { className: 'heatmap-grid' },
                 ZONES.map(z => {
                   const count = zoneCounts[z] || 0;
@@ -2130,6 +1330,7 @@
           );
         }
 
+        // ===== LEADERBOARD =====
         function LeaderboardView() {
           const depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration'];
           const deptStats = depts.map(d => {
@@ -2137,36 +1338,32 @@
             const resolved = comps.filter(c => ['resolved', 'closed'].includes(c.status));
             const total = comps.length || 1;
             const rate = Math.round((resolved.length / total) * 100);
-            const avgTime = resolved.length ? Math.round(resolved.reduce((acc, c) => {
-              const re = c.timeline?.find(t => t.status === 'resolved');
-              return acc + (re ? (re.timestamp - c.createdAt) : 0);
-            }, 0) / resolved.length / (1000 * 60 * 60)) : 0;
-            return { name: d, resolved: resolved.length, total: comps.length, rate, avgTime };
+            return { name: d, resolved: resolved.length, total: comps.length, rate };
           });
-          deptStats.sort((a, b) => b.rate - a.rate || a.avgTime - b.avgTime);
+          deptStats.sort((a, b) => b.rate - a.rate);
 
-          return React.createElement('div', { className: 'animate-fade-up' },
+          return React.createElement('div',
+            null,
             React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Department Leaderboard'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, '🏆 Performance rankings by resolution rate'),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+            React.createElement('div', { className: 'glass', style: { padding: 24 } },
               deptStats.map((d, i) =>
-                React.createElement('div', { key: d.name, className: 'dept-row' },
-                  React.createElement('span', { style: { fontWeight: 800, fontSize: 20, minWidth: 40, color: i === 0 ? 'var(--gold)' : i === 1 ? 'var(--text-secondary)' : i === 2 ? 'var(--text-tertiary)' : 'var(--text-tertiary)' } },
-                    i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`
+                React.createElement('div', { key: d.name, style: { display: 'flex', alignItems: 'center', gap: 14, padding: '8px 0', borderBottom: '1px solid var(--border)' } },
+                  React.createElement('span', { style: { fontWeight: 800, fontSize: 18, minWidth: 32, color: i === 0 ? 'var(--gold)' : 'var(--text-secondary)' } },
+                    i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#'
                   ),
-                  React.createElement('span', { style: { fontWeight: 600, minWidth: 120, fontSize: 14, color: 'var(--text-primary)' } }, d.name),
-                  React.createElement('div', { className: 'dept-bar-bg' },
-                    React.createElement('div', { className: `dept-bar-fill ${i === 0 ? 'gold' : i === 1 ? 'green' : ''}`, style: { width: `${d.rate}%` } })
+                  React.createElement('span', { style: { fontWeight: 600, minWidth: 100, fontSize: 14 } }, d.name),
+                  React.createElement('div', { style: { flex: 1, height: 8, borderRadius: 8, background: 'rgba(255,255,255,0.05)', overflow: 'hidden' } },
+                    React.createElement('div', { style: { width: d.rate + '%', height: '100%', borderRadius: 8, background: 'var(--gradient-primary)', transition: 'width 1s ease' } })
                   ),
-                  React.createElement('span', { style: { fontWeight: 700, fontSize: 14, minWidth: 50, color: 'var(--gold)' } }, d.rate + '%'),
-                  React.createElement('span', { style: { fontSize: 12, color: 'var(--text-secondary)', minWidth: 60 } }, '⏱ ' + d.avgTime + 'h'),
-                  React.createElement('span', { style: { fontSize: 11, color: 'var(--text-tertiary)' } }, '(' + d.resolved + '/' + d.total + ')')
+                  React.createElement('span', { style: { fontWeight: 700, fontSize: 14, minWidth: 44, color: 'var(--gold)' } }, d.rate + '%'),
+                  React.createElement('span', { style: { fontSize: 12, color: 'var(--text-secondary)' } }, '(' + d.resolved + '/' + d.total + ')')
                 )
               )
             )
           );
         }
 
+        // ===== COMPLAINT LIST =====
         function ComplaintList() {
           let complaints = data.complaints;
           if (!isAdmin && session.role !== 'staff') {
@@ -2180,9 +1377,10 @@
               c.description.toLowerCase().includes(q)
             );
           }
-          complaints.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt);
+          complaints.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
 
-          return React.createElement('div', { className: 'animate-fade-up' },
+          return React.createElement('div',
+            null,
             React.createElement('div', { style: { marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 } },
               React.createElement('div', null,
                 React.createElement('h2', { className: 'page-title' }, 'All Complaints'),
@@ -2204,24 +1402,21 @@
               )
             ),
             viewMode === 'list' ?
-              React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', overflow: 'hidden' } },
-                complaints.length === 0 ? React.createElement(EmptyState, { message: 'No complaints found', submessage: 'Try adjusting your search' }) :
+              React.createElement('div', { className: 'glass', style: { overflow: 'hidden' } },
+                complaints.length === 0 ? React.createElement(EmptyState, { message: 'No complaints found' }) :
                   complaints.map(c => React.createElement(ComplaintRow, { key: c.id, complaint: c }))
               ) :
               React.createElement('div', { className: 'kanban-board' },
                 ['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'].map(status => {
                   const items = complaints.filter(c => c.status === status);
-                  return React.createElement('div', { key: status, className: 'kanban-column animate-stagger' },
+                  return React.createElement('div', { key: status, className: 'kanban-column' },
                     React.createElement('div', { className: 'kanban-header' },
-                      React.createElement('span', { style: { color: getStatusColor(status) } },
-                        React.createElement('span', { className: 'dot', style: { display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: getStatusColor(status), marginRight: 8 } }),
-                        status
-                      ),
+                      React.createElement('span', { style: { color: getStatusColor(status) } }, status),
                       React.createElement('span', { className: 'kanban-count' }, items.length)
                     ),
                     items.map(c =>
                       React.createElement('div', { key: c.id, className: 'kanban-card', onClick: () => setSelectedComplaint(c) },
-                        React.createElement('div', { style: { fontWeight: 600, fontSize: 13, color: 'var(--text-primary)' } }, c.subject),
+                        React.createElement('div', { style: { fontWeight: 600, fontSize: 13 } }, c.subject),
                         React.createElement('div', { style: { fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 } },
                           c.id, ' · ', timeAgo(c.createdAt)
                         ),
@@ -2236,6 +1431,7 @@
           );
         }
 
+        // ===== COMPLAINT DETAIL =====
         function ComplaintDetail({ complaint, onClose }) {
           const { updateData, addToast, session } = useData();
           const [comment, setComment] = useState('');
@@ -2253,7 +1449,7 @@
               return { ...prev, complaints: next };
             });
             setConfetti(true);
-            setTimeout(() => setConfetti(false), 4000);
+            setTimeout(() => setConfetti(false), 3000);
             addToast('Complaint resolved! 🎉', 'success');
             onClose();
           };
@@ -2280,19 +1476,19 @@
 
           return React.createElement('div', { className: 'modal-overlay', onClick: e => { if (e.target === e.currentTarget) onClose(); } },
             React.createElement('div', { className: 'modal-box animate-fade-scale' },
-              React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 20 } },
+              React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 } },
                 React.createElement('div', null,
-                  React.createElement('h3', { style: { fontSize: 22, fontWeight: 800, color: 'var(--text-primary)' } }, complaint.subject),
+                  React.createElement('h3', { style: { fontSize: 20, fontWeight: 800 } }, complaint.subject),
                   React.createElement('div', { style: { fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 } },
                     complaint.id, ' · ', complaint.category
                   )
                 ),
-                React.createElement('button', { onClick: onClose, style: { background: 'none', border: 'none', fontSize: 24, color: 'var(--text-tertiary)', cursor: 'pointer', padding: '4px 8px', borderRadius: 'var(--radius-sm)', transition: 'all 0.3s ease' }, onMouseEnter: e => e.target.style.background = 'rgba(255,255,255,0.05)', onMouseLeave: e => e.target.style.background = 'none' },
+                React.createElement('button', { onClick: onClose, style: { background: 'none', border: 'none', fontSize: 20, color: 'var(--text-tertiary)', cursor: 'pointer' } },
                   React.createElement('i', { className: 'fas fa-times' })
                 )
               ),
-              React.createElement('p', { style: { color: 'var(--text-secondary)', marginBottom: 20, fontSize: 14, lineHeight: 1.8 } }, complaint.description),
-              React.createElement('div', { style: { display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 20 } },
+              React.createElement('p', { style: { color: 'var(--text-secondary)', marginBottom: 16, fontSize: 14, lineHeight: 1.7 } }, complaint.description),
+              React.createElement('div', { style: { display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 } },
                 React.createElement('span', null, 'Priority: ', React.createElement(Badge, { color: getPriorityColor(complaint.priority) }, complaint.priority)),
                 React.createElement('span', null, 'Status: ', React.createElement(Badge, { color: getStatusColor(complaint.status) }, complaint.status)),
                 React.createElement('span', null, '📍 ', complaint.location),
@@ -2300,51 +1496,51 @@
               ),
               isAdmin && complaint.status !== 'resolved' &&
                 React.createElement('button', {
-                  className: 'btn btn-secondary btn-sm',
+                  className: 'btn btn-gold btn-sm',
                   onClick: handleResolve,
-                  style: { marginBottom: 20 }
+                  style: { marginBottom: 16 }
                 },
-                  React.createElement('i', { className: 'fas fa-check' }), ' Resolve Issue'
+                  React.createElement('i', { className: 'fas fa-check' }), ' Resolve'
                 ),
               complaint.timeline && complaint.timeline.length > 0 &&
-                React.createElement('div', { style: { marginBottom: 20 } },
-                  React.createElement('div', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)', marginBottom: 12, letterSpacing: '0.5px', textTransform: 'uppercase' } }, 'Timeline'),
+                React.createElement('div', { style: { marginBottom: 16 } },
+                  React.createElement('div', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' } }, 'Timeline'),
                   complaint.timeline.map((t, i) =>
-                    React.createElement('div', { key: i, className: 'timeline-item' },
-                      React.createElement('div', { className: 'timeline-dot', style: { background: getStatusColor(t.status) } },
-                        React.createElement('i', { className: 'fas fa-check', style: { fontSize: 12 } })
+                    React.createElement('div', { key: i, style: { display: 'flex', gap: 14, padding: '8px 0', borderBottom: '1px solid var(--border)' } },
+                      React.createElement('div', { style: { width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: getStatusColor(t.status), flexShrink: 0, fontSize: 12, color: 'white' } },
+                        React.createElement('i', { className: 'fas fa-check' })
                       ),
-                      React.createElement('div', { className: 'timeline-content' },
-                        React.createElement('div', { className: 'timeline-status' }, t.status),
-                        React.createElement('div', { className: 'timeline-note' }, t.note),
-                        React.createElement('div', { className: 'timeline-time' }, formatDate(t.timestamp))
+                      React.createElement('div', null,
+                        React.createElement('div', { style: { fontWeight: 600, fontSize: 14, textTransform: 'capitalize' } }, t.status),
+                        React.createElement('div', { style: { fontSize: 13, color: 'var(--text-secondary)' } }, t.note),
+                        React.createElement('div', { style: { fontSize: 11, color: 'var(--text-tertiary)' } }, formatDate(t.timestamp))
                       )
                     )
                   )
                 ),
               complaint.comments && complaint.comments.length > 0 &&
-                React.createElement('div', { style: { marginBottom: 16 } },
-                  React.createElement('div', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)', marginBottom: 12, letterSpacing: '0.5px', textTransform: 'uppercase' } }, 'Comments ' + React.createElement('span', { style: { fontWeight: 400, color: 'var(--text-tertiary)' } }, '(' + complaint.comments.length + ')')),
+                React.createElement('div', { style: { marginBottom: 12 } },
+                  React.createElement('div', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' } }, 'Comments'),
                   complaint.comments.map(c =>
-                    React.createElement('div', { key: c.id, style: { padding: '10px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
-                      React.createElement('span', { style: { fontWeight: 700, color: 'var(--text-primary)' } }, c.name),
+                    React.createElement('div', { key: c.id, style: { padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
+                      React.createElement('span', { style: { fontWeight: 700 } }, c.name),
                       React.createElement('span', { style: { color: 'var(--text-tertiary)', fontSize: 11, marginLeft: 8 } }, '@' + c.role),
                       React.createElement('span', { style: { color: 'var(--text-tertiary)', fontSize: 11, marginLeft: 8 } }, '·', timeAgo(c.timestamp)),
                       React.createElement('div', { style: { marginTop: 4, color: 'var(--text-secondary)' } }, c.message)
                     )
                   )
                 ),
-              React.createElement('div', { style: { display: 'flex', gap: 10 } },
+              React.createElement('div', { style: { display: 'flex', gap: 8 } },
                 React.createElement('input', {
                   type: 'text',
                   className: 'input',
                   value: comment,
                   onChange: e => setComment(e.target.value),
                   placeholder: 'Write a comment...',
-                  style: { flex: 1, borderRadius: var(--radius-full) },
+                  style: { flex: 1 },
                   onKeyDown: e => { if (e.key === 'Enter') handleAddComment(); }
                 }),
-                React.createElement('button', { className: 'btn btn-primary', onClick: handleAddComment, style: { borderRadius: var(--radius-full), padding: '12px 24px' } },
+                React.createElement('button', { className: 'btn btn-primary', onClick: handleAddComment },
                   React.createElement('i', { className: 'fas fa-paper-plane' })
                 )
               )
@@ -2352,6 +1548,7 @@
           );
         }
 
+        // ===== COMPLAINT FORM =====
         function ComplaintForm({ onSuccess }) {
           const { updateData, addToast, session } = useData();
           const [form, setForm] = useState({
@@ -2396,58 +1593,58 @@
               }));
               addToast('Complaint ' + newComplaint.id + ' created ✨', 'success');
               setConfetti(true);
-              setTimeout(() => setConfetti(false), 3000);
+              setTimeout(() => setConfetti(false), 2000);
               onSuccess?.();
               setLoading(false);
-            }, 600);
+            }, 500);
           };
 
-          return React.createElement('div', { className: 'animate-fade-up' },
+          return React.createElement('div',
+            null,
             React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Report an Issue'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, 'Submit a complaint with luxury experience'),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 32, maxWidth: 700 } },
+            React.createElement('div', { className: 'glass', style: { padding: 28, maxWidth: 700 } },
               React.createElement('form', { onSubmit: handleSubmit },
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Subject ', React.createElement('span', { style: { color: 'var(--rose)' } }, '*')),
-                  React.createElement('input', { className: 'input input-premium', value: form.subject, onChange: e => setForm({ ...form, subject: e.target.value }), placeholder: 'Brief title', required: true })
+                React.createElement('div', { className: 'form-group', style: { marginBottom: 16 } },
+                  React.createElement('label', { style: { display: 'block', fontWeight: 600, marginBottom: 6, fontSize: 13 } }, 'Subject'),
+                  React.createElement('input', { className: 'input', value: form.subject, onChange: e => setForm({ ...form, subject: e.target.value }), placeholder: 'Brief title' })
                 ),
-                React.createElement('div', { className: 'form-group' },
-                  React.createElement('label', null, 'Description ', React.createElement('span', { style: { color: 'var(--rose)' } }, '*')),
-                  React.createElement('textarea', { className: 'input input-premium', value: form.description, onChange: e => setForm({ ...form, description: e.target.value }), rows: 5, placeholder: 'Describe the issue in detail...', required: true })
+                React.createElement('div', { className: 'form-group', style: { marginBottom: 16 } },
+                  React.createElement('label', { style: { display: 'block', fontWeight: 600, marginBottom: 6, fontSize: 13 } }, 'Description'),
+                  React.createElement('textarea', { className: 'input', value: form.description, onChange: e => setForm({ ...form, description: e.target.value }), rows: 5, placeholder: 'Describe the issue...' })
                 ),
-                React.createElement('div', { className: 'form-row' },
-                  React.createElement('div', { className: 'form-group' },
-                    React.createElement('label', null, 'Category'),
+                React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 } },
+                  React.createElement('div', null,
+                    React.createElement('label', { style: { display: 'block', fontWeight: 600, marginBottom: 6, fontSize: 13 } }, 'Category'),
                     React.createElement('select', { className: 'input', value: form.category, onChange: e => setForm({ ...form, category: e.target.value }) },
                       CATEGORIES.map(c => React.createElement('option', { key: c }, c))
                     )
                   ),
-                  React.createElement('div', { className: 'form-group' },
-                    React.createElement('label', null, 'Priority'),
+                  React.createElement('div', null,
+                    React.createElement('label', { style: { display: 'block', fontWeight: 600, marginBottom: 6, fontSize: 13 } }, 'Priority'),
                     React.createElement('select', { className: 'input', value: form.priority, onChange: e => setForm({ ...form, priority: e.target.value }) },
-                      PRIORITIES.map(p => React.createElement('option', { key: p }, p.charAt(0).toUpperCase() + p.slice(1)))
+                      ['low', 'medium', 'high', 'critical'].map(p => React.createElement('option', { key: p }, p))
                     )
                   )
                 ),
-                React.createElement('div', { className: 'form-row' },
-                  React.createElement('div', { className: 'form-group' },
-                    React.createElement('label', null, 'Department'),
+                React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 } },
+                  React.createElement('div', null,
+                    React.createElement('label', { style: { display: 'block', fontWeight: 600, marginBottom: 6, fontSize: 13 } }, 'Department'),
                     React.createElement('input', { className: 'input', value: form.department, onChange: e => setForm({ ...form, department: e.target.value }), placeholder: 'e.g. Facilities' })
                   ),
-                  React.createElement('div', { className: 'form-group' },
-                    React.createElement('label', null, 'Location'),
+                  React.createElement('div', null,
+                    React.createElement('label', { style: { display: 'block', fontWeight: 600, marginBottom: 6, fontSize: 13 } }, 'Location'),
                     React.createElement('input', { className: 'input', value: form.location, onChange: e => setForm({ ...form, location: e.target.value }), placeholder: 'e.g. Building A' })
                   )
                 ),
-                React.createElement('div', { className: 'form-group checkbox-wrap' },
-                  React.createElement('input', { type: 'checkbox', checked: form.anonymous, onChange: e => setForm({ ...form, anonymous: e.target.checked }) }),
+                React.createElement('div', { style: { marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 } },
+                  React.createElement('input', { type: 'checkbox', checked: form.anonymous, onChange: e => setForm({ ...form, anonymous: e.target.checked }), style: { width: 18, height: 18, accentColor: '#6C3CE1' } }),
                   React.createElement('label', { style: { cursor: 'pointer', color: 'var(--text-secondary)' } }, 'Submit anonymously')
                 ),
                 React.createElement('button', {
                   type: 'submit',
                   disabled: loading,
-                  className: 'btn btn-gold btn-lg',
-                  style: { width: '100%', padding: '16px', fontSize: 16 }
+                  className: 'btn btn-gold',
+                  style: { width: '100%', padding: '14px', fontSize: 16 }
                 },
                   loading ?
                     React.createElement(React.Fragment, null,
@@ -2462,10 +1659,11 @@
           );
         }
 
+        // ===== ADMIN DASHBOARD =====
         function AdminDashboard() {
           const complaints = data.complaints;
           const total = complaints.length;
-          const pending = complaints.filter(c => !['resolved', 'closed', 'rejected'].includes(c.status)).length;
+          const pending = complaints.filter(c => !['resolved', 'closed'].includes(c.status)).length;
           const resolved = complaints.filter(c => ['resolved', 'closed'].includes(c.status)).length;
           const critical = complaints.filter(c => c.priority === 'critical').length;
           const rate = total ? Math.round((resolved / total) * 100) : 0;
@@ -2473,21 +1671,21 @@
           const catMap = {};
           complaints.forEach(c => { catMap[c.category] = (catMap[c.category] || 0) + 1; });
 
-          return React.createElement('div', { className: 'animate-fade-up' },
-            React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Analytics Dashboard'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, 'Comprehensive insights and metrics'),
+          return React.createElement('div',
+            null,
+            React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Analytics'),
             React.createElement('div', { className: 'stats-grid' },
-              React.createElement(StatCard, { label: 'Total Issues', value: total, icon: 'fa-folder-open', color: 'purple' }),
-              React.createElement(StatCard, { label: 'Pending', value: pending, icon: 'fa-clock', color: 'gold' }),
-              React.createElement(StatCard, { label: 'Resolved', value: resolved, icon: 'fa-check-circle', color: 'green' }),
-              React.createElement(StatCard, { label: 'Critical', value: critical, icon: 'fa-exclamation-triangle', color: 'rose' }),
-              React.createElement(StatCard, { label: 'Resolution Rate', value: rate + '%', icon: 'fa-percent', color: 'purple' })
+              React.createElement(StatCard, { label: 'Total', value: total, icon: 'fa-folder-open', color: '#6C3CE1' }),
+              React.createElement(StatCard, { label: 'Pending', value: pending, icon: 'fa-clock', color: '#F59E0B' }),
+              React.createElement(StatCard, { label: 'Resolved', value: resolved, icon: 'fa-check-circle', color: '#06D6A0' }),
+              React.createElement(StatCard, { label: 'Critical', value: critical, icon: 'fa-exclamation-triangle', color: '#F43F5E' }),
+              React.createElement(StatCard, { label: 'Rate', value: rate + '%', icon: 'fa-percent', color: '#8B5CF6' })
             ),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
-              React.createElement('h4', { style: { fontWeight: 700, marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase' } }, 'By Category'),
-              Object.entries(catMap).sort((a, b) => b[1] - a[1]).map(([k, v]) =>
-                React.createElement('div', { key: k, style: { display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
-                  React.createElement('span', { style: { color: 'var(--text-secondary)' } }, k),
+            React.createElement('div', { className: 'glass', style: { padding: 20 } },
+              React.createElement('h4', { style: { fontWeight: 700, marginBottom: 12, fontSize: 14 } }, 'By Category'),
+              Object.entries(catMap).map(([k, v]) =>
+                React.createElement('div', { key: k, style: { display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
+                  React.createElement('span', null, k),
                   React.createElement('span', { style: { fontWeight: 700, color: 'var(--gold)' } }, v)
                 )
               )
@@ -2495,17 +1693,18 @@
           );
         }
 
+        // ===== USERS =====
         function UserManagement() {
-          return React.createElement('div', { className: 'animate-fade-up' },
-            React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'User Management'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, 'Manage users and their roles'),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+          return React.createElement('div',
+            null,
+            React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Users'),
+            React.createElement('div', { className: 'glass', style: { padding: 24 } },
               data.users.map(u =>
-                React.createElement('div', { key: u.id, style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: '1px solid var(--border)' } },
-                  React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 14 } },
+                React.createElement('div', { key: u.id, style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' } },
+                  React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 12 } },
                     React.createElement(Avatar, { name: u.name }),
                     React.createElement('div', null,
-                      React.createElement('div', { style: { fontWeight: 600, color: 'var(--text-primary)' } }, u.name),
+                      React.createElement('div', { style: { fontWeight: 600 } }, u.name),
                       React.createElement('div', { style: { fontSize: 12, color: 'var(--text-secondary)' } }, u.email)
                     )
                   ),
@@ -2516,14 +1715,15 @@
           );
         }
 
+        // ===== AUDIT =====
         function AuditLogs() {
-          return React.createElement('div', { className: 'animate-fade-up' },
+          return React.createElement('div',
+            null,
             React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Audit Log'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, 'Track all system activity'),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+            React.createElement('div', { className: 'glass', style: { padding: 24 } },
               data.auditLogs.slice(0, 30).map(a =>
-                React.createElement('div', { key: a.id, style: { display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
-                  React.createElement('span', { style: { fontWeight: 500, color: 'var(--text-primary)' } }, a.actorName),
+                React.createElement('div', { key: a.id, style: { display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
+                  React.createElement('span', { style: { fontWeight: 500 } }, a.actorName),
                   React.createElement('span', { style: { color: 'var(--text-secondary)' } }, a.action),
                   React.createElement('span', { style: { color: 'var(--text-tertiary)', fontSize: 12 } }, formatDate(a.createdAt))
                 )
@@ -2532,16 +1732,9 @@
           );
         }
 
+        // ===== SETTINGS =====
         function Settings() {
           const { updateData, addToast } = useData();
-          const [theme, setTheme] = useState(data.settings?.theme || 'dark');
-
-          const handleTheme = (t) => {
-            setTheme(t);
-            updateData(prev => ({ ...prev, settings: { ...prev.settings, theme: t } }));
-            document.body.style.background = t === 'dark' ? '#0F0C29' : '#F8FAFC';
-            addToast('Theme: ' + t, 'info');
-          };
 
           const handleReset = () => {
             if (confirm('Reset all demo data?')) {
@@ -2550,34 +1743,17 @@
             }
           };
 
-          return React.createElement('div', { className: 'animate-fade-up' },
+          return React.createElement('div',
+            null,
             React.createElement('h2', { className: 'page-title', style: { marginBottom: 16 } }, 'Settings'),
-            React.createElement('p', { className: 'page-subtitle', style: { marginBottom: 24 } }, 'Customize your experience'),
-            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 32, maxWidth: 600 } },
-              React.createElement('div', { style: { marginBottom: 28 } },
-                React.createElement('h4', { style: { fontWeight: 700, marginBottom: 14, color: 'var(--text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase', fontSize: 12 } }, 'Appearance'),
-                React.createElement('div', { style: { display: 'flex', gap: 12 } },
-                  React.createElement('button', {
-                    className: `btn ${theme === 'light' ? 'btn-primary' : 'btn-ghost'}`,
-                    onClick: () => handleTheme('light')
-                  },
-                    React.createElement('i', { className: 'fas fa-sun' }), ' Light'
-                  ),
-                  React.createElement('button', {
-                    className: `btn ${theme === 'dark' ? 'btn-primary' : 'btn-ghost'}`,
-                    onClick: () => handleTheme('dark')
-                  },
-                    React.createElement('i', { className: 'fas fa-moon' }), ' Dark'
-                  )
-                )
-              ),
-              React.createElement('div', { style: { marginBottom: 28 } },
-                React.createElement('h4', { style: { fontWeight: 700, marginBottom: 14, color: 'var(--text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase', fontSize: 12 } }, 'Data Management'),
+            React.createElement('div', { className: 'glass', style: { padding: 28, maxWidth: 600 } },
+              React.createElement('div', { style: { marginBottom: 24 } },
+                React.createElement('h4', { style: { fontWeight: 700, marginBottom: 12 } }, 'Data'),
                 React.createElement('button', { className: 'btn btn-ghost', onClick: handleReset, style: { color: 'var(--rose)', borderColor: 'var(--rose)44' } },
                   React.createElement('i', { className: 'fas fa-trash' }), ' Reset Demo Data'
                 )
               ),
-              React.createElement('div', { style: { padding: 16, borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.03)', fontSize: 12, color: 'var(--text-secondary)' } },
+              React.createElement('div', { style: { padding: 16, borderRadius: 12, background: 'rgba(255,255,255,0.03)', fontSize: 12, color: 'var(--text-secondary)' } },
                 React.createElement('i', { className: 'fas fa-asterisk', style: { color: 'var(--gold)', marginRight: 8 } }),
                 'ResolveHub v3.0 · All data stored locally'
               )
@@ -2593,9 +1769,9 @@
             case 'leaderboard': return React.createElement(LeaderboardView, null);
             case 'complaints': return React.createElement(ComplaintList, null);
             case 'new-complaint': return React.createElement(ComplaintForm, { onSuccess: () => setActiveView('complaints') });
-            case 'admin-dashboard': return isAdmin ? React.createElement(AdminDashboard, null) : React.createElement(EmptyState, { icon: 'fa-lock', message: 'Access denied', submessage: 'Admin privileges required' });
-            case 'users': return isAdmin ? React.createElement(UserManagement, null) : React.createElement(EmptyState, { icon: 'fa-lock', message: 'Access denied', submessage: 'Admin privileges required' });
-            case 'audit': return isAdmin ? React.createElement(AuditLogs, null) : React.createElement(EmptyState, { icon: 'fa-lock', message: 'Access denied', submessage: 'Admin privileges required' });
+            case 'admin-dashboard': return isAdmin ? React.createElement(AdminDashboard, null) : React.createElement(EmptyState, { message: 'Access denied' });
+            case 'users': return isAdmin ? React.createElement(UserManagement, null) : React.createElement(EmptyState, { message: 'Access denied' });
+            case 'audit': return isAdmin ? React.createElement(AuditLogs, null) : React.createElement(EmptyState, { message: 'Access denied' });
             case 'settings': return React.createElement(Settings, null);
             default: return React.createElement(Dashboard, null);
           }
@@ -2605,45 +1781,33 @@
         return React.createElement('div', { className: 'app-shell' },
           React.createElement(Confetti, { active: confetti }),
           React.createElement(ToastContainer, null),
-          React.createElement('div', { className: 'bg-effects' },
-            React.createElement('div', { className: 'bg-orb bg-orb-1' }),
-            React.createElement('div', { className: 'bg-orb bg-orb-2' }),
-            React.createElement('div', { className: 'bg-orb bg-orb-3' }),
-            React.createElement('div', { className: 'bg-grid' })
-          ),
           React.createElement('aside', { className: 'sidebar' },
-            React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 12 } },
-              React.createElement('div', { className: 'sidebar-brand' }, 'ResolveHub'),
-              React.createElement('span', { style: { fontSize: 10, fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: 1, textTransform: 'uppercase', padding: '2px 10px', borderRadius: 'var(--radius-full)', background: 'rgba(255,255,255,0.05)' } }, 'v3')
-            ),
+            React.createElement('div', { className: 'sidebar-brand' }, 'ResolveHub'),
             React.createElement('div', { className: 'sidebar-subtitle' }, 'Luxury Resolution'),
             React.createElement('nav', { className: 'sidebar-nav' },
-              navItems.map(item => {
-                const badge = item.id === 'complaints' ? data.complaints.filter(c => c.status === 'submitted' || c.status === 'under review').length : null;
-                return React.createElement('button', {
+              navItems.map(item =>
+                React.createElement('button', {
                   key: item.id,
                   className: `nav-item ${activeView === item.id ? 'active' : ''}`,
                   onClick: () => setActiveView(item.id)
                 },
                   React.createElement('i', { className: `fas ${item.icon} nav-icon` }),
-                  React.createElement('span', null, item.label),
-                  badge > 0 && React.createElement('span', { className: 'nav-badge' }, badge)
-                );
-              })
+                  React.createElement('span', null, item.label)
+                )
+              )
             ),
             React.createElement('div', { className: 'sidebar-footer' },
               React.createElement('div', { className: 'user-card' },
-                React.createElement(Avatar, { name: user?.name, ring: true }),
+                React.createElement(Avatar, { name: user?.name }),
                 React.createElement('div', { style: { flex: 1, minWidth: 0 } },
-                  React.createElement('div', { style: { fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' } }, user?.name),
+                  React.createElement('div', { style: { fontWeight: 700, fontSize: 14 } }, user?.name),
                   React.createElement('div', { style: { fontSize: 11, color: 'var(--text-secondary)' } }, session?.role)
                 ),
                 React.createElement('button', {
-                  className: 'btn btn-ghost btn-sm btn-icon',
-                  onClick: () => { logout(); addToast('Logged out', 'info'); },
-                  style: { width: 40, height: 40 }
+                  className: 'btn btn-ghost btn-sm',
+                  onClick: () => { logout(); addToast('Logged out', 'info'); }
                 },
-                  React.createElement('i', { className: 'fas fa-sign-out-alt', style: { fontSize: 16 } })
+                  React.createElement('i', { className: 'fas fa-sign-out-alt' })
                 )
               )
             )
@@ -2651,8 +1815,7 @@
           React.createElement('main', { className: 'main-area' },
             React.createElement('div', { className: 'topbar' },
               React.createElement('div', null,
-                React.createElement('h1', { className: 'page-title' }, currentNav?.label || 'Dashboard'),
-                React.createElement('div', { className: 'page-subtitle' }, currentNav?.id === 'dashboard' ? 'Welcome to your luxury dashboard' : '')
+                React.createElement('h1', { className: 'page-title' }, currentNav?.label || 'Dashboard')
               ),
               React.createElement('div', { style: { display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' } },
                 React.createElement('div', { className: 'search-wrap' },
@@ -2662,8 +1825,7 @@
                     className: 'input',
                     placeholder: 'Search complaints...',
                     value: searchQuery,
-                    onChange: e => setSearchQuery(e.target.value),
-                    style: { borderRadius: 'var(--radius-full)', height: 48 }
+                    onChange: e => setSearchQuery(e.target.value)
                   })
                 ),
                 React.createElement(NotificationCenter, null),
@@ -2685,13 +1847,24 @@
       }
 
       // ===== MOUNT =====
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(
-        React.createElement(DataProvider, null,
-          React.createElement(App, null)
-        )
-      );
-    })();
+      try {
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+          React.createElement(DataProvider, null,
+            React.createElement(App, null)
+          )
+        );
+      } catch (error) {
+        document.getElementById('root').innerHTML = `
+          <div style="height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;font-family:'Inter',sans-serif;padding:20px;text-align:center;background:#0F0C29;color:white;">
+            <div style="font-size:48px;">⚠️</div>
+            <h2>Something went wrong</h2>
+            <p style="color:rgba(255,255,255,0.6);max-width:400px;">${error.message || 'Please try refreshing the page'}</p>
+            <button onclick="location.reload()" style="padding:12px 32px;background:linear-gradient(135deg,#6C3CE1,#EC4899);color:white;border:none;border-radius:30px;font-weight:600;cursor:pointer;">Refresh</button>
+          </div>
+        `;
+      }
+    }
   </script>
 </body>
   </html>
