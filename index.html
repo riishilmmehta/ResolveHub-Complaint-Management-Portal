@@ -3,18 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <meta name="theme-color" content="#4f46e5" id="theme-color">
+  <meta name="theme-color" content="#4f46e5">
   <meta name="description" content="ResolveHub — Next-Gen Smart Complaint Management">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>ResolveHub · Next-Gen Issue Resolution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Load React and ReactDOM with error handling -->
+  <script>
+    // Check if CDN loads, if not show error
+    window.ReactLoaded = false;
+    window.ReactDOMLoaded = false;
+  </script>
+  
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js" 
+          onload="window.ReactLoaded = true"
+          onerror="console.error('React failed to load from CDN')">
+  </script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+          onload="window.ReactDOMLoaded = true"
+          onerror="console.error('ReactDOM failed to load from CDN')">
+  </script>
+  
+  <!-- Babel Standalone -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"
+          onerror="console.error('Babel failed to load from CDN')">
+  </script>
+  
   <style>
+    /* --- RESET & ROOT VARIABLES --- */
     :root {
       --primary: #6366f1;
       --primary-dark: #4f46e5;
@@ -33,16 +52,11 @@
       --text-tertiary: #94a3b8;
       --border: rgba(99,102,241,0.12);
       --border-strong: rgba(99,102,241,0.22);
-      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.04);
-      --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -2px rgba(0,0,0,0.03);
-      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08), 0 10px 10px -5px rgba(0,0,0,0.02);
-      --shadow-glow: 0 0 20px rgba(99,102,241,0.15);
-      --radius-sm: 12px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.08);
       --radius: 16px;
       --radius-lg: 24px;
       --radius-xl: 32px;
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
@@ -50,21 +64,14 @@
       --bg: #0b0f1f;
       --bg-elevated: #0f172a;
       --surface: rgba(15,23,42,0.65);
-      --surface-hover: rgba(30,41,59,0.8);
       --text: #f1f5f9;
       --text-secondary: #94a3b8;
       --text-tertiary: #64748b;
       --border: rgba(99,102,241,0.18);
       --border-strong: rgba(99,102,241,0.28);
-      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.2);
-      --shadow: 0 4px 6px -1px rgba(0,0,0,0.2), 0 2px 4px -1px rgba(0,0,0,0.15);
-      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.2);
-      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.4), 0 10px 10px -5px rgba(0,0,0,0.3);
-      --shadow-glow: 0 0 30px rgba(99,102,241,0.25);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
       font-family: var(--font);
       background: var(--bg);
@@ -75,9 +82,7 @@
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
     .glass {
       background: var(--surface);
@@ -85,63 +90,33 @@
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      transition: var(--transition);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .glass:hover { border-color: var(--border-strong); }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.92) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes confetti-fall { 0% { transform: translateY(-120vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(120vh) rotate(960deg); opacity: 0; } }
 
     .animate-fade { animation: fadeIn 0.4s ease forwards; }
     .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .animate-scale { animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .stagger-1 { animation-delay: 0.04s; }
-    .stagger-2 { animation-delay: 0.08s; }
-    .stagger-3 { animation-delay: 0.12s; }
-    .stagger-4 { animation-delay: 0.16s; }
-    .stagger-5 { animation-delay: 0.20s; }
-
-    .skeleton {
-      background: linear-gradient(90deg, var(--border) 25%, var(--border-strong) 50%, var(--border) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: var(--radius-sm);
-    }
-
-    .card-hover {
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    .card-hover:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--border-strong);
-    }
-    .card-hover:active { transform: scale(0.98); }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       padding: 10px 20px; border-radius: var(--radius); border: none;
       font-weight: 600; font-size: 14px; cursor: pointer;
-      transition: var(--transition); position: relative; overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: var(--font);
     }
     .btn-primary {
       background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
-      color: white; box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+      color: white;
+      box-shadow: 0 4px 16px rgba(79,70,229,0.35);
     }
     .btn-primary:hover { box-shadow: 0 6px 24px rgba(79,70,229,0.45); transform: translateY(-1px); }
-    .btn-primary:active { transform: scale(0.96); }
     .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
     .btn-secondary:hover { background: var(--surface-hover); border-color: var(--border-strong); }
-    .btn-danger { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
     .btn-ghost { background: transparent; color: var(--text-secondary); }
     .btn-ghost:hover { background: rgba(99,102,241,0.08); color: var(--primary); }
     .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 20px; }
@@ -156,10 +131,10 @@
       width: 100%; padding: 12px 16px; border-radius: var(--radius);
       border: 1px solid var(--border); background: var(--surface);
       color: var(--text); font-size: 14px; font-family: var(--font);
-      transition: var(--transition); outline: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
     }
     .input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
-    .input::placeholder { color: var(--text-tertiary); }
 
     .app-shell { display: flex; min-height: 100vh; }
     
@@ -181,7 +156,8 @@
       padding: 10px 14px; border-radius: var(--radius); border: none;
       background: transparent; color: var(--text-secondary);
       font-size: 14px; font-weight: 500; cursor: pointer;
-      transition: var(--transition); margin-bottom: 4px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 4px;
       font-family: var(--font); text-align: left;
     }
     .nav-item:hover { background: rgba(99,102,241,0.06); color: var(--text); }
@@ -195,7 +171,6 @@
       display: flex; align-items: center; justify-content: center;
       font-weight: 700; font-size: 15px; color: white; flex-shrink: 0;
       background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
-      box-shadow: 0 4px 12px rgba(79,70,229,0.3);
     }
     .avatar-sm { width: 32px; height: 32px; font-size: 13px; }
 
@@ -216,19 +191,16 @@
       padding: 20px; border-radius: var(--radius-lg);
       display: flex; align-items: center; gap: 16px;
       background: var(--surface); border: 1px solid var(--border);
-      box-shadow: var(--shadow); transition: var(--transition);
+      box-shadow: var(--shadow); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+    .stat-card:hover { transform: translateY(-2px); border-color: var(--border-strong); }
     .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
     .stat-value { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; }
     .stat-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; margin-top: 4px; }
-    .stat-delta { font-size: 11px; font-weight: 700; margin-top: 6px; display: inline-flex; align-items: center; gap: 2px; }
-    .stat-delta.positive { color: var(--success); }
-    .stat-delta.negative { color: var(--danger); }
 
     .complaint-row {
       padding: 16px 20px; border-bottom: 1px solid var(--border);
-      cursor: pointer; transition: var(--transition);
+      cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex; align-items: center; gap: 16px;
     }
     .complaint-row:last-child { border-bottom: none; }
@@ -242,7 +214,7 @@
       display: inline-flex; align-items: center; gap: 4px;
       padding: 5px 12px; border-radius: 30px; font-size: 12px; font-weight: 700;
       border: 1px solid var(--border); background: transparent; color: var(--text-secondary);
-      cursor: pointer; transition: var(--transition);
+      cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .upvote-btn:hover { background: rgba(99,102,241,0.08); border-color: var(--primary-light); color: var(--primary); }
     .upvote-btn.upvoted { background: rgba(99,102,241,0.12); border-color: var(--primary); color: var(--primary); }
@@ -259,22 +231,6 @@
       background: var(--surface); border: 1px solid var(--border);
       box-shadow: var(--shadow-lg); animation: scaleIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
     }
-
-    .timeline-item { display: flex; gap: 14px; padding: 12px 0; position: relative; }
-    .timeline-item::before {
-      content: ''; position: absolute; left: 15px; top: 36px; bottom: -12px;
-      width: 2px; background: var(--border); border-radius: 2px;
-    }
-    .timeline-item:last-child::before { display: none; }
-    .timeline-dot {
-      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; color: white; z-index: 1;
-    }
-    .timeline-content { flex: 1; }
-    .timeline-status { font-weight: 700; font-size: 13px; color: var(--text); }
-    .timeline-note { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-    .timeline-time { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
 
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; max-width: 380px; width: 100%; pointer-events: none; }
     .toast {
@@ -295,11 +251,50 @@
     .heat-cell {
       aspect-ratio: 1; border-radius: var(--radius); display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 6px; cursor: pointer;
-      transition: var(--transition); border: 1px solid transparent; position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
     }
-    .heat-cell:hover { transform: scale(1.06); z-index: 2; box-shadow: var(--shadow-md); }
+    .heat-cell:hover { transform: scale(1.06); z-index: 2; box-shadow: var(--shadow); }
     .heat-label { font-size: 12px; font-weight: 700; text-transform: capitalize; }
     .heat-value { font-size: 22px; font-weight: 800; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+    .empty-state i { font-size: 48px; opacity: 0.3; margin-bottom: 16px; display: block; }
+
+    .login-bg {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #e0f2fe 100%);
+    }
+    .dark .login-bg { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); }
+    .login-blob {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    .checkbox-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .checkbox-wrap input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+
+    .timeline-item { display: flex; gap: 14px; padding: 12px 0; position: relative; }
+    .timeline-item::before {
+      content: ''; position: absolute; left: 15px; top: 36px; bottom: -12px;
+      width: 2px; background: var(--border); border-radius: 2px;
+    }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-dot {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: white; z-index: 1;
+    }
+
+    .dept-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .dept-bar-bg { flex: 1; height: 8px; border-radius: 8px; background: var(--border); overflow: hidden; }
+    .dept-bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
 
     .kanban-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
     .kanban-column { border-radius: var(--radius-lg); padding: 16px; background: var(--surface); border: 1px solid var(--border); }
@@ -308,13 +303,16 @@
     .kanban-card {
       padding: 14px; border-radius: var(--radius); background: var(--bg-elevated);
       border: 1px solid var(--border); margin-bottom: 10px; cursor: pointer;
-      transition: var(--transition); box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .kanban-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--border-strong); }
 
-    .dept-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-    .dept-bar-bg { flex: 1; height: 8px; border-radius: 8px; background: var(--border); overflow: hidden; }
-    .dept-bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .shortcut-key { 
+      display: inline-flex; align-items: center; justify-content: center; 
+      padding: 2px 8px; border-radius: 6px; background: var(--border); 
+      font-size: 12px; font-weight: 700; font-family: monospace; 
+      color: var(--text-secondary); border: 1px solid var(--border-strong); 
+    }
 
     .notification-dropdown {
       position: absolute; top: 48px; right: 0; width: 360px; max-height: 480px;
@@ -323,39 +321,15 @@
       box-shadow: var(--shadow-lg); animation: scaleIn 0.2s ease;
     }
 
-    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
-    .empty-state i { font-size: 48px; opacity: 0.3; margin-bottom: 16px; display: block; }
-
     .confetti-piece {
       position: fixed; width: 10px; height: 10px; top: -10px; z-index: 99999;
       animation: confetti-fall 3s linear forwards;
     }
+    @keyframes confetti-fall { 0% { transform: translateY(-120vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(120vh) rotate(960deg); opacity: 0; } }
 
-    .timer-badge {
-      font-family: 'SF Mono', monospace; font-size: 13px; font-weight: 700;
-      padding: 4px 10px; border-radius: 8px; background: rgba(239,68,68,0.1); color: var(--danger);
-    }
-    .timer-badge.safe { background: rgba(16,185,129,0.1); color: var(--success); }
-
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
-
-    .filter-bar {
-      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-      padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px;
-      background: var(--surface); border: 1px solid var(--border);
-    }
-    .filter-pill {
-      padding: 6px 14px; border-radius: 30px; border: 1px solid var(--border);
-      background: transparent; color: var(--text-secondary); font-size: 13px;
-      font-weight: 500; cursor: pointer; transition: var(--transition); font-family: var(--font);
-    }
-    .filter-pill:hover, .filter-pill.active { background: rgba(99,102,241,0.1); border-color: var(--primary-light); color: var(--primary); }
-
-    .checkbox-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .checkbox-wrap input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .activity-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
 
     @media (max-width: 768px) {
       .app-shell { flex-direction: column; }
@@ -366,1302 +340,1030 @@
       .nav-item span { display: none; }
       .sidebar-footer { display: none; }
       .main-area { padding: 16px; }
-      .topbar { margin-bottom: 20px; }
       .page-title { font-size: 22px; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .stat-card { padding: 14px; }
       .stat-icon { width: 40px; height: 40px; font-size: 18px; }
       .stat-value { font-size: 20px; }
-      .modal-box { padding: 20px; border-radius: var(--radius-lg); }
-      .notification-dropdown { width: calc(100vw - 40px); right: -10px; }
-      .kanban-board { grid-template-columns: 1fr; }
-    }
-
-    .login-bg {
-      position: fixed; inset: 0; z-index: -1; overflow: hidden;
-      background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #e0f2fe 100%);
-    }
-    .dark .login-bg { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); }
-    .login-blob {
-      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 8s ease-in-out infinite;
-    }
-
-    .shortcut-key { 
-      display: inline-flex; align-items: center; justify-content: center; 
-      padding: 2px 8px; border-radius: 6px; background: var(--border); 
-      font-size: 12px; font-weight: 700; font-family: monospace; 
-      color: var(--text-secondary); border: 1px solid var(--border-strong); 
+      .modal-box { padding: 20px; }
+      .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
 <body>
-<div id="root"></div>
-
-<script type="text/babel" data-presets="react">
-const { useState, useEffect, useCallback, useContext, useRef, useMemo, createContext } = React;
-
-/* ===================== CONSTANTS & HELPERS ===================== */
-const STORAGE_KEY = 'resolvehub_data_v2';
-const SESSION_KEY = 'resolvehub_session';
-
-const STATUS_COLORS = {
-  submitted: '#94a3b8', 'under review': '#f59e0b', assigned: '#6366f1',
-  'in progress': '#8b5cf6', resolved: '#10b981', closed: '#64748b',
-  reopened: '#ef4444', rejected: '#ef4444'
-};
-const PRIORITY_COLORS = { low: '#94a3b8', medium: '#f59e0b', high: '#f97316', critical: '#ef4444' };
-const STATUS_FLOW = ['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'];
-
-const SLA_HOURS = { critical: 4, high: 24, medium: 72, low: 168 };
-
-const CATEGORIES = ['Infrastructure','Academic','Faculty','Examination','Hostel','Transport','Library','IT / Technology','Security','Cleanliness','Electricity','Water','Harassment / Misconduct','Administration','Other'];
-const PRIORITIES = ['low','medium','high','critical'];
-const ZONES = ['academic','hostel','library','cafeteria','admin','transport'];
-const ZONE_LABELS = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
-
-const KEYWORD_MAP = [
-  { regex: /wifi|internet|network|lan|server|portal/i, category: 'IT / Technology', priority: 'high' },
-  { regex: /broken|not working|damaged|repair|maintenance/i, category: 'Infrastructure', priority: 'medium' },
-  { regex: /ac|cooling|temperature|hot|cold|hvac|fan/i, category: 'Infrastructure', priority: 'high' },
-  { regex: /harassment|abuse|misconduct|inappropriate|threat|unsafe/i, category: 'Harassment / Misconduct', priority: 'critical' },
-  { regex: /exam|schedule|timetable|clash|grading|marks/i, category: 'Examination', priority: 'high' },
-  { regex: /water|leak|pipe|plumbing|flood|drain/i, category: 'Water', priority: 'high' },
-  { regex: /noise|loud|disturbance|quiet|silent/i, category: 'Library', priority: 'low' },
-  { regex: /bus|transport|shuttle|late|route|vehicle/i, category: 'Transport', priority: 'medium' },
-  { regex: /clean|dirty|hygiene|mess|garbage|trash/i, category: 'Cleanliness', priority: 'medium' },
-  { regex: /light|electric|power|outage|wire|bulb/i, category: 'Electricity', priority: 'high' },
-  { regex: /security|theft|lost|missing|camera|guard/i, category: 'Security', priority: 'high' },
-  { regex: /food|canteen|cafeteria|meal|menu|hygiene/i, category: 'Cafeteria', priority: 'medium' },
-];
-
-function getStatusColor(s) { return STATUS_COLORS[(s||'').toLowerCase()] || '#94a3b8'; }
-function getPriorityColor(p) { return PRIORITY_COLORS[(p||'').toLowerCase()] || '#94a3b8'; }
-function formatDate(ts) { if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
-function timeAgo(ts) { const s=Math.floor((Date.now()-ts)/1000); const i={y:31536000,m:2592000,w:604800,d:86400,h:3600,n:60}; for(let[k,v]of Object.entries(i)){const c=Math.floor(s/v);if(c>0)return c+' '+k+(c>1?'s':'')+' ago';} return 'Just now'; }
-function generateId() { return 'CMP-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*100000)).padStart(5,'0'); }
-function getGreeting() { const h=new Date().getHours(); if(h<12)return 'Good morning'; if(h<17)return 'Good afternoon'; return 'Good evening'; }
-function suggestFromText(text) { if(!text) return null; for(const rule of KEYWORD_MAP){ if(rule.regex.test(text)) return { category: rule.category, priority: rule.priority }; } return null; }
-function exportToJson(data, filename='resolvehub-export.json') { const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url); }
-function exportToCsv(complaints, filename='resolvehub-export.csv') {
-  const headers = ['ID','Subject','Category','Priority','Status','Department','Location','Zone','SubmittedBy','AssignedTo','Upvotes','CreatedAt','UpdatedAt','Resolution'];
-  const rows = complaints.map(c => [c.id, `"${c.subject}"`, c.category, c.priority, c.status, c.department, c.location, c.zone, c.submittedBy, c.assignedTo||'', c.upvotes||0, new Date(c.createdAt).toISOString(), new Date(c.updatedAt).toISOString(), `"${c.resolution||''}"`].join(','));
-  const csv = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
-}
-
-const defaultUsers = [
-  { id:'u1', name:'Admin', email:'admin@portal.demo', role:'admin', department:'Administration', avatar:'A' },
-  { id:'u2', name:'Student', email:'student@portal.demo', role:'student', department:'Engineering', avatar:'S' },
-  { id:'u3', name:'Teacher', email:'teacher@portal.demo', role:'teacher', department:'CS', avatar:'T' },
-  { id:'u4', name:'Staff', email:'staff@portal.demo', role:'staff', department:'Facilities', avatar:'F' },
-];
-
-const defaultComplaints = [
-  { id:'CMP-2026-0001', subject:'Broken AC in lab 301', description:'AC not cooling since monday. Room temp is 32°C.', category:'Infrastructure', subcategory:'HVAC', priority:'high', status:'in progress', department:'Facilities', location:'Building A', zone:'academic', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:5, upvotedBy:[], attachments:[], comments:[{id:'c1',userId:'u4',name:'Staff',role:'staff',message:'Technician dispatched, will fix today.',timestamp:Date.now()-200000}], timeline:[{status:'submitted',timestamp:Date.now()-500000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-300000,note:'Assigned to Staff'},{status:'in progress',timestamp:Date.now()-150000,note:'Work in progress'}], resolution:'', feedback:null, createdAt:Date.now()-500000, updatedAt:Date.now()-100000 },
-  { id:'CMP-2026-0002', subject:'Exam schedule conflict', description:'Two major exams on same day. Need reschedule.', category:'Examination', subcategory:'Scheduling', priority:'critical', status:'under review', department:'Examination', location:'Online', zone:'admin', anonymous:false, submittedBy:'u3', assignedTo:null, upvotes:12, upvotedBy:[], attachments:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-400000,note:'Submitted'},{status:'under review',timestamp:Date.now()-250000,note:'Under review'}], resolution:'', feedback:null, createdAt:Date.now()-400000, updatedAt:Date.now()-200000 },
-  { id:'CMP-2026-0003', subject:'Library quiet zone noise', description:'Construction noise near library is disrupting study.', category:'Library', subcategory:'Environment', priority:'medium', status:'resolved', department:'Library', location:'Library', zone:'library', anonymous:true, submittedBy:'u2', assignedTo:'u4', upvotes:8, upvotedBy:[], attachments:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-600000,note:'Submitted'},{status:'in progress',timestamp:Date.now()-400000,note:'In progress'},{status:'resolved',timestamp:Date.now()-100000,note:'Resolved'}], resolution:'Noise reduced, hours adjusted', feedback:{rating:4,comment:'Better now'}, createdAt:Date.now()-600000, updatedAt:Date.now()-100000 },
-  { id:'CMP-2026-0004', subject:'WiFi connectivity issue', description:'No WiFi in hostel block C since yesterday.', category:'IT / Technology', subcategory:'Network', priority:'high', status:'assigned', department:'IT', location:'Hostel C', zone:'hostel', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:15, upvotedBy:[], attachments:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-300000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-150000,note:'Assigned to IT'}], resolution:'', feedback:null, createdAt:Date.now()-300000, updatedAt:Date.now()-150000 },
-  { id:'CMP-2026-0005', subject:'Harassment complaint', description:'Inappropriate behavior in cafeteria. Urgent action needed.', category:'Harassment / Misconduct', subcategory:'Verbal', priority:'critical', status:'submitted', department:'Administration', location:'Cafeteria', zone:'cafeteria', anonymous:true, submittedBy:'u2', assignedTo:null, upvotes:3, upvotedBy:[], attachments:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-100000,note:'Submitted'}], resolution:'', feedback:null, createdAt:Date.now()-100000, updatedAt:Date.now()-100000 },
-  { id:'CMP-2026-0006', subject:'Water leakage in restroom', description:'Pipe burst near 2nd floor restroom.', category:'Water', subcategory:'Plumbing', priority:'high', status:'in progress', department:'Facilities', location:'Building B', zone:'academic', anonymous:false, submittedBy:'u3', assignedTo:'u4', upvotes:7, upvotedBy:[], attachments:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-700000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-600000,note:'Assigned'},{status:'in progress',timestamp:Date.now()-400000,note:'In progress'}], resolution:'', feedback:null, createdAt:Date.now()-700000, updatedAt:Date.now()-400000 },
-  { id:'CMP-2026-0007', subject:'Transport bus delay', description:'Bus from campus to station is consistently late.', category:'Transport', subcategory:'Scheduling', priority:'low', status:'closed', department:'Transport', location:'Main gate', zone:'transport', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:2, upvotedBy:[], attachments:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-900000,note:'Submitted'},{status:'resolved',timestamp:Date.now()-700000,note:'Resolved'},{status:'closed',timestamp:Date.now()-500000,note:'Closed'}], resolution:'Schedule adjusted', feedback:{rating:5,comment:'Great'}, createdAt:Date.now()-900000, updatedAt:Date.now()-500000 },
-];
-
-const defaultNotifications = [
-  { id:'n1', userId:'u2', type:'status', title:'Complaint assigned', message:'Your complaint CMP-2026-0001 has been assigned.', read:false, createdAt:Date.now()-200000 },
-  { id:'n2', userId:'u4', type:'assignment', title:'New assignment', message:'You have been assigned complaint CMP-2026-0004.', read:false, createdAt:Date.now()-150000 },
-  { id:'n3', userId:'u2', type:'submission', title:'Complaint submitted', message:'Your complaint CMP-2026-0005 has been submitted.', read:true, createdAt:Date.now()-90000 },
-];
-
-const defaultAudit = [
-  { id:'a1', actorId:'u1', actorName:'Admin', role:'admin', action:'login', targetId:'', description:'Admin logged in', createdAt:Date.now()-10000 },
-  { id:'a2', actorId:'u2', actorName:'Student', role:'student', action:'complaint_created', targetId:'CMP-2026-0005', description:'Created complaint CMP-2026-0005', createdAt:Date.now()-90000 },
-];
-
-function getDefaultData() {
-  return { users: defaultUsers, complaints: defaultComplaints, notifications: defaultNotifications, auditLogs: defaultAudit, settings: { theme:'light', notifications:true } };
-}
-
-function loadData() { try { const raw=localStorage.getItem(STORAGE_KEY); if(raw){ const parsed=JSON.parse(raw); const def=getDefaultData(); for(const k in def) if(!(k in parsed)) parsed[k]=def[k]; return parsed; } }catch(e){} return getDefaultData(); }
-function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-function loadSession() { try{ const s=localStorage.getItem(SESSION_KEY); return s?JSON.parse(s):null; }catch{return null;} }
-function saveSession(s) { if(s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
-
-/* ===================== CONTEXT & PROVIDER ===================== */
-const DataContext = createContext(null);
-
-function DataProvider({ children }) {
-  const [data, setData] = useState(loadData);
-  const [session, setSession] = useState(loadSession);
-  const [toasts, setToasts] = useState([]);
-
-  useEffect(() => { saveData(data); }, [data]);
-
-  const addToast = useCallback((message, type='info', duration=4000) => {
-    const id = Date.now() + Math.random();
-    setToasts(prev => [...prev, { id, message, type, duration }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
-  }, []);
-
-  const login = useCallback((email, password) => {
-    const user = data.users.find(u => u.email === email);
-    if (user) {
-      const sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
-      setSession(sess); saveSession(sess);
-      const auditEntry = { id:'a'+Date.now(), actorId:user.id, actorName:user.name, role:user.role, action:'login', targetId:'', description:user.name+' logged in', createdAt:Date.now() };
-      setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
-      return { success:true, user };
-    }
-    return { success:false, error:'Invalid email or password' };
-  }, [data.users]);
-
-  const logout = useCallback(() => {
-    if (session) {
-      const auditEntry = { id:'a'+Date.now(), actorId:session.userId, actorName:session.name, role:session.role, action:'logout', targetId:'', description:session.name+' logged out', createdAt:Date.now() };
-      setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
-    }
-    setSession(null); saveSession(null);
-  }, [session]);
-
-  const updateData = useCallback((fn) => setData(prev => typeof fn === 'function' ? fn(prev) : fn), []);
-
-  return (
-    <DataContext.Provider value={{ data, setData, updateData, session, login, logout, toasts, addToast }}>
-      {children}
-    </DataContext.Provider>
-  );
-}
-
-function useData() { return useContext(DataContext); }
-
-/* ===================== UI PRIMITIVES ===================== */
-function Badge({ children, color, style }) {
-  return <span className="badge" style={{ background: color+'18', color: color, ...style }}>{children}</span>;
-}
-
-function Avatar({ name, size }) {
-  return <div className={`avatar ${size==='sm'?'avatar-sm':''}`}>{name ? name[0] : 'U'}</div>;
-}
-
-function EmptyState({ icon='fa-inbox', message, action }) {
-  return (
-    <div className="empty-state animate-fade">
-      <i className={`fas ${icon}`} />
-      <p style={{ fontWeight: 600, marginBottom: 8 }}>{message}</p>
-      {action}
+  <div id="root">
+    <!-- Loading state shown while React loads -->
+    <div style="height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; background:#f8fafc; font-family:'Inter',sans-serif;">
+      <div style="width:64px; height:64px; border-radius:50%; border:4px solid rgba(99,102,241,0.12); border-top-color:#6366f1; animation:spin 0.9s linear infinite;"></div>
+      <div style="font-weight:600; color:#64748b; font-size:16px;">Loading ResolveHub...</div>
     </div>
-  );
-}
+  </div>
 
-/* ===================== TOAST SYSTEM ===================== */
-function ToastContainer() {
-  const { toasts } = useData();
-  if (!toasts.length) return null;
-  return (
-    <div className="toast-container">
-      {toasts.map(t => (
-        <div key={t.id} className={`toast toast-${t.type} slide-up`}>
-          <i className={`fas ${t.type==='success'?'fa-check-circle':t.type==='error'?'fa-exclamation-circle':'fa-info-circle'}`} />
-          {t.message}
-        </div>
-      ))}
-    </div>
-  );
-}
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useCallback, useContext, useRef, createContext } = React;
 
-/* ===================== CONFETTI ===================== */
-function Confetti({ active }) {
-  const [pieces, setPieces] = useState([]);
-  useEffect(() => {
-    if (!active) return;
-    const colors = ['#6366f1','#a855f7','#06b6d4','#10b981','#f59e0b','#ef4444'];
-    const newPieces = Array.from({length:40}).map((_,i)=>({
-      id: i, left: Math.random()*100+'vw',
-      bg: colors[Math.floor(Math.random()*colors.length)],
-      delay: Math.random()*0.5+'s',
-      duration: (2+Math.random()*2)+'s',
-      size: (6+Math.random()*8)+'px'
-    }));
-    setPieces(newPieces);
-    const timer = setTimeout(() => setPieces([]), 4000);
-    return () => clearTimeout(timer);
-  }, [active]);
-  if (!pieces.length) return null;
-  return (
-    <div style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:99999 }}>
-      {pieces.map(p => (
-        <div key={p.id} className="confetti-piece" style={{
-          left: p.left, background: p.bg, width: p.size, height: p.size,
-          animationDelay: p.delay, animationDuration: p.duration
-        }} />
-      ))}
-    </div>
-  );
-}
+    // ===================== CONSTANTS & HELPERS =====================
+    const STORAGE_KEY = 'resolvehub_data_v2';
+    const SESSION_KEY = 'resolvehub_session';
 
-/* ===================== NOTIFICATION CENTER ===================== */
-function NotificationCenter() {
-  const { data, session, updateData } = useData();
-  const [open, setOpen] = useState(false);
-  const ref = useRef();
-  const userNotes = data.notifications.filter(n => n.userId === session?.userId);
-  const unread = userNotes.filter(n => !n.read);
-
-  useEffect(() => {
-    function handleClick(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
-  const markAllRead = () => {
-    updateData(prev => ({ ...prev, notifications: prev.notifications.map(n => n.userId===session.userId ? {...n, read:true} : n) }));
-  };
-
-  return (
-    <div ref={ref} style={{ position:'relative' }}>
-      <button className="btn btn-ghost btn-sm" onClick={() => setOpen(!open)} style={{ position:'relative' }}>
-        <i className="fas fa-bell" />
-        {unread.length > 0 && (
-          <span style={{ position:'absolute', top:-2, right:-2, width:18, height:18, borderRadius:'50%', background:'linear-gradient(135deg,var(--danger),#f87171)', color:'white', fontSize:10, fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 2px 8px rgba(239,68,68,0.4)' }}>{unread.length}</span>
-        )}
-      </button>
-      {open && (
-        <div className="notification-dropdown glass">
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 18px', borderBottom:'1px solid var(--border)' }}>
-            <span style={{ fontWeight:700, fontSize:14 }}>Notifications</span>
-            {unread.length > 0 && <button className="btn btn-ghost btn-sm" onClick={markAllRead}>Mark all read</button>}
-          </div>
-          <div style={{ maxHeight:360, overflowY:'auto' }}>
-            {userNotes.length === 0 ? <div style={{ padding:20, textAlign:'center', color:'var(--text-secondary)', fontSize:13 }}>No notifications yet</div> :
-              userNotes.map(n => (
-                <div key={n.id} style={{ padding:'12px 18px', borderBottom:'1px solid var(--border)', opacity: n.read?0.7:1, background: n.read?'transparent':'rgba(99,102,241,0.04)' }}>
-                  <div style={{ fontWeight:600, fontSize:13, marginBottom:2 }}>{n.title}</div>
-                  <div style={{ fontSize:12, color:'var(--text-secondary)' }}>{n.message}</div>
-                  <div style={{ fontSize:11, color:'var(--text-tertiary)', marginTop:4 }}>{timeAgo(n.createdAt)}</div>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ===================== LOGIN ===================== */
-function Login() {
-  const { login, addToast, session } = useData();
-  const [email, setEmail] = useState('admin@portal.demo');
-  const [password, setPassword] = useState('demo');
-  const [loading, setLoading] = useState(false);
-  const [showPw, setShowPw] = useState(false);
-  if (session) return null;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      const r = login(email, password);
-      if (r.success) addToast('Welcome back, '+r.user.name+'!', 'success');
-      else addToast(r.error, 'error');
-      setLoading(false);
-    }, 500);
-  };
-
-  return (
-    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:20, position:'relative' }}>
-      <div className="login-bg">
-        <div className="login-blob" style={{ width:400, height:400, background:'#c7d2fe', top:-100, left:-100, animationDelay:'0s' }} />
-        <div className="login-blob" style={{ width:300, height:300, background:'#e9d5ff', bottom:-50, right:-50, animationDelay:'2s' }} />
-        <div className="login-blob" style={{ width:250, height:250, background:'#bae6fd', top:'40%', left:'60%', animationDelay:'4s' }} />
-      </div>
-      <div className="glass animate-scale" style={{ maxWidth:440, width:'100%', borderRadius:'var(--radius-xl)', padding:'40px 36px', position:'relative', zIndex:1 }}>
-        <div style={{ textAlign:'center', marginBottom:32 }}>
-          <div style={{ fontSize:36, fontWeight:900, letterSpacing:'-1.5px', background:'linear-gradient(135deg,var(--primary-dark),var(--secondary))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', marginBottom:6 }}>ResolveHub</div>
-          <div style={{ color:'var(--text-secondary)', fontSize:15, fontWeight:500 }}>Next-Gen Smart Complaint Management</div>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" className="input" value={email} onChange={e=>setEmail(e.target.value)} placeholder="admin@portal.demo" required />
-          </div>
-          <div className="form-group" style={{ position:'relative' }}>
-            <label>Password</label>
-            <input type={showPw?'text':'password'} className="input" value={password} onChange={e=>setPassword(e.target.value)} placeholder="•••••••" required style={{ paddingRight:48 }} />
-            <button type="button" onClick={()=>setShowPw(!showPw)} style={{ position:'absolute', right:16, bottom:14, background:'none', border:'none', color:'var(--text-tertiary)', cursor:'pointer', fontSize:16 }}>
-              <i className={`fas ${showPw?'fa-eye':'fa-eye-slash'}`} />
-            </button>
-          </div>
-          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width:'100%', padding:'14px', borderRadius:30, fontSize:16 }}>
-            {loading ? <><i className="fas fa-circle-notch fa-spin" /> Signing in...</> : 'Get Started'}
-          </button>
-        </form>
-        <div className="glass" style={{ marginTop:28, borderRadius:'var(--radius-lg)', padding:'16px 20px', fontSize:12, color:'var(--text-secondary)' }}>
-          <div style={{ fontWeight:700, marginBottom:8, color:'var(--text)', fontSize:13 }}>Demo accounts <span style={{ fontWeight:400, opacity:0.7 }}>(password: demo)</span></div>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr auto', gap:'4px 12px', lineHeight:1.8 }}>
-            <span>admin@portal.demo</span><Badge color="var(--primary)">admin</Badge>
-            <span>student@portal.demo</span><Badge color="var(--secondary)">student</Badge>
-            <span>teacher@portal.demo</span><Badge color="var(--accent)">teacher</Badge>
-            <span>staff@portal.demo</span><Badge color="var(--success)">staff</Badge>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ===================== MAIN APP ===================== */
-function App() {
-  const { session, logout, data, updateData, addToast } = useData();
-  const [activeView, setActiveView] = useState('dashboard');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [confetti, setConfetti] = useState(false);
-  const [viewMode, setViewMode] = useState('list');
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const theme = data.settings?.theme || 'light';
-    if (theme === 'dark') document.body.classList.add('dark');
-    else if (theme === 'light') document.body.classList.remove('dark');
-    else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.body.classList.toggle('dark', prefersDark);
-    }
-  }, [data.settings?.theme]);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      if (e.key === '/') { e.preventDefault(); document.querySelector('.global-search')?.focus(); }
-      if (e.key === 'n' || e.key === 'N') { e.preventDefault(); setActiveView('new-complaint'); }
-      if (e.key === 'Escape') { setSelectedComplaint(null); }
-      if (e.key === '1') setActiveView('dashboard');
-      if (e.key === '2') setActiveView('complaints');
-      if (e.key === '3') setActiveView('heatmap');
-      if (e.key === '4') setActiveView('leaderboard');
+    const STATUS_COLORS = {
+      submitted: '#94a3b8', 'under review': '#f59e0b', assigned: '#6366f1',
+      'in progress': '#8b5cf6', resolved: '#10b981', closed: '#64748b',
+      reopened: '#ef4444', rejected: '#ef4444'
     };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, []);
+    const PRIORITY_COLORS = { low: '#94a3b8', medium: '#f59e0b', high: '#f97316', critical: '#ef4444' };
+    const ZONES = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
+    const ZONE_LABELS = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
+    const CATEGORIES = ['Infrastructure','Academic','Faculty','Examination','Hostel','Transport','Library','IT / Technology','Security','Cleanliness','Electricity','Water','Harassment / Misconduct','Administration','Other'];
+    const PRIORITIES = ['low','medium','high','critical'];
+    const SLA_HOURS = { critical: 4, high: 24, medium: 72, low: 168 };
 
-  if (loading) {
-    return (
-      <div style={{ height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:24, background:'var(--bg)' }}>
-        <div style={{ width:64, height:64, borderRadius:'50%', border:'4px solid var(--border)', borderTopColor:'var(--primary)', animation:'spin 0.9s linear infinite' }} />
-        <div style={{ fontWeight:700, color:'var(--text-secondary)', fontSize:16 }}>Loading ResolveHub...</div>
-      </div>
-    );
-  }
+    function getStatusColor(s) { return STATUS_COLORS[(s||'').toLowerCase()] || '#94a3b8'; }
+    function getPriorityColor(p) { return PRIORITY_COLORS[(p||'').toLowerCase()] || '#94a3b8'; }
+    function formatDate(ts) { if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+    function timeAgo(ts) { const s=Math.floor((Date.now()-ts)/1000); const intervals={y:31536000,m:2592000,w:604800,d:86400,h:3600,n:60}; for(let[k,v]of Object.entries(intervals)){const c=Math.floor(s/v); if(c>0) return c+' '+k+(c>1?'s':'')+' ago'; } return 'Just now'; }
+    function generateId() { return 'CMP-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*100000)).padStart(5,'0'); }
+    function getGreeting() { const h=new Date().getHours(); if(h<12)return 'Good morning'; if(h<17)return 'Good afternoon'; return 'Good evening'; }
+    
+    const KEYWORD_MAP = [
+      { regex: /wifi|internet|network|lan/i, category: 'IT / Technology', priority: 'high' },
+      { regex: /broken|not working|damaged|repair/i, category: 'Infrastructure', priority: 'medium' },
+      { regex: /ac|cooling|temperature|hot|cold/i, category: 'Infrastructure', priority: 'high' },
+      { regex: /harassment|abuse|misconduct|inappropriate/i, category: 'Harassment / Misconduct', priority: 'critical' },
+      { regex: /exam|schedule|timetable|clash|grading/i, category: 'Examination', priority: 'high' },
+      { regex: /water|leak|pipe|plumbing|flood/i, category: 'Water', priority: 'high' },
+    ];
+    
+    function suggestFromText(text) { 
+      if(!text) return null; 
+      for(const rule of KEYWORD_MAP){ 
+        if(rule.regex.test(text)) return { category: rule.category, priority: rule.priority }; 
+      } 
+      return null; 
+    }
 
-  if (!session) return <Login />;
+    const defaultUsers = [
+      { id:'u1', name:'Admin', email:'admin@portal.demo', role:'admin', department:'Administration' },
+      { id:'u2', name:'Student', email:'student@portal.demo', role:'student', department:'Engineering' },
+      { id:'u3', name:'Teacher', email:'teacher@portal.demo', role:'teacher', department:'CS' },
+      { id:'u4', name:'Staff', email:'staff@portal.demo', role:'staff', department:'Facilities' },
+    ];
 
-  const user = data.users.find(u => u.id === session.userId);
-  const isAdmin = session.role === 'admin';
-  const isStaff = session.role === 'staff';
+    const defaultComplaints = [
+      { id:'CMP-2026-0001', subject:'Broken AC in lab 301', description:'AC not cooling since monday.', category:'Infrastructure', priority:'high', status:'in progress', department:'Facilities', location:'Building A', zone:'academic', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:5, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-500000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-300000,note:'Assigned'},{status:'in progress',timestamp:Date.now()-150000,note:'In progress'}], resolution:'', feedback:null, createdAt:Date.now()-500000, updatedAt:Date.now()-100000 },
+      { id:'CMP-2026-0002', subject:'Exam schedule conflict', description:'Two major exams on same day.', category:'Examination', priority:'critical', status:'under review', department:'Examination', location:'Online', zone:'admin', anonymous:false, submittedBy:'u3', assignedTo:null, upvotes:12, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-400000,note:'Submitted'},{status:'under review',timestamp:Date.now()-250000,note:'Under review'}], resolution:'', feedback:null, createdAt:Date.now()-400000, updatedAt:Date.now()-200000 },
+      { id:'CMP-2026-0003', subject:'Library quiet zone noise', description:'Construction noise near library.', category:'Library', priority:'medium', status:'resolved', department:'Library', location:'Library', zone:'library', anonymous:true, submittedBy:'u2', assignedTo:'u4', upvotes:8, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-600000,note:'Submitted'},{status:'in progress',timestamp:Date.now()-400000,note:'In progress'},{status:'resolved',timestamp:Date.now()-100000,note:'Resolved'}], resolution:'Noise reduced', feedback:{rating:4,comment:'Better'}, createdAt:Date.now()-600000, updatedAt:Date.now()-100000 },
+      { id:'CMP-2026-0004', subject:'WiFi connectivity issue', description:'No WiFi in hostel block C.', category:'IT / Technology', priority:'high', status:'assigned', department:'IT', location:'Hostel C', zone:'hostel', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:15, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-300000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-150000,note:'Assigned'}], resolution:'', feedback:null, createdAt:Date.now()-300000, updatedAt:Date.now()-150000 },
+      { id:'CMP-2026-0005', subject:'Harassment complaint', description:'Inappropriate behavior in cafeteria.', category:'Harassment / Misconduct', priority:'critical', status:'submitted', department:'Administration', location:'Cafeteria', zone:'cafeteria', anonymous:true, submittedBy:'u2', assignedTo:null, upvotes:3, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-100000,note:'Submitted'}], resolution:'', feedback:null, createdAt:Date.now()-100000, updatedAt:Date.now()-100000 },
+    ];
 
-  const navItems = [
-    { id:'dashboard', label:'Dashboard', icon:'fa-gauge-high', shortcut:'1' },
-    { id:'complaints', label:'Complaints', icon:'fa-list', shortcut:'2' },
-    { id:'heatmap', label:'Heatmap', icon:'fa-map', shortcut:'3' },
-    { id:'leaderboard', label:'Leaderboard', icon:'fa-trophy', shortcut:'4' },
-    { id:'new-complaint', label:'New Issue', icon:'fa-plus-circle', shortcut:'N' },
-  ];
-  if (isAdmin) {
-    navItems.push({ id:'admin-dashboard', label:'Analytics', icon:'fa-chart-pie', shortcut:'' });
-    navItems.push({ id:'users', label:'Users', icon:'fa-users', shortcut:'' });
-    navItems.push({ id:'audit', label:'Audit', icon:'fa-history', shortcut:'' });
-  }
-  navItems.push({ id:'settings', label:'Settings', icon:'fa-sliders', shortcut:'' });
+    const defaultNotifications = [
+      { id:'n1', userId:'u2', type:'status', title:'Complaint assigned', message:'Your complaint CMP-2026-0001 has been assigned.', read:false, createdAt:Date.now()-200000 },
+    ];
 
-  const currentNav = navItems.find(n => n.id === activeView);
+    const defaultAudit = [
+      { id:'a1', actorId:'u1', actorName:'Admin', role:'admin', action:'login', description:'Admin logged in', createdAt:Date.now()-10000 },
+    ];
 
-  /* ---------- Sub-Components ---------- */
-  function StatCard({ label, value, icon, color, delta, delay }) {
-    const [displayValue, setDisplayValue] = useState(0);
-    useEffect(() => {
-      const target = typeof value === 'number' ? value : parseInt(value) || 0;
-      let current = 0;
-      const step = Math.max(1, Math.floor(target / 20));
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) { current = target; clearInterval(timer); }
-        setDisplayValue(current);
-      }, 30);
-      return () => clearInterval(timer);
-    }, [value]);
-    return (
-      <div className={`stat-card animate-slide-up stagger-${delay||1}`}>
-        <div className="stat-icon" style={{ background: color+'15', color: color }}><i className={`fas ${icon}`} /></div>
-        <div>
-          <div className="stat-value">{typeof value === 'string' && value.includes('%') ? value : displayValue}</div>
-          <div className="stat-label">{label}</div>
-          {delta && <div className={`stat-delta ${delta.positive ? 'positive' : 'negative'}`}><i className={`fas fa-arrow-${delta.positive?'up':'down'}`} /> {delta.text}</div>}
-        </div>
-      </div>
-    );
-  }
+    function getDefaultData() {
+      return { users: defaultUsers, complaints: defaultComplaints, notifications: defaultNotifications, auditLogs: defaultAudit, settings: { theme:'light' } };
+    }
 
-  function ComplaintRow({ complaint, selectable, selected, onSelect }) {
-    const { session, updateData } = useData();
-    const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
-    const handleUpvote = (e) => {
-      e.stopPropagation();
-      updateData(prev => {
-        const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-        if (idx === -1) return prev;
-        const c = prev.complaints[idx];
-        const next = [...prev.complaints];
-        if (c.upvotedBy?.includes(session.userId)) {
-          next[idx] = { ...c, upvotes: (c.upvotes||0)-1, upvotedBy: c.upvotedBy.filter(id=>id!==session.userId) };
-        } else {
-          next[idx] = { ...c, upvotes: (c.upvotes||0)+1, upvotedBy: [...(c.upvotedBy||[]), session.userId] };
+    function loadData() { 
+      try { 
+        const raw = localStorage.getItem(STORAGE_KEY); 
+        if(raw){ 
+          const parsed = JSON.parse(raw); 
+          const def = getDefaultData(); 
+          for(const k in def) if(!(k in parsed)) parsed[k] = def[k]; 
+          return parsed; 
+        } 
+      } catch(e){} 
+      return getDefaultData(); 
+    }
+    function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+    function loadSession() { try{ const s=localStorage.getItem(SESSION_KEY); return s?JSON.parse(s):null; }catch{return null;} }
+    function saveSession(s) { if(s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
+
+    // ===================== CONTEXT =====================
+    const DataContext = createContext(null);
+
+    function DataProvider({ children }) {
+      const [data, setData] = useState(loadData);
+      const [session, setSession] = useState(loadSession);
+      const [toasts, setToasts] = useState([]);
+
+      useEffect(() => { saveData(data); }, [data]);
+
+      const addToast = useCallback((message, type='info', duration=4000) => {
+        const id = Date.now() + Math.random();
+        setToasts(prev => [...prev, { id, message, type, duration }]);
+        setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
+      }, []);
+
+      const login = useCallback((email, password) => {
+        const user = data.users.find(u => u.email === email);
+        if (user) {
+          const sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
+          setSession(sess); 
+          saveSession(sess);
+          const auditEntry = { id:'a'+Date.now(), actorId:user.id, actorName:user.name, role:user.role, action:'login', description:user.name+' logged in', createdAt:Date.now() };
+          setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
+          return { success:true, user };
         }
-        return { ...prev, complaints: next };
-      });
-    };
-    const submitter = data.users.find(u => u.id === complaint.submittedBy);
-    return (
-      <div className="complaint-row animate-slide-up" onClick={() => setSelectedComplaint(complaint)}>
-        {selectable && (
-          <div className="checkbox-wrap" onClick={e => e.stopPropagation()}>
-            <input type="checkbox" checked={selected} onChange={() => onSelect && onSelect(complaint.id)} />
-          </div>
-        )}
-        <Avatar name={complaint.anonymous ? '?' : (submitter?.name || 'U')} size="sm" />
-        <div className="complaint-info">
-          <div className="complaint-subject">{complaint.subject}</div>
-          <div className="complaint-meta">
-            <span>{complaint.id}</span>
-            <span>·</span>
-            <span>{complaint.category}</span>
-            <span>·</span>
-            <span>{ZONE_LABELS[complaint.zone]}</span>
-            <span>·</span>
-            <span>{timeAgo(complaint.createdAt)}</span>
-          </div>
-        </div>
-        <div className="complaint-actions">
-          <button className={`upvote-btn ${hasUpvoted?'upvoted':''}`} onClick={handleUpvote}>
-            <i className="fas fa-arrow-up" /> {complaint.upvotes||0}
-          </button>
-          <Badge color={getPriorityColor(complaint.priority)}>{complaint.priority}</Badge>
-          <Badge color={getStatusColor(complaint.status)}>{complaint.status}</Badge>
-        </div>
-      </div>
-    );
-  }
+        return { success:false, error:'Invalid email or password' };
+      }, [data.users]);
 
-  function Dashboard() {
-    const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
-    const pending = userComplaints.filter(c => !['resolved','closed','rejected'].includes(c.status));
-    const inProgress = userComplaints.filter(c => ['in progress','assigned'].includes(c.status));
-    const resolved = userComplaints.filter(c => ['resolved','closed'].includes(c.status));
-    const activities = [...data.auditLogs, ...data.complaints.map(c => ({ id:c.id+'-create', actorName:data.users.find(u=>u.id===c.submittedBy)?.name||'Unknown', action:'complaint_created', description:`Created ${c.id}`, createdAt:c.createdAt }))].sort((a,b)=>b.createdAt-a.createdAt).slice(0,8);
+      const logout = useCallback(() => {
+        if (session) {
+          const auditEntry = { id:'a'+Date.now(), actorId:session.userId, actorName:session.name, role:session.role, action:'logout', description:session.name+' logged out', createdAt:Date.now() };
+          setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
+        }
+        setSession(null); 
+        saveSession(null);
+      }, [session]);
 
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom:24 }}>
-          <h1 className="page-title">{getGreeting()}, {user?.name}</h1>
-          <div className="page-subtitle">Here's what's happening in your workspace today.</div>
-        </div>
-        <div className="stats-grid">
-          <StatCard label="Total" value={userComplaints.length} icon="fa-folder-open" color="#6366f1" delay="1" />
-          <StatCard label="Pending" value={pending.length} icon="fa-clock" color="#f59e0b" delay="2" />
-          <StatCard label="In Progress" value={inProgress.length} icon="fa-spinner" color="#8b5cf6" delay="3" />
-          <StatCard label="Resolved" value={resolved.length} icon="fa-check-circle" color="#10b981" delay="4" />
-        </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:20 }}>
-          <div className="glass" style={{ borderRadius:'var(--radius-lg)', padding:24 }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-              <h3 style={{ fontSize:16, fontWeight:700 }}>Recent Complaints</h3>
-              <button className="btn btn-ghost btn-sm" onClick={()=>setActiveView('complaints')}>View all</button>
-            </div>
-            {userComplaints.slice(0,5).map(c => <ComplaintRow key={c.id} complaint={c} />)}
-            {userComplaints.length===0 && <EmptyState message="No complaints yet" />}
-          </div>
-          <div className="glass" style={{ borderRadius:'var(--radius-lg)', padding:24 }}>
-            <h3 style={{ fontSize:16, fontWeight:700, marginBottom:16 }}>Activity Feed</h3>
-            {activities.map(a => (
-              <div key={a.id} className="activity-item" style={{ display:'flex', gap:14, padding:'12px 0', borderBottom:'1px solid var(--border)', alignItems:'flex-start' }}>
-                <div className="activity-icon" style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, flexShrink:0, background: a.action==='login'?'rgba(99,102,241,0.1)':'rgba(16,185,129,0.1)', color: a.action==='login'?'#6366f1':'#10b981' }}>
-                  <i className={`fas ${a.action==='login'?'fa-sign-in-alt':a.action==='logout'?'fa-sign-out-alt':'fa-plus'}`} />
-                </div>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontWeight:600, fontSize:13 }}>{a.actorName}</div>
-                  <div style={{ fontSize:12, color:'var(--text-secondary)' }}>{a.description}</div>
-                  <div style={{ fontSize:11, color:'var(--text-tertiary)', marginTop:2 }}>{timeAgo(a.createdAt)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+      const updateData = useCallback((fn) => setData(prev => typeof fn === 'function' ? fn(prev) : fn), []);
 
-  function HeatmapView() {
-    const zoneCounts = {};
-    ZONES.forEach(z => { zoneCounts[z] = data.complaints.filter(c => c.zone === z).length; });
-    const maxCount = Math.max(...Object.values(zoneCounts), 1);
-    
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">Campus Heatmap</h2>
-          <div className="page-subtitle">Visualize complaint density across campus zones</div>
-        </div>
-        <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
-          <div className="heatmap-grid">
-            {ZONES.map(z => {
-              const count = zoneCounts[z] || 0;
-              const intensity = Math.min(1, count / maxCount);
-              const hue = 240 - intensity * 180;
-              return (
-                <div key={z} className="heat-cell" style={{ 
-                  background: `hsl(${hue}, 80%, ${50 + (1 - intensity) * 30}%)`,
-                  color: intensity > 0.6 ? 'white' : 'var(--text)'
-                }}>
-                  <span className="heat-label">{ZONE_LABELS[z]}</span>
-                  <span className="heat-value">{count}</span>
-                  <span style={{ fontSize: 10, opacity: 0.7 }}>{count} complaints</span>
-                </div>
-              );
-            })}
-          </div>
-          <div style={{ display: 'flex', gap: 16, marginTop: 16, justifyContent: 'center', fontSize: 12, color: 'var(--text-secondary)' }}>
-            <span>🔵 Low</span>
-            <span style={{ width: 100, height: 8, borderRadius: 8, background: 'linear-gradient(90deg, #6366f1, #ef4444)' }} />
-            <span>🔴 High</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+      return (
+        <DataContext.Provider value={{ data, setData, updateData, session, login, logout, toasts, addToast }}>
+          {children}
+        </DataContext.Provider>
+      );
+    }
 
-  function LeaderboardView() {
-    const depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration', 'Security'];
-    const deptStats = depts.map(d => {
-      const comps = data.complaints.filter(c => c.department === d);
-      const resolved = comps.filter(c => ['resolved', 'closed'].includes(c.status));
-      const total = comps.length || 1;
-      const avgTime = resolved.length ? Math.round(resolved.reduce((acc, c) => {
-        const re = c.timeline?.find(t => t.status === 'resolved');
-        return acc + (re ? (re.timestamp - c.createdAt) : 0);
-      }, 0) / resolved.length / (1000 * 60 * 60)) : 0;
-      const satisfaction = resolved.length ? Math.round(resolved.reduce((acc, c) => acc + (c.feedback?.rating || 3), 0) / resolved.length * 20) : 50;
-      return { name: d, resolved: resolved.length, total: comps.length, rate: Math.round((resolved.length / total) * 100), avgTime, satisfaction: Math.min(100, satisfaction) };
-    });
-    deptStats.sort((a, b) => b.rate - a.rate || a.avgTime - b.avgTime);
-    
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">Department Leaderboard</h2>
-          <div className="page-subtitle">Ranked by resolution rate and efficiency</div>
+    function useData() { return useContext(DataContext); }
+
+    // ===================== COMPONENTS =====================
+    function Badge({ children, color }) {
+      return <span className="badge" style={{ background: color+'18', color: color }}>{children}</span>;
+    }
+
+    function Avatar({ name, size }) {
+      return <div className={`avatar ${size==='sm'?'avatar-sm':''}`}>{name ? name[0] : 'U'}</div>;
+    }
+
+    function EmptyState({ icon='fa-inbox', message }) {
+      return (
+        <div className="empty-state animate-fade">
+          <i className={`fas ${icon}`} />
+          <p style={{ fontWeight: 600 }}>{message}</p>
         </div>
-        <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
-          {deptStats.map((d, i) => (
-            <div key={d.name} className="dept-row" style={{ animationDelay: `${i * 0.05}s` }}>
-              <span style={{ fontWeight: 800, fontSize: 18, minWidth: 32, color: i === 0 ? 'var(--warning)' : 'var(--text-secondary)' }}>
-                {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`}
-              </span>
-              <span style={{ fontWeight: 600, minWidth: 120, fontSize: 14 }}>{d.name}</span>
-              <div className="dept-bar-bg">
-                <div className="dept-bar-fill" style={{ width: `${d.rate}%` }} />
-              </div>
-              <span style={{ fontWeight: 700, fontSize: 14, minWidth: 50, color: 'var(--primary)' }}>{d.rate}%</span>
-              <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 60 }}>⏱ {d.avgTime}h avg</span>
-              <span style={{ fontSize: 12, color: 'var(--success)', minWidth: 40 }}>⭐ {d.satisfaction}</span>
-              <span style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>({d.resolved}/{d.total})</span>
+      );
+    }
+
+    function ToastContainer() {
+      const { toasts } = useData();
+      if (!toasts.length) return null;
+      return (
+        <div className="toast-container">
+          {toasts.map(t => (
+            <div key={t.id} className={`toast toast-${t.type} slide-up`}>
+              <i className={`fas ${t.type==='success'?'fa-check-circle':t.type==='error'?'fa-exclamation-circle':'fa-info-circle'}`} />
+              {t.message}
             </div>
           ))}
         </div>
-      </div>
-    );
-  }
-
-  function ComplaintList() {
-    let complaints = data.complaints;
-    if (!isAdmin && !isStaff) {
-      complaints = complaints.filter(c => c.submittedBy === session.userId || !c.anonymous);
-    } else if (isStaff) {
-      complaints = complaints.filter(c => c.assignedTo === session.userId || !c.assignedTo);
-    }
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      complaints = complaints.filter(c => 
-        c.id.toLowerCase().includes(q) || 
-        c.subject.toLowerCase().includes(q) || 
-        c.description.toLowerCase().includes(q)
       );
     }
-    complaints.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt);
-    
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-          <div>
-            <h2 className="page-title">All Complaints</h2>
-            <div className="page-subtitle">{complaints.length} issues reported</div>
+
+    function Confetti({ active }) {
+      const [pieces, setPieces] = useState([]);
+      useEffect(() => {
+        if (!active) return;
+        const colors = ['#6366f1','#a855f7','#06b6d4','#10b981','#f59e0b','#ef4444'];
+        const newPieces = Array.from({length:40}).map((_,i)=>({
+          id: i, 
+          left: Math.random()*100+'vw',
+          bg: colors[Math.floor(Math.random()*colors.length)],
+          delay: Math.random()*0.5+'s',
+          duration: (2+Math.random()*2)+'s',
+          size: (6+Math.random()*8)+'px'
+        }));
+        setPieces(newPieces);
+        const timer = setTimeout(() => setPieces([]), 4000);
+        return () => clearTimeout(timer);
+      }, [active]);
+      if (!pieces.length) return null;
+      return (
+        <div style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:99999 }}>
+          {pieces.map(p => (
+            <div key={p.id} className="confetti-piece" style={{
+              left: p.left, background: p.bg, width: p.size, height: p.size,
+              animationDelay: p.delay, animationDuration: p.duration
+            }} />
+          ))}
+        </div>
+      );
+    }
+
+    function NotificationCenter() {
+      const { data, session, updateData } = useData();
+      const [open, setOpen] = useState(false);
+      const ref = useRef();
+      const userNotes = data.notifications.filter(n => n.userId === session?.userId);
+      const unread = userNotes.filter(n => !n.read);
+
+      useEffect(() => {
+        function handleClick(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
+        document.addEventListener('mousedown', handleClick);
+        return () => document.removeEventListener('mousedown', handleClick);
+      }, []);
+
+      return (
+        <div ref={ref} style={{ position:'relative' }}>
+          <button className="btn btn-ghost btn-sm" onClick={() => setOpen(!open)} style={{ position:'relative' }}>
+            <i className="fas fa-bell" />
+            {unread.length > 0 && (
+              <span style={{ position:'absolute', top:-2, right:-2, width:18, height:18, borderRadius:'50%', background:'var(--danger)', color:'white', fontSize:10, fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center' }}>{unread.length}</span>
+            )}
+          </button>
+          {open && (
+            <div className="notification-dropdown glass">
+              <div style={{ padding:'14px 18px', borderBottom:'1px solid var(--border)', fontWeight:700 }}>Notifications</div>
+              {userNotes.length === 0 ? <div style={{ padding:20, textAlign:'center', color:'var(--text-secondary)' }}>No notifications</div> :
+                userNotes.map(n => (
+                  <div key={n.id} style={{ padding:'12px 18px', borderBottom:'1px solid var(--border)', opacity: n.read?0.7:1 }}>
+                    <div style={{ fontWeight:600, fontSize:13 }}>{n.title}</div>
+                    <div style={{ fontSize:12, color:'var(--text-secondary)' }}>{n.message}</div>
+                    <div style={{ fontSize:11, color:'var(--text-tertiary)', marginTop:4 }}>{timeAgo(n.createdAt)}</div>
+                  </div>
+                ))
+              }
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function Login() {
+      const { login, addToast, session } = useData();
+      const [email, setEmail] = useState('admin@portal.demo');
+      const [password, setPassword] = useState('demo');
+      const [loading, setLoading] = useState(false);
+      const [showPw, setShowPw] = useState(false);
+      if (session) return null;
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setTimeout(() => {
+          const r = login(email, password);
+          if (r.success) addToast('Welcome back, '+r.user.name+'!', 'success');
+          else addToast(r.error, 'error');
+          setLoading(false);
+        }, 500);
+      };
+
+      return (
+        <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:20, position:'relative' }}>
+          <div className="login-bg">
+            <div className="login-blob" style={{ width:400, height:400, background:'#c7d2fe', top:-100, left:-100 }} />
+            <div className="login-blob" style={{ width:300, height:300, background:'#e9d5ff', bottom:-50, right:-50, animationDelay:'2s' }} />
+            <div className="login-blob" style={{ width:250, height:250, background:'#bae6fd', top:'40%', left:'60%', animationDelay:'4s' }} />
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className={`btn btn-sm ${viewMode === 'list' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('list')}>
-              <i className="fas fa-list" /> List
-            </button>
-            <button className={`btn btn-sm ${viewMode === 'kanban' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('kanban')}>
-              <i className="fas fa-columns" /> Kanban
-            </button>
+          <div className="glass animate-scale" style={{ maxWidth:440, width:'100%', borderRadius:'var(--radius-xl)', padding:'40px 36px', position:'relative', zIndex:1 }}>
+            <div style={{ textAlign:'center', marginBottom:32 }}>
+              <div style={{ fontSize:36, fontWeight:900, letterSpacing:'-1.5px', background:'linear-gradient(135deg,var(--primary-dark),var(--secondary))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>ResolveHub</div>
+              <div style={{ color:'var(--text-secondary)', fontSize:15, fontWeight:500, marginTop:4 }}>Smart Complaint Management</div>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" className="input" value={email} onChange={e=>setEmail(e.target.value)} placeholder="admin@portal.demo" required />
+              </div>
+              <div className="form-group" style={{ position:'relative' }}>
+                <label>Password</label>
+                <input type={showPw?'text':'password'} className="input" value={password} onChange={e=>setPassword(e.target.value)} placeholder="•••••••" required style={{ paddingRight:48 }} />
+                <button type="button" onClick={()=>setShowPw(!showPw)} style={{ position:'absolute', right:16, bottom:14, background:'none', border:'none', color:'var(--text-tertiary)', cursor:'pointer', fontSize:16 }}>
+                  <i className={`fas ${showPw?'fa-eye':'fa-eye-slash'}`} />
+                </button>
+              </div>
+              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width:'100%', padding:'14px', borderRadius:30, fontSize:16 }}>
+                {loading ? <><i className="fas fa-circle-notch fa-spin" /> Signing in...</> : 'Get Started'}
+              </button>
+            </form>
+            <div className="glass" style={{ marginTop:28, borderRadius:'var(--radius-lg)', padding:'16px 20px', fontSize:12, color:'var(--text-secondary)' }}>
+              <div style={{ fontWeight:700, marginBottom:8, color:'var(--text)', fontSize:13 }}>Demo accounts <span style={{ fontWeight:400, opacity:0.7 }}>(password: demo)</span></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr auto', gap:'4px 12px', lineHeight:1.8 }}>
+                <span>admin@portal.demo</span><Badge color="var(--primary)">admin</Badge>
+                <span>student@portal.demo</span><Badge color="var(--secondary)">student</Badge>
+                <span>teacher@portal.demo</span><Badge color="var(--accent)">teacher</Badge>
+                <span>staff@portal.demo</span><Badge color="var(--success)">staff</Badge>
+              </div>
+            </div>
           </div>
         </div>
-        {viewMode === 'list' ? (
-          <div className="glass" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-            {complaints.length === 0 ? <EmptyState message="No complaints found" /> :
-              complaints.map(c => <ComplaintRow key={c.id} complaint={c} />)}
+      );
+    }
+
+    // ===================== MAIN APP =====================
+    function App() {
+      const { session, logout, data, updateData, addToast } = useData();
+      const [activeView, setActiveView] = useState('dashboard');
+      const [searchQuery, setSearchQuery] = useState('');
+      const [selectedComplaint, setSelectedComplaint] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [confetti, setConfetti] = useState(false);
+      const [viewMode, setViewMode] = useState('list');
+
+      useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 400);
+        return () => clearTimeout(timer);
+      }, []);
+
+      useEffect(() => {
+        const theme = data.settings?.theme || 'light';
+        document.body.classList.toggle('dark', theme === 'dark');
+      }, [data.settings?.theme]);
+
+      if (loading) {
+        return (
+          <div style={{ height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:24, background:'var(--bg)' }}>
+            <div style={{ width:64, height:64, borderRadius:'50%', border:'4px solid var(--border)', borderTopColor:'var(--primary)', animation:'spin 0.9s linear infinite' }} />
+            <div style={{ fontWeight:700, color:'var(--text-secondary)', fontSize:16 }}>Loading ResolveHub...</div>
           </div>
-        ) : (
-          <div className="kanban-board">
-            {['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'].map(status => {
-              const items = complaints.filter(c => c.status === status);
-              return (
-                <div key={status} className="kanban-column">
-                  <div className="kanban-header">
-                    <span style={{ color: getStatusColor(status) }}>{status}</span>
-                    <span className="kanban-count">{items.length}</span>
+        );
+      }
+
+      if (!session) return <Login />;
+
+      const user = data.users.find(u => u.id === session.userId);
+      const isAdmin = session.role === 'admin';
+
+      const navItems = [
+        { id:'dashboard', label:'Dashboard', icon:'fa-gauge-high' },
+        { id:'complaints', label:'Complaints', icon:'fa-list' },
+        { id:'heatmap', label:'Heatmap', icon:'fa-map' },
+        { id:'leaderboard', label:'Leaderboard', icon:'fa-trophy' },
+        { id:'new-complaint', label:'New Issue', icon:'fa-plus-circle' },
+      ];
+      if (isAdmin) {
+        navItems.push({ id:'admin-dashboard', label:'Analytics', icon:'fa-chart-pie' });
+        navItems.push({ id:'users', label:'Users', icon:'fa-users' });
+        navItems.push({ id:'audit', label:'Audit', icon:'fa-history' });
+      }
+      navItems.push({ id:'settings', label:'Settings', icon:'fa-sliders' });
+
+      const currentNav = navItems.find(n => n.id === activeView);
+
+      // ===== SUB-COMPONENTS =====
+      function StatCard({ label, value, icon, color }) {
+        return (
+          <div className="stat-card animate-slide-up">
+            <div className="stat-icon" style={{ background: color+'15', color: color }}><i className={`fas ${icon}`} /></div>
+            <div>
+              <div className="stat-value">{value}</div>
+              <div className="stat-label">{label}</div>
+            </div>
+          </div>
+        );
+      }
+
+      function ComplaintRow({ complaint }) {
+        const { session, updateData } = useData();
+        const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
+        const handleUpvote = (e) => {
+          e.stopPropagation();
+          updateData(prev => {
+            const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+            if (idx === -1) return prev;
+            const c = prev.complaints[idx];
+            const next = [...prev.complaints];
+            if (c.upvotedBy?.includes(session.userId)) {
+              next[idx] = { ...c, upvotes: (c.upvotes||0)-1, upvotedBy: c.upvotedBy.filter(id=>id!==session.userId) };
+            } else {
+              next[idx] = { ...c, upvotes: (c.upvotes||0)+1, upvotedBy: [...(c.upvotedBy||[]), session.userId] };
+            }
+            return { ...prev, complaints: next };
+          });
+        };
+        const submitter = data.users.find(u => u.id === complaint.submittedBy);
+        return (
+          <div className="complaint-row animate-slide-up" onClick={() => setSelectedComplaint(complaint)}>
+            <Avatar name={complaint.anonymous ? '?' : (submitter?.name || 'U')} size="sm" />
+            <div className="complaint-info">
+              <div className="complaint-subject">{complaint.subject}</div>
+              <div className="complaint-meta">
+                <span>{complaint.id}</span>
+                <span>·</span>
+                <span>{complaint.category}</span>
+                <span>·</span>
+                <span>{timeAgo(complaint.createdAt)}</span>
+              </div>
+            </div>
+            <div className="complaint-actions">
+              <button className={`upvote-btn ${hasUpvoted?'upvoted':''}`} onClick={handleUpvote}>
+                <i className="fas fa-arrow-up" /> {complaint.upvotes||0}
+              </button>
+              <Badge color={getPriorityColor(complaint.priority)}>{complaint.priority}</Badge>
+              <Badge color={getStatusColor(complaint.status)}>{complaint.status}</Badge>
+            </div>
+          </div>
+        );
+      }
+
+      function Dashboard() {
+        const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
+        const pending = userComplaints.filter(c => !['resolved','closed','rejected'].includes(c.status));
+        const inProgress = userComplaints.filter(c => ['in progress','assigned'].includes(c.status));
+        const resolved = userComplaints.filter(c => ['resolved','closed'].includes(c.status));
+
+        return (
+          <div className="animate-fade">
+            <div style={{ marginBottom:24 }}>
+              <h1 className="page-title">{getGreeting()}, {user?.name}</h1>
+              <div className="page-subtitle">Here's what's happening in your workspace.</div>
+            </div>
+            <div className="stats-grid">
+              <StatCard label="Total" value={userComplaints.length} icon="fa-folder-open" color="#6366f1" />
+              <StatCard label="Pending" value={pending.length} icon="fa-clock" color="#f59e0b" />
+              <StatCard label="In Progress" value={inProgress.length} icon="fa-spinner" color="#8b5cf6" />
+              <StatCard label="Resolved" value={resolved.length} icon="fa-check-circle" color="#10b981" />
+            </div>
+            <div className="glass" style={{ borderRadius:'var(--radius-lg)', padding:24 }}>
+              <h3 style={{ fontSize:16, fontWeight:700, marginBottom:16 }}>Recent Complaints</h3>
+              {userComplaints.slice(0,5).map(c => <ComplaintRow key={c.id} complaint={c} />)}
+              {userComplaints.length===0 && <EmptyState message="No complaints yet" />}
+            </div>
+          </div>
+        );
+      }
+
+      function HeatmapView() {
+        const zoneCounts = {};
+        ZONES.forEach(z => { zoneCounts[z] = data.complaints.filter(c => c.zone === z).length; });
+        const maxCount = Math.max(...Object.values(zoneCounts), 1);
+        
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Campus Heatmap</h2>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
+              <div className="heatmap-grid">
+                {ZONES.map(z => {
+                  const count = zoneCounts[z] || 0;
+                  const intensity = Math.min(1, count / maxCount);
+                  const hue = 240 - intensity * 180;
+                  return (
+                    <div key={z} className="heat-cell" style={{ 
+                      background: `hsl(${hue}, 80%, ${50 + (1 - intensity) * 30}%)`,
+                      color: intensity > 0.6 ? 'white' : 'var(--text)'
+                    }}>
+                      <span className="heat-label">{ZONE_LABELS[z]}</span>
+                      <span className="heat-value">{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function LeaderboardView() {
+        const depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration'];
+        const deptStats = depts.map(d => {
+          const comps = data.complaints.filter(c => c.department === d);
+          const resolved = comps.filter(c => ['resolved', 'closed'].includes(c.status));
+          const total = comps.length || 1;
+          const rate = Math.round((resolved.length / total) * 100);
+          const avgTime = resolved.length ? Math.round(resolved.reduce((acc, c) => {
+            const re = c.timeline?.find(t => t.status === 'resolved');
+            return acc + (re ? (re.timestamp - c.createdAt) : 0);
+          }, 0) / resolved.length / (1000 * 60 * 60)) : 0;
+          return { name: d, resolved: resolved.length, total: comps.length, rate, avgTime };
+        });
+        deptStats.sort((a, b) => b.rate - a.rate || a.avgTime - b.avgTime);
+        
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Department Leaderboard</h2>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
+              {deptStats.map((d, i) => (
+                <div key={d.name} className="dept-row">
+                  <span style={{ fontWeight: 800, fontSize: 18, minWidth: 32, color: i === 0 ? 'var(--warning)' : 'var(--text-secondary)' }}>
+                    {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`}
+                  </span>
+                  <span style={{ fontWeight: 600, minWidth: 120, fontSize: 14 }}>{d.name}</span>
+                  <div className="dept-bar-bg">
+                    <div className="dept-bar-fill" style={{ width: `${d.rate}%` }} />
                   </div>
-                  {items.map(c => (
-                    <div key={c.id} className="kanban-card" onClick={() => setSelectedComplaint(c)}>
-                      <div style={{ fontWeight: 600, fontSize: 13 }}>{c.subject}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 }}>
-                        {c.id} · {timeAgo(c.createdAt)}
+                  <span style={{ fontWeight: 700, fontSize: 14, minWidth: 50, color: 'var(--primary)' }}>{d.rate}%</span>
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 60 }}>⏱ {d.avgTime}h</span>
+                  <span style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>({d.resolved}/{d.total})</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      function ComplaintList() {
+        let complaints = data.complaints;
+        if (!isAdmin && session.role !== 'staff') {
+          complaints = complaints.filter(c => c.submittedBy === session.userId || !c.anonymous);
+        }
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          complaints = complaints.filter(c => 
+            c.id.toLowerCase().includes(q) || 
+            c.subject.toLowerCase().includes(q) || 
+            c.description.toLowerCase().includes(q)
+          );
+        }
+        complaints.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt);
+        
+        return (
+          <div className="animate-fade">
+            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+              <div>
+                <h2 className="page-title">All Complaints</h2>
+                <div className="page-subtitle">{complaints.length} issues reported</div>
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className={`btn btn-sm ${viewMode === 'list' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('list')}>
+                  <i className="fas fa-list" /> List
+                </button>
+                <button className={`btn btn-sm ${viewMode === 'kanban' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('kanban')}>
+                  <i className="fas fa-columns" /> Kanban
+                </button>
+              </div>
+            </div>
+            {viewMode === 'list' ? (
+              <div className="glass" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+                {complaints.length === 0 ? <EmptyState message="No complaints found" /> :
+                  complaints.map(c => <ComplaintRow key={c.id} complaint={c} />)}
+              </div>
+            ) : (
+              <div className="kanban-board">
+                {['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'].map(status => {
+                  const items = complaints.filter(c => c.status === status);
+                  return (
+                    <div key={status} className="kanban-column">
+                      <div className="kanban-header">
+                        <span style={{ color: getStatusColor(status) }}>{status}</span>
+                        <span className="kanban-count">{items.length}</span>
                       </div>
-                      <div style={{ marginTop: 8, display: 'flex', gap: 4 }}>
-                        <Badge color={getPriorityColor(c.priority)}>{c.priority}</Badge>
+                      {items.map(c => (
+                        <div key={c.id} className="kanban-card" onClick={() => setSelectedComplaint(c)}>
+                          <div style={{ fontWeight: 600, fontSize: 13 }}>{c.subject}</div>
+                          <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 }}>
+                            {c.id} · {timeAgo(c.createdAt)}
+                          </div>
+                          <div style={{ marginTop: 8 }}>
+                            <Badge color={getPriorityColor(c.priority)}>{c.priority}</Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      function ComplaintDetail({ complaint, onClose }) {
+        const { updateData, addToast, session } = useData();
+        const [comment, setComment] = useState('');
+
+        const handleResolve = () => {
+          updateData(prev => {
+            const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+            if (idx === -1) return prev;
+            const next = [...prev.complaints];
+            next[idx] = { 
+              ...next[idx], 
+              status: 'resolved',
+              timeline: [...next[idx].timeline, { status: 'resolved', timestamp: Date.now(), note: 'Resolved' }]
+            };
+            return { ...prev, complaints: next };
+          });
+          setConfetti(true);
+          setTimeout(() => setConfetti(false), 3000);
+          addToast('Complaint resolved! 🎉', 'success');
+          onClose();
+        };
+
+        const handleAddComment = () => {
+          if (!comment.trim()) return;
+          updateData(prev => {
+            const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+            if (idx === -1) return prev;
+            const next = [...prev.complaints];
+            next[idx].comments = [...next[idx].comments, { 
+              id: 'c' + Date.now(), 
+              userId: session.userId, 
+              name: session.name, 
+              role: session.role, 
+              message: comment, 
+              timestamp: Date.now()
+            }];
+            return { ...prev, complaints: next };
+          });
+          setComment('');
+          addToast('Comment added', 'info');
+        };
+
+        return (
+          <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+            <div className="modal-box animate-scale">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 }}>
+                <div>
+                  <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)' }}>{complaint.subject}</h3>
+                  <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
+                    {complaint.id} · {complaint.category}
+                  </div>
+                </div>
+                <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, color: 'var(--text-tertiary)', cursor: 'pointer' }}>
+                  <i className="fas fa-times" />
+                </button>
+              </div>
+              
+              <p style={{ color: 'var(--text)', marginBottom: 16, fontSize: 14, lineHeight: 1.7 }}>{complaint.description}</p>
+              
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 }}>
+                <span>Priority: <Badge color={getPriorityColor(complaint.priority)}>{complaint.priority}</Badge></span>
+                <span>Status: <Badge color={getStatusColor(complaint.status)}>{complaint.status}</Badge></span>
+                <span>Location: {complaint.location}</span>
+                <span>Upvotes: <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{complaint.upvotes || 0}</span></span>
+              </div>
+
+              {isAdmin && complaint.status !== 'resolved' && (
+                <button className="btn btn-primary btn-sm" onClick={handleResolve} style={{ marginBottom: 16, background: 'linear-gradient(135deg, var(--success), #34d399)' }}>
+                  <i className="fas fa-check" /> Resolve
+                </button>
+              )}
+
+              {complaint.timeline && complaint.timeline.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 }}>Timeline</div>
+                  {complaint.timeline.map((t, i) => (
+                    <div key={i} className="timeline-item">
+                      <div className="timeline-dot" style={{ background: getStatusColor(t.status) }}>
+                        <i className="fas fa-circle" style={{ fontSize: 10 }} />
+                      </div>
+                      <div className="timeline-content">
+                        <div className="timeline-status">{t.status}</div>
+                        <div className="timeline-note">{t.note}</div>
+                        <div className="timeline-time">{formatDate(t.timestamp)}</div>
                       </div>
                     </div>
                   ))}
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    );
-  }
+              )}
 
-  function ComplaintDetail({ complaint, onClose }) {
-    const { updateData, addToast, session } = useData();
-    const [comment, setComment] = useState('');
-    if (!complaint) return null;
+              {complaint.comments && complaint.comments.length > 0 && (
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 }}>Comments</div>
+                  {complaint.comments.map(c => (
+                    <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
+                      <span style={{ fontWeight: 700 }}>{c.name}</span>
+                      <span style={{ color: 'var(--text-secondary)', fontSize: 11, marginLeft: 6 }}>@{c.role}</span>
+                      <span style={{ color: 'var(--text-tertiary)', fontSize: 11, marginLeft: 8 }}>{timeAgo(c.timestamp)}</span>
+                      <div style={{ marginTop: 4, color: 'var(--text)' }}>{c.message}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-    const canAssign = isAdmin && complaint.status !== 'resolved' && complaint.status !== 'closed';
-    const canResolve = isAdmin && complaint.status !== 'resolved' && complaint.status !== 'closed';
-    const canReopen = isAdmin && ['resolved', 'closed'].includes(complaint.status);
-
-    const handleAssign = () => {
-      const staffUser = data.users.find(u => u.role === 'staff');
-      updateData(prev => {
-        const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-        if (idx === -1) return prev;
-        const next = [...prev.complaints];
-        next[idx] = { 
-          ...next[idx], 
-          status: 'assigned', 
-          assignedTo: staffUser?.id || 'u4',
-          timeline: [...next[idx].timeline, { status: 'assigned', timestamp: Date.now(), note: `Assigned to ${staffUser?.name || 'Staff'}` }]
-        };
-        return { ...prev, complaints: next };
-      });
-      addToast('Complaint assigned', 'success');
-      onClose();
-    };
-
-    const handleResolve = () => {
-      updateData(prev => {
-        const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-        if (idx === -1) return prev;
-        const next = [...prev.complaints];
-        next[idx] = { 
-          ...next[idx], 
-          status: 'resolved',
-          resolution: 'Resolved by admin',
-          timeline: [...next[idx].timeline, { status: 'resolved', timestamp: Date.now(), note: 'Resolved by admin' }]
-        };
-        return { ...prev, complaints: next };
-      });
-      setConfetti(true);
-      setTimeout(() => setConfetti(false), 3000);
-      addToast('Complaint resolved! 🎉', 'success');
-      onClose();
-    };
-
-    const handleReopen = () => {
-      updateData(prev => {
-        const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-        if (idx === -1) return prev;
-        const next = [...prev.complaints];
-        next[idx] = { 
-          ...next[idx], 
-          status: 'reopened',
-          timeline: [...next[idx].timeline, { status: 'reopened', timestamp: Date.now(), note: 'Reopened by admin' }]
-        };
-        return { ...prev, complaints: next };
-      });
-      addToast('Complaint reopened', 'info');
-      onClose();
-    };
-
-    const handleAddComment = () => {
-      if (!comment.trim()) return;
-      updateData(prev => {
-        const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-        if (idx === -1) return prev;
-        const next = [...prev.complaints];
-        next[idx].comments = [...next[idx].comments, { 
-          id: 'c' + Date.now(), 
-          userId: session.userId, 
-          name: session.name, 
-          role: session.role, 
-          message: comment, 
-          timestamp: Date.now()
-        }];
-        return { ...prev, complaints: next };
-      });
-      setComment('');
-      addToast('Comment added', 'info');
-    };
-
-    const elapsed = Math.floor((Date.now() - complaint.createdAt) / (1000 * 60));
-    const timerDisplay = elapsed > 60 ? Math.floor(elapsed/60) + 'h ' + elapsed%60 + 'm' : elapsed + 'm';
-    const isOverdue = complaint.priority && SLA_HOURS[complaint.priority] && elapsed > SLA_HOURS[complaint.priority] * 60;
-
-    return (
-      <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-        <div className="modal-box animate-scale">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 }}>
-            <div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)' }}>{complaint.subject}</h3>
-              <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
-                {complaint.id} · {complaint.category}
-                {complaint.anonymous && <span style={{ marginLeft: 8 }}><i className="fas fa-user-secret" /> Anonymous</span>}
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input 
+                  type="text" 
+                  className="input" 
+                  value={comment} 
+                  onChange={e => setComment(e.target.value)} 
+                  placeholder="Add a comment..." 
+                  style={{ flex: 1, borderRadius: 30 }}
+                  onKeyDown={e => { if (e.key === 'Enter') handleAddComment(); }}
+                />
+                <button className="btn btn-primary" onClick={handleAddComment} style={{ borderRadius: 30 }}>
+                  <i className="fas fa-paper-plane" /> Send
+                </button>
               </div>
             </div>
-            <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, color: 'var(--text-tertiary)', cursor: 'pointer' }}>
-              <i className="fas fa-times" />
-            </button>
           </div>
-          
-          {isOverdue && (
-            <div style={{ background: 'rgba(239,68,68,0.1)', padding: '8px 16px', borderRadius: 8, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, border: '1px solid var(--danger)' }}>
-              <i className="fas fa-exclamation-triangle" style={{ color: 'var(--danger)' }} />
-              <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--danger)' }}>SLA BREACHED · {timerDisplay} since submission</span>
+        );
+      }
+
+      function ComplaintForm({ onSuccess }) {
+        const { updateData, addToast, session } = useData();
+        const [form, setForm] = useState({ 
+          subject: '', category: 'Infrastructure', description: '', 
+          priority: 'medium', department: '', location: '', zone: 'academic', anonymous: false 
+        });
+        const [loading, setLoading] = useState(false);
+
+        useEffect(() => {
+          const suggestion = suggestFromText(form.description);
+          if (suggestion) {
+            setForm(prev => ({
+              ...prev,
+              category: suggestion.category || prev.category,
+              priority: suggestion.priority || prev.priority
+            }));
+          }
+        }, [form.description]);
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          if (!form.subject.trim() || !form.description.trim()) {
+            addToast('Subject and description are required', 'error');
+            return;
+          }
+          setLoading(true);
+          setTimeout(() => {
+            const newComplaint = {
+              id: generateId(),
+              subject: form.subject.trim(),
+              description: form.description.trim(),
+              category: form.category,
+              priority: form.priority,
+              status: 'submitted',
+              department: form.department || 'General',
+              location: form.location || 'Campus',
+              zone: form.zone,
+              anonymous: form.anonymous,
+              submittedBy: session.userId,
+              assignedTo: null,
+              upvotes: 0,
+              upvotedBy: [],
+              comments: [],
+              timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted' }],
+              resolution: '',
+              feedback: null,
+              createdAt: Date.now(),
+              updatedAt: Date.now()
+            };
+            updateData(prev => ({
+              ...prev,
+              complaints: [newComplaint, ...prev.complaints]
+            }));
+            addToast(`Complaint ${newComplaint.id} created`, 'success');
+            setConfetti(true);
+            setTimeout(() => setConfetti(false), 2000);
+            onSuccess?.();
+            setLoading(false);
+          }, 500);
+        };
+
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Report an Issue</h2>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 700 }}>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label>Subject <span style={{ color: 'var(--danger)' }}>*</span></label>
+                  <input className="input" value={form.subject} onChange={e => setForm({...form, subject: e.target.value})} placeholder="Brief title" required />
+                </div>
+                <div className="form-group">
+                  <label>Description <span style={{ color: 'var(--danger)' }}>*</span></label>
+                  <textarea className="input" value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={5} placeholder="Describe the issue..." required />
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Category</label>
+                    <select className="input" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
+                      {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Priority</label>
+                    <select className="input" value={form.priority} onChange={e => setForm({...form, priority: e.target.value})}>
+                      {PRIORITIES.map(p => <option key={p}>{p}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Department</label>
+                    <input className="input" value={form.department} onChange={e => setForm({...form, department: e.target.value})} placeholder="e.g. Facilities" />
+                  </div>
+                  <div className="form-group">
+                    <label>Location</label>
+                    <input className="input" value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="e.g. Building A" />
+                  </div>
+                </div>
+                <div className="form-group checkbox-wrap">
+                  <input type="checkbox" checked={form.anonymous} onChange={e => setForm({...form, anonymous: e.target.checked})} />
+                  <label style={{ cursor: 'pointer' }}>Submit anonymously</label>
+                </div>
+                <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px', borderRadius: 30, fontSize: 16 }}>
+                  {loading ? <><i className="fas fa-circle-notch fa-spin" /> Submitting...</> : <><i className="fas fa-paper-plane" /> Submit</>}
+                </button>
+              </form>
             </div>
-          )}
-
-          <p style={{ color: 'var(--text)', marginBottom: 16, fontSize: 14, lineHeight: 1.7 }}>{complaint.description}</p>
-          
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 }}>
-            <span>Priority: <Badge color={getPriorityColor(complaint.priority)}>{complaint.priority}</Badge></span>
-            <span>Status: <Badge color={getStatusColor(complaint.status)}>{complaint.status}</Badge></span>
-            <span>Location: {complaint.location}</span>
-            <span>Zone: {ZONE_LABELS[complaint.zone]}</span>
-            <span>Upvotes: <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{complaint.upvotes || 0}</span></span>
           </div>
+        );
+      }
 
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
-            {canAssign && <button className="btn btn-primary btn-sm" onClick={handleAssign}><i className="fas fa-user-plus" /> Assign</button>}
-            {canResolve && <button className="btn btn-primary btn-sm" onClick={handleResolve} style={{ background: 'linear-gradient(135deg, var(--success), #34d399)' }}><i className="fas fa-check" /> Resolve</button>}
-            {canReopen && <button className="btn btn-secondary btn-sm" onClick={handleReopen}><i className="fas fa-undo" /> Reopen</button>}
-          </div>
+      function AdminDashboard() {
+        const complaints = data.complaints;
+        const total = complaints.length;
+        const pending = complaints.filter(c => !['resolved','closed','rejected'].includes(c.status)).length;
+        const resolved = complaints.filter(c => ['resolved','closed'].includes(c.status)).length;
+        const critical = complaints.filter(c => c.priority === 'critical').length;
+        const rate = total ? Math.round((resolved/total)*100) : 0;
+        
+        const catMap = {};
+        complaints.forEach(c => { catMap[c.category] = (catMap[c.category]||0)+1; });
 
-          {complaint.timeline && complaint.timeline.length > 0 && (
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 }}>Timeline</div>
-              {complaint.timeline.map((t, i) => (
-                <div key={i} className="timeline-item">
-                  <div className="timeline-dot" style={{ background: getStatusColor(t.status) }}>
-                    <i className={`fas ${t.status === 'submitted' ? 'fa-paper-plane' : t.status === 'resolved' ? 'fa-check' : 'fa-circle'}`} style={{ fontSize: 10 }} />
-                  </div>
-                  <div className="timeline-content">
-                    <div className="timeline-status">{t.status}</div>
-                    <div className="timeline-note">{t.note}</div>
-                    <div className="timeline-time">{formatDate(t.timestamp)}</div>
-                  </div>
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Analytics</h2>
+            <div className="stats-grid">
+              <StatCard label="Total" value={total} icon="fa-folder-open" color="#6366f1" />
+              <StatCard label="Pending" value={pending} icon="fa-clock" color="#f59e0b" />
+              <StatCard label="Resolved" value={resolved} icon="fa-check-circle" color="#10b981" />
+              <StatCard label="Critical" value={critical} icon="fa-exclamation-triangle" color="#ef4444" />
+              <StatCard label="Rate" value={rate+'%'} icon="fa-percent" color="#8b5cf6" />
+            </div>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 20 }}>
+              <h4 style={{ fontWeight: 700, marginBottom: 12, fontSize: 14 }}>By Category</h4>
+              {Object.entries(catMap).map(([k,v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
+                  <span>{k}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>{v}</span>
                 </div>
               ))}
             </div>
-          )}
+          </div>
+        );
+      }
 
-          {complaint.comments && complaint.comments.length > 0 && (
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 }}>Comments ({complaint.comments.length})</div>
-              {complaint.comments.map(c => (
-                <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                  <span style={{ fontWeight: 700 }}>{c.name}</span>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: 11, marginLeft: 6 }}>@{c.role}</span>
-                  <span style={{ color: 'var(--text-tertiary)', fontSize: 11, marginLeft: 8 }}>{timeAgo(c.timestamp)}</span>
-                  <div style={{ marginTop: 4, color: 'var(--text)' }}>{c.message}</div>
+      function UserManagement() {
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Users</h2>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
+              {data.users.map(u => (
+                <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <Avatar name={u.name} />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{u.name}</div>
+                      <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{u.email}</div>
+                    </div>
+                  </div>
+                  <Badge color={u.role === 'admin' ? 'var(--primary)' : 'var(--text-secondary)'}>{u.role}</Badge>
                 </div>
               ))}
             </div>
-          )}
-
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input 
-              type="text" 
-              className="input" 
-              value={comment} 
-              onChange={e => setComment(e.target.value)} 
-              placeholder="Add a comment..." 
-              style={{ flex: 1, borderRadius: 30 }}
-              onKeyDown={e => { if (e.key === 'Enter') handleAddComment(); }}
-            />
-            <button className="btn btn-primary" onClick={handleAddComment} style={{ borderRadius: 30 }}>
-              <i className="fas fa-paper-plane" /> Send
-            </button>
           </div>
-          <div style={{ marginTop: 12, fontSize: 12, color: 'var(--text-tertiary)' }}>
-            <i className="fas fa-shield-alt" /> Smart redaction active · Auto-blur sensitive content
+        );
+      }
+
+      function AuditLogs() {
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Audit Log</h2>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
+              {data.auditLogs.slice(0,30).map(a => (
+                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
+                  <span style={{ fontWeight: 500 }}>{a.actorName}</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>{a.action}</span>
+                  <span style={{ color: 'var(--text-tertiary)', fontSize: 12 }}>{formatDate(a.createdAt)}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  function ComplaintForm({ onSuccess }) {
-    const { updateData, addToast, session } = useData();
-    const [form, setForm] = useState({ 
-      subject: '', category: 'Infrastructure', subcategory: '', description: '', 
-      priority: 'medium', department: '', location: '', zone: 'academic', anonymous: false 
-    });
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-      const suggestion = suggestFromText(form.description);
-      if (suggestion) {
-        setForm(prev => ({
-          ...prev,
-          category: suggestion.category || prev.category,
-          priority: suggestion.priority || prev.priority
-        }));
+        );
       }
-    }, [form.description]);
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      if (!form.subject.trim() || !form.description.trim()) {
-        addToast('Subject and description are required', 'error');
-        return;
-      }
-      setLoading(true);
-      setTimeout(() => {
-        const newComplaint = {
-          id: generateId(),
-          subject: form.subject.trim(),
-          description: form.description.trim(),
-          category: form.category,
-          subcategory: form.subcategory || 'General',
-          priority: form.priority,
-          status: 'submitted',
-          department: form.department || 'General',
-          location: form.location || 'Campus',
-          zone: form.zone,
-          anonymous: form.anonymous,
-          submittedBy: session.userId,
-          assignedTo: null,
-          upvotes: 0,
-          upvotedBy: [],
-          attachments: [],
-          comments: [],
-          timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted by ' + (form.anonymous ? 'Anonymous' : session.name) }],
-          resolution: '',
-          feedback: null,
-          createdAt: Date.now(),
-          updatedAt: Date.now()
+      function Settings() {
+        const { updateData, addToast } = useData();
+        const [theme, setTheme] = useState(data.settings?.theme || 'light');
+        
+        const handleTheme = (t) => {
+          setTheme(t);
+          updateData(prev => ({ ...prev, settings: { ...prev.settings, theme: t } }));
+          document.body.classList.toggle('dark', t === 'dark');
+          addToast(`Theme: ${t}`, 'info');
         };
-        updateData(prev => ({
-          ...prev,
-          complaints: [newComplaint, ...prev.complaints],
-          auditLogs: [{ id: 'a'+Date.now(), actorId: session.userId, actorName: session.name, role: session.role, action: 'complaint_created', targetId: newComplaint.id, description: `Created ${newComplaint.id}`, createdAt: Date.now() }, ...prev.auditLogs]
-        }));
-        addToast(`Complaint ${newComplaint.id} created successfully`, 'success');
-        setConfetti(true);
-        setTimeout(() => setConfetti(false), 2000);
-        onSuccess?.();
-        setLoading(false);
-      }, 500);
-    };
 
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">Report an Issue</h2>
-          <div className="page-subtitle">Help us improve by describing the problem</div>
-        </div>
-        <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 700 }}>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Subject <span style={{ color: 'var(--danger)' }}>*</span></label>
-              <input className="input" value={form.subject} onChange={e => setForm({...form, subject: e.target.value})} placeholder="Brief title of the issue" required />
-            </div>
-            <div className="form-group">
-              <label>Description <span style={{ color: 'var(--danger)' }}>*</span></label>
-              <textarea className="input" value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={5} placeholder="Describe what happened, when, and where..." required />
-              <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 4 }}>
-                <i className="fas fa-lightbulb" /> Smart suggestions based on your description
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Category</label>
-                <select className="input" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Priority</label>
-                <select className="input" value={form.priority} onChange={e => setForm({...form, priority: e.target.value})}>
-                  {PRIORITIES.map(p => <option key={p}>{p}</option>)}
-                </select>
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Department</label>
-                <input className="input" value={form.department} onChange={e => setForm({...form, department: e.target.value})} placeholder="e.g. Facilities" />
-              </div>
-              <div className="form-group">
-                <label>Location</label>
-                <input className="input" value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="e.g. Building A, Room 301" />
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Zone</label>
-              <select className="input" value={form.zone} onChange={e => setForm({...form, zone: e.target.value})}>
-                {ZONES.map(z => <option key={z} value={z}>{ZONE_LABELS[z]}</option>)}
-              </select>
-            </div>
-            <div className="form-group checkbox-wrap">
-              <input type="checkbox" checked={form.anonymous} onChange={e => setForm({...form, anonymous: e.target.checked})} />
-              <label style={{ cursor: 'pointer' }}>Submit anonymously <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>(your identity will be hidden)</span></label>
-            </div>
-            <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px', borderRadius: 30, fontSize: 16 }}>
-              {loading ? <><i className="fas fa-circle-notch fa-spin" /> Submitting...</> : <><i className="fas fa-paper-plane" /> Submit Complaint</>}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
+        const handleReset = () => {
+          if (confirm('Reset all demo data?')) {
+            updateData(getDefaultData());
+            addToast('Demo data reset', 'success');
+          }
+        };
 
-  function AdminDashboard() {
-    const complaints = data.complaints;
-    const total = complaints.length;
-    const pending = complaints.filter(c => !['resolved','closed','rejected'].includes(c.status)).length;
-    const resolved = complaints.filter(c => ['resolved','closed'].includes(c.status)).length;
-    const critical = complaints.filter(c => c.priority === 'critical').length;
-    const rate = total ? Math.round((resolved/total)*100) : 0;
-    const totalUpvotes = complaints.reduce((acc, c) => acc + (c.upvotes || 0), 0);
-    
-    const resolvedComplaints = complaints.filter(c => ['resolved','closed'].includes(c.status));
-    let avgTime = 0;
-    if (resolvedComplaints.length) {
-      const times = resolvedComplaints.map(c => {
-        const re = c.timeline?.find(t => t.status === 'resolved');
-        return re ? re.timestamp - c.createdAt : c.updatedAt - c.createdAt;
-      });
-      avgTime = Math.round(times.reduce((a,b) => a+b, 0) / times.length / (1000*60*60));
-    }
-
-    const catMap = {}; complaints.forEach(c => { catMap[c.category] = (catMap[c.category]||0)+1; });
-    const priMap = {}; complaints.forEach(c => { priMap[c.priority] = (priMap[c.priority]||0)+1; });
-    const statusMap = {}; complaints.forEach(c => { statusMap[c.status] = (statusMap[c.status]||0)+1; });
-    const zoneMap = {}; complaints.forEach(c => { zoneMap[c.zone] = (zoneMap[c.zone]||0)+1; });
-
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">Analytics Dashboard</h2>
-          <div className="page-subtitle">System-wide metrics and insights</div>
-        </div>
-        <div className="stats-grid">
-          <StatCard label="Total Issues" value={total} icon="fa-folder-open" color="#6366f1" />
-          <StatCard label="Pending" value={pending} icon="fa-clock" color="#f59e0b" />
-          <StatCard label="Resolved" value={resolved} icon="fa-check-circle" color="#10b981" />
-          <StatCard label="Critical" value={critical} icon="fa-exclamation-triangle" color="#ef4444" />
-          <StatCard label="Resolution Rate" value={rate+'%'} icon="fa-percent" color="#8b5cf6" />
-          <StatCard label="Avg Time" value={avgTime+'h'} icon="fa-hourglass-half" color="#06b6d4" />
-          <StatCard label="Total Upvotes" value={totalUpvotes} icon="fa-arrow-up" color="#a855f7" />
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-          <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 20 }}>
-            <h4 style={{ fontWeight: 700, marginBottom: 12, fontSize: 14 }}>By Category</h4>
-            {Object.entries(catMap).sort((a,b) => b[1]-a[1]).slice(0,8).map(([k,v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                <span>{k}</span>
-                <span style={{ fontWeight: 600, color: 'var(--primary)' }}>{v}</span>
-              </div>
-            ))}
-          </div>
-          <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 20 }}>
-            <h4 style={{ fontWeight: 700, marginBottom: 12, fontSize: 14 }}>By Priority</h4>
-            {Object.entries(priMap).map(([k,v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                <span><Badge color={getPriorityColor(k)}>{k}</Badge></span>
-                <span style={{ fontWeight: 600 }}>{v}</span>
-              </div>
-            ))}
-          </div>
-          <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 20 }}>
-            <h4 style={{ fontWeight: 700, marginBottom: 12, fontSize: 14 }}>By Status</h4>
-            {Object.entries(statusMap).map(([k,v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                <span><Badge color={getStatusColor(k)}>{k}</Badge></span>
-                <span style={{ fontWeight: 600 }}>{v}</span>
-              </div>
-            ))}
-          </div>
-          <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 20 }}>
-            <h4 style={{ fontWeight: 700, marginBottom: 12, fontSize: 14 }}>By Zone</h4>
-            {Object.entries(zoneMap).map(([k,v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                <span>{ZONE_LABELS[k]||k}</span>
-                <span style={{ fontWeight: 600 }}>{v}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function UserManagement() {
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">User Management</h2>
-          <div className="page-subtitle">{data.users.length} registered users</div>
-        </div>
-        <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24, overflow: 'hidden' }}>
-          {data.users.map(u => (
-            <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <Avatar name={u.name} />
-                <div>
-                  <div style={{ fontWeight: 600 }}>{u.name}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{u.email}</div>
+        return (
+          <div className="animate-fade">
+            <h2 className="page-title" style={{ marginBottom:16 }}>Settings</h2>
+            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 600 }}>
+              <div style={{ marginBottom: 24 }}>
+                <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Theme</h4>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <button className={`btn ${theme === 'light' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('light')}>
+                    <i className="fas fa-sun" /> Light
+                  </button>
+                  <button className={`btn ${theme === 'dark' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('dark')}>
+                    <i className="fas fa-moon" /> Dark
+                  </button>
                 </div>
               </div>
-              <Badge color={u.role === 'admin' ? 'var(--primary)' : u.role === 'staff' ? 'var(--success)' : 'var(--text-secondary)'}>
-                {u.role}
-              </Badge>
+              <div>
+                <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Data</h4>
+                <button className="btn btn-danger" onClick={handleReset}>
+                  <i className="fas fa-trash" /> Reset Demo Data
+                </button>
+              </div>
+              <div style={{ marginTop: 24, padding: 16, borderRadius: 'var(--radius)', background: 'rgba(99,102,241,0.05)', fontSize: 13, color: 'var(--text-secondary)' }}>
+                <i className="fas fa-info-circle" /> ResolveHub v2.0 · Data stored locally
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  function AuditLogs() {
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">Audit Log</h2>
-          <div className="page-subtitle">Track all system activity</div>
-        </div>
-        <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24, overflow: 'hidden' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8, fontWeight: 700, fontSize: 12, color: 'var(--text-secondary)', padding: '8px 0', borderBottom: '2px solid var(--border)' }}>
-            <span>User</span>
-            <span>Action</span>
-            <span>Details</span>
-            <span style={{ textAlign: 'right' }}>Time</span>
           </div>
-          {data.auditLogs.slice(0,50).map(a => (
-            <div key={a.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8, padding: '10px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-              <span style={{ fontWeight: 500 }}>{a.actorName}</span>
-              <span><Badge color="var(--primary)" style={{ fontSize: 10 }}>{a.action}</Badge></span>
-              <span style={{ color: 'var(--text-secondary)' }}>{a.description}</span>
-              <span style={{ textAlign: 'right', color: 'var(--text-tertiary)', fontSize: 12 }}>{formatDate(a.createdAt)}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  function Settings() {
-    const { updateData, addToast } = useData();
-    const [theme, setTheme] = useState(data.settings?.theme || 'light');
-    
-    const handleTheme = (t) => {
-      setTheme(t);
-      updateData(prev => ({ ...prev, settings: { ...prev.settings, theme: t } }));
-      document.body.classList.toggle('dark', t === 'dark');
-      addToast(`Theme: ${t}`, 'info');
-    };
-
-    const handleReset = () => {
-      if (confirm('Reset all demo data? This cannot be undone.')) {
-        updateData(getDefaultData());
-        addToast('Demo data reset successfully', 'success');
-        setConfetti(true);
-        setTimeout(() => setConfetti(false), 2000);
+        );
       }
-    };
 
-    const handleExport = () => {
-      exportToJson(data, `resolvehub-export-${new Date().toISOString().slice(0,10)}.json`);
-      addToast('Data exported', 'success');
-    };
+      // ===== RENDER =====
+      const renderView = () => {
+        switch(activeView) {
+          case 'dashboard': return <Dashboard />;
+          case 'heatmap': return <HeatmapView />;
+          case 'leaderboard': return <LeaderboardView />;
+          case 'complaints': return <ComplaintList />;
+          case 'new-complaint': return <ComplaintForm onSuccess={() => setActiveView('complaints')} />;
+          case 'admin-dashboard': return isAdmin ? <AdminDashboard /> : <EmptyState icon="fa-lock" message="Access denied" />;
+          case 'users': return isAdmin ? <UserManagement /> : <EmptyState icon="fa-lock" message="Access denied" />;
+          case 'audit': return isAdmin ? <AuditLogs /> : <EmptyState icon="fa-lock" message="Access denied" />;
+          case 'settings': return <Settings />;
+          default: return <Dashboard />;
+        }
+      };
 
-    const handleExportCsv = () => {
-      exportToCsv(data.complaints, `resolvehub-export-${new Date().toISOString().slice(0,10)}.csv`);
-      addToast('CSV exported', 'success');
-    };
+      return (
+        <div className="app-shell">
+          <Confetti active={confetti} />
+          <ToastContainer />
+          
+          <aside className="sidebar">
+            <div className="sidebar-brand">ResolveHub</div>
+            <nav className="sidebar-nav">
+              {navItems.map(item => (
+                <button
+                  key={item.id}
+                  className={`nav-item ${activeView === item.id ? 'active' : ''}`}
+                  onClick={() => setActiveView(item.id)}
+                >
+                  <i className={`fas ${item.icon} nav-icon`} />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </nav>
+            <div className="sidebar-footer">
+              <div className="user-card">
+                <Avatar name={user?.name} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: 13 }}>{user?.name}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{session?.role}</div>
+                </div>
+                <button className="btn btn-ghost btn-sm" onClick={() => { logout(); addToast('Logged out', 'info'); }}>
+                  <i className="fas fa-sign-out-alt" />
+                </button>
+              </div>
+            </div>
+          </aside>
 
-    return (
-      <div className="animate-fade">
-        <div style={{ marginBottom: 16 }}>
-          <h2 className="page-title">Settings</h2>
-          <div className="page-subtitle">Customize your experience</div>
+          <main className="main-area">
+            <div className="topbar">
+              <div>
+                <h1 className="page-title">{currentNav?.label || 'Dashboard'}</h1>
+              </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div className="search-wrap">
+                  <i className="fas fa-search" />
+                  <input
+                    type="text"
+                    className="input global-search"
+                    placeholder="Search complaints..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    style={{ borderRadius: 30 }}
+                  />
+                </div>
+                <NotificationCenter />
+                <button className="btn btn-primary btn-sm" onClick={() => setActiveView('new-complaint')}>
+                  <i className="fas fa-plus" /> New
+                </button>
+              </div>
+            </div>
+            {renderView()}
+            {selectedComplaint && <ComplaintDetail complaint={selectedComplaint} onClose={() => setSelectedComplaint(null)} />}
+          </main>
         </div>
-        <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 600 }}>
-          <div style={{ marginBottom: 24 }}>
-            <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Theme</h4>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button className={`btn ${theme === 'light' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('light')}>
-                <i className="fas fa-sun" /> Light
-              </button>
-              <button className={`btn ${theme === 'dark' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('dark')}>
-                <i className="fas fa-moon" /> Dark
-              </button>
-              <button className={`btn ${theme === 'system' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('system')}>
-                <i className="fas fa-desktop" /> System
-              </button>
-            </div>
-          </div>
-          <div style={{ marginBottom: 24 }}>
-            <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Data</h4>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button className="btn btn-secondary" onClick={handleExport}><i className="fas fa-download" /> Export JSON</button>
-              <button className="btn btn-secondary" onClick={handleExportCsv}><i className="fas fa-file-csv" /> Export CSV</button>
-              <button className="btn btn-danger" onClick={handleReset}><i className="fas fa-trash" /> Reset Demo Data</button>
-            </div>
-          </div>
-          <div>
-            <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Shortcuts</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, fontSize: 13 }}>
-              <span>Dashboard</span><span className="shortcut-key">1</span>
-              <span>Complaints</span><span className="shortcut-key">2</span>
-              <span>Heatmap</span><span className="shortcut-key">3</span>
-              <span>Leaderboard</span><span className="shortcut-key">4</span>
-              <span>New Complaint</span><span className="shortcut-key">N</span>
-              <span>Search</span><span className="shortcut-key">/</span>
-              <span>Close Modal</span><span className="shortcut-key">Esc</span>
-            </div>
-          </div>
-          <div style={{ marginTop: 24, padding: 16, borderRadius: 'var(--radius)', background: 'rgba(99,102,241,0.05)', fontSize: 13, color: 'var(--text-secondary)' }}>
-            <i className="fas fa-info-circle" /> ResolveHub v2.0 · Built with React · Data stored locally
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  /* ---------- Render ---------- */
-  const renderView = () => {
-    switch(activeView) {
-      case 'dashboard': return <Dashboard />;
-      case 'heatmap': return <HeatmapView />;
-      case 'leaderboard': return <LeaderboardView />;
-      case 'complaints': return <ComplaintList />;
-      case 'new-complaint': return <ComplaintForm onSuccess={() => { setActiveView('complaints'); }} />;
-      case 'admin-dashboard': return isAdmin ? <AdminDashboard /> : <EmptyState icon="fa-lock" message="Access denied" />;
-      case 'users': return isAdmin ? <UserManagement /> : <EmptyState icon="fa-lock" message="Access denied" />;
-      case 'audit': return isAdmin ? <AuditLogs /> : <EmptyState icon="fa-lock" message="Access denied" />;
-      case 'settings': return <Settings />;
-      default: return <Dashboard />;
+      );
     }
-  };
 
-  return (
-    <div className="app-shell">
-      <Confetti active={confetti} />
-      <ToastContainer />
-      
-      <aside className="sidebar">
-        <div className="sidebar-brand">ResolveHub</div>
-        <nav className="sidebar-nav">
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              className={`nav-item ${activeView === item.id ? 'active' : ''}`}
-              onClick={() => setActiveView(item.id)}
-            >
-              <i className={`fas ${item.icon} nav-icon`} />
-              <span>{item.label}</span>
-              {item.shortcut && <span style={{ marginLeft: 'auto', fontSize: 10, opacity: 0.5 }}>{item.shortcut}</span>}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-footer">
-          <div className="user-card">
-            <Avatar name={user?.name} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: 600, fontSize: 13 }}>{user?.name}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{session?.role}</div>
-            </div>
-            <button className="btn btn-ghost btn-sm" onClick={() => { logout(); addToast('Logged out', 'info'); }}>
-              <i className="fas fa-sign-out-alt" />
-            </button>
-          </div>
-        </div>
-      </aside>
-
-      <main className="main-area">
-        <div className="topbar">
-          <div>
-            <h1 className="page-title">{currentNav?.label || 'Dashboard'}</h1>
-            <div className="page-subtitle">{currentNav?.shortcut && <span className="shortcut-key" style={{ marginRight: 8 }}>{currentNav.shortcut}</span>}</div>
-          </div>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-            <div className="search-wrap">
-              <i className="fas fa-search" />
-              <input
-                type="text"
-                className="input global-search"
-                placeholder="Search complaints..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                style={{ borderRadius: 30 }}
-              />
-            </div>
-            <NotificationCenter />
-            <button className="btn btn-primary btn-sm" onClick={() => setActiveView('new-complaint')}>
-              <i className="fas fa-plus" /> New
-            </button>
-          </div>
-        </div>
-        {renderView()}
-        {selectedComplaint && <ComplaintDetail complaint={selectedComplaint} onClose={() => setSelectedComplaint(null)} />}
-      </main>
-    </div>
-  );
-}
-
-/* ===================== MOUNT ===================== */
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <DataProvider>
-    <App />
-  </DataProvider>
-);
-</script>
+    // ===== MOUNT =====
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <DataProvider>
+        <App />
+      </DataProvider>
+    );
+  </script>
 </body>
-  </html>
+</html>
