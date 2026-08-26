@@ -3,1392 +3,1295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#7c3aed">
-<title>Smart Complaint System — Intelligent Campus Resolution</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Smart Complaint System — Classic Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
---p:#7c3aed;--p2:#a855f7;--pink:#ec4899;--cyan:#22d3ee;--green:#10b981;--yellow:#f59e0b;--red:#f43f5e;--blue:#3b82f6;
---bg:#070511;--panel:rgba(17,12,35,.72);--panel2:#120d25;--text:#f8fafc;--muted:#a7a2b8;--dim:#6f6a82;--line:rgba(255,255,255,.09);
---grad:linear-gradient(135deg,#7c3aed,#ec4899);--grad2:linear-gradient(135deg,#22d3ee,#7c3aed);
---shadow:0 24px 80px rgba(0,0,0,.38);--r:22px;
---font-main:'Inter',system-ui,sans-serif;--font-display:'Space Grotesk',sans-serif;
+--navy:#1a2332;
+--gold:#c9a84c;
+--gold-light:#e8d5a3;
+--cream:#f5efe6;
+--burgundy:#6b2e3e;
+--charcoal:#2c2c2c;
+--ivory:#faf8f5;
+--sage:#8a9a8a;
+--rose:#d4a0a0;
+--panel:rgba(255,252,248,.92);
+--panel-dark:rgba(26,35,50,.95);
+--text:#1a2332;
+--muted:#6b6b6b;
+--dim:#9a9a9a;
+--line:rgba(26,35,50,.12);
+--shadow:0 8px 40px rgba(26,35,50,.15);
+--r:12px;
+--font-serif:'Playfair Display',serif;
+--font-sans:'Inter',sans-serif;
 }
-[data-theme="light"]{--bg:#f5f3ff;--panel:rgba(255,255,255,.82);--panel2:#fff;--text:#181425;--muted:#625b72;--dim:#8b8498;--line:rgba(24,20,37,.1);--shadow:0 20px 60px rgba(50,35,90,.12)}
-html,body,#root{min-height:100%;width:100%}
-body{font-family:var(--font-main);background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .4s,color .4s}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-a{color:inherit}
-::selection{background:#8b5cf6;color:#fff}
-::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-thumb{background:#5b21b6;border-radius:20px}
-
-.bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-2;background:radial-gradient(circle at 10% 10%,rgba(124,58,237,.18),transparent 30%),radial-gradient(circle at 90% 20%,rgba(236,72,153,.12),transparent 30%),var(--bg)}
-.grid-bg{position:absolute;inset:0;opacity:.18;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent);animation:gridMove 20s linear infinite}
-@keyframes gridMove{0%{transform:translateY(0)}100%{transform:translateY(44px)}}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.28;animation:float 12s ease-in-out infinite}.o1{width:420px;height:420px;background:#7c3aed;left:-160px;top:-150px}.o2{width:360px;height:360px;background:#ec4899;right:-120px;top:25%;animation-delay:-4s}.o3{width:300px;height:300px;background:#22d3ee;left:40%;bottom:-180px;animation-delay:-7s}
-@keyframes float{50%{transform:translate3d(30px,-25px,0) scale(1.08)}}@keyframes up{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}@keyframes pop{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,.4)}50%{box-shadow:0 0 0 15px rgba(124,58,237,0)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}@keyframes glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.animate{animation:up .5s cubic-bezier(.22,1,.36,1) both}.pop{animation:pop .35s cubic-bezier(.22,1,.36,1) both}.slide{animation:slideIn .4s ease both}
-
+[data-theme="dark"]{
+--panel:rgba(26,35,50,.94);
+--panel-dark:rgba(26,35,50,.98);
+--text:#f5efe6;
+--muted:#b8b0a0;
+--dim:#8a8278;
+--line:rgba(245,239,230,.12);
+--shadow:0 8px 40px rgba(0,0,0,.3);
+}
+html,body{min-height:100%;width:100%}
+body{
+font-family:var(--font-sans);
+background:var(--cream);
+color:var(--text);
+overflow-x:hidden;
+background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+button,input,textarea,select{font:inherit;font-family:var(--font-sans)}
+button{cursor:pointer;transition:all .3s ease}
+::selection{background:var(--gold);color:var(--navy)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
 .app{display:flex;min-height:100vh}
-.sidebar{width:280px;position:sticky;top:0;height:100vh;padding:24px 18px;background:rgba(9,6,20,.8);backdrop-filter:blur(40px);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:20;transition:.3s}
-[data-theme=light] .sidebar{background:rgba(255,255,255,.9)}
-.brand{display:flex;align-items:center;gap:13px;padding:8px 12px 28px}.brand-mark{width:46px;height:46px;border-radius:16px;background:var(--grad);display:grid;place-items:center;box-shadow:0 12px 40px #7c3aed55;color:white;font-size:20px;animation:pulse 3s infinite}.brand b{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.5px}.brand small{display:block;color:var(--dim);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-top:3px;font-weight:600}
-.nav{display:flex;flex-direction:column;gap:6px;overflow:auto}.nav button{border:1px solid transparent;background:transparent;color:var(--muted);padding:13px 16px;border-radius:16px;text-align:left;display:flex;align-items:center;gap:13px;transition:.3s;font-weight:500;position:relative;overflow:hidden}.nav button::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad);border-radius:0 4px 4px 0;transform:scaleY(0);transition:.3s}.nav button:hover{background:rgba(255,255,255,.06);color:var(--text);transform:translateX(4px)}.nav button:hover::before{transform:scaleY(.6)}.nav button.active{background:var(--grad);color:#fff;box-shadow:0 12px 40px #7c3aed33;transform:translateX(0)}.nav button.active::before{transform:scaleY(1)}.nav i{width:22px;text-align:center;font-size:15px}.section-label{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1.8px;padding:24px 14px 10px;font-weight:700}
-.sidebar-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:16px}.mini-user{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.03);border-radius:16px;border:1px solid var(--line);transition:.3s}.mini-user:hover{border-color:#8b5cf655;transform:translateY(-2px)}.avatar{width:40px;height:40px;border-radius:14px;background:var(--grad);display:grid;place-items:center;font-weight:800;color:#fff;flex:none;box-shadow:0 8px 24px #7c3aed33}.avatar.sm{width:32px;height:32px;border-radius:11px;font-size:12px}.mini-user div:nth-child(2){min-width:0;flex:1}.mini-user strong,.mini-user small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-user small{color:var(--dim);font-size:10px;margin-top:2px;font-weight:500}
-
-.main{flex:1;min-width:0;padding:28px 32px 60px;max-width:1600px;margin:auto;width:100%}
-.topbar{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:28px}.title h1{font-size:32px;font-family:var(--font-display);font-weight:800;letter-spacing:-1px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.title p{color:var(--muted);font-size:13px;margin-top:6px;font-weight:500}.top-actions{display:flex;gap:10px;align-items:center}.search{position:relative;width:min(360px,36vw)}.search i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--dim);transition:.3s}.search:focus-within i{color:var(--p)}.search input{padding-left:44px}
-.input{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--text);outline:none;border-radius:16px;padding:13px 16px;transition:.3s;font-size:13px}.input:focus{border-color:#8b5cf6;box-shadow:0 0 0 4px #7c3aed18,0 0 20px #7c3aed10}.input::placeholder{color:var(--dim)}textarea.input{resize:vertical;min-height:120px}select.input option{background:#18122b;color:white}
-.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);padding:11px 18px;border-radius:14px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.3s;position:relative;overflow:hidden}.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transform:translateX(-100%);transition:.5s}.btn:hover{transform:translateY(-2px);border-color:#8b5cf666;box-shadow:0 8px 24px rgba(124,58,237,.15)}.btn:hover::after{transform:translateX(100%)}.btn:active{transform:translateY(0)}.btn.primary{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 12px 35px #7c3aed28}.btn.success{background:#10b98118;border-color:#10b98155;color:#34d399}.btn.warn{background:#f59e0b16;border-color:#f59e0b55;color:#fbbf24}.btn.danger{background:#f43f5e16;border-color:#f43f5e55;color:#fb7185}.btn.info{background:#3b82f618;border-color:#3b82f655;color:#60a5fa}.btn.icon{width:44px;height:44px;padding:0;border-radius:13px}.btn.sm{padding:8px 12px;font-size:11px;border-radius:11px}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-.panel{background:var(--panel);backdrop-filter:blur(30px);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);transition:.3s}.panel.pad{padding:24px}.panel:hover{box-shadow:0 28px 90px rgba(0,0,0,.42)}
-
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}.stat{padding:22px;position:relative;overflow:hidden;transition:.4s;border-radius:var(--r);background:var(--panel);backdrop-filter:blur(30px);border:1px solid var(--line);box-shadow:var(--shadow)}.stat:hover{transform:translateY(-6px) scale(1.02);border-color:#8b5cf655;box-shadow:0 30px 100px rgba(124,58,237,.15)}.stat .ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;margin-bottom:18px;transition:.3s}.stat:hover .ico{transform:scale(1.1) rotate(-5deg)}.stat .num{font-size:34px;font-weight:900;font-family:var(--font-display);letter-spacing:-1.5px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.stat .lab{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}.stat .delta{position:absolute;right:16px;top:16px;font-size:10px;color:#34d399;background:#10b98115;padding:6px 10px;border-radius:99px;font-weight:700;backdrop-filter:blur(10px)}
-
-.grid2{display:grid;grid-template-columns:1.4fr .6fr;gap:20px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.head h3{font-size:16px;font-weight:800;font-family:var(--font-display)}.head p{color:var(--muted);font-size:12px;margin-top:4px;font-weight:500}.muted{color:var(--muted)}.dim{color:var(--dim)}
-
-.complaint{padding:18px 20px;border-top:1px solid var(--line);display:flex;align-items:center;gap:14px;transition:.3s;cursor:pointer;position:relative;overflow:hidden}.complaint:first-child{border-top:0}.complaint::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--grad);opacity:.15;transition:.3s}.complaint:hover::before{width:4px}.complaint:hover{background:rgba(255,255,255,.04);transform:translateX(6px)}.cmain{min-width:0;flex:1}.cmain b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}.meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--dim);font-size:11px;margin-top:6px;font-weight:500}.badges{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{padding:6px 10px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;border:1px solid;backdrop-filter:blur(10px)}.up{color:#fbbf24;border-color:#f59e0b44;background:#f59e0b0d;display:flex;align-items:center;gap:4px}
-
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}.filters .input{width:auto;min-width:160px;padding:10px 13px;font-size:12px;border-radius:12px}
-
-.progress{height:8px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;position:relative}.progress>i{display:block;height:100%;border-radius:inherit;background:var(--grad);transition:width 1s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}.progress>i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2s infinite}
-
-.chart{height:240px;display:flex;align-items:end;gap:12px;padding:18px 8px 6px}.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:end;transition:.3s}.bar:hover{transform:translateY(-4px)}.bar i{width:100%;max-width:40px;border-radius:10px 10px 4px 4px;background:var(--grad);min-height:4px;box-shadow:0 12px 30px #7c3aed22;transition:.6s cubic-bezier(.22,1,.36,1)}.bar span{font-size:10px;color:var(--dim);font-weight:600;text-align:center}
-
-.donut{width:160px;height:160px;border-radius:50%;display:grid;place-items:center;margin:auto;position:relative;transition:.6s}.donut::after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:var(--panel2)}.donut b{z-index:1;font-size:28px;font-family:var(--font-display);font-weight:800}
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.legend span{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;font-weight:500}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 8px currentColor}
-
-.empty{padding:60px 20px;text-align:center;color:var(--muted)}.empty i{font-size:42px;color:var(--dim);margin-bottom:14px;display:block;animation:floatCard 3s ease-in-out infinite}
-
-.kanban{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;overflow:auto;padding-bottom:10px}.col{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:20px;padding:14px;min-height:300px;transition:.3s}.col:hover{background:rgba(255,255,255,.05)}.colhead{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:14px;letter-spacing:.5px}.kcard{background:var(--panel2);border:1px solid var(--line);padding:14px;border-radius:16px;margin-bottom:10px;cursor:pointer;transition:.3s;position:relative;overflow:hidden}.kcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);opacity:0;transition:.3s}.kcard:hover{transform:translateY(-5px);border-color:#8b5cf655;box-shadow:0 16px 40px rgba(0,0,0,.2)}.kcard:hover::before{opacity:1}.kcard b{font-size:12px;line-height:1.4;display:block;font-weight:700}.kcard small{color:var(--dim);font-size:10px;display:block;margin-top:8px;font-weight:500}
-
-.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.field label{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin:0 0 8px}.field.full{grid-column:1/-1}.toggle{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}.toggle input{accent-color:#7c3aed;width:18px;height:18px}
-
-.modal{position:fixed;inset:0;background:rgba(2,1,8,.85);backdrop-filter:blur(24px);z-index:100;display:grid;place-items:center;padding:20px;animation:up .3s ease}.modalbox{width:min(900px,100%);max-height:92vh;overflow:auto;background:var(--panel2);border:1px solid var(--line);border-radius:30px;box-shadow:0 40px 120px #000a;padding:28px;position:relative}.modalhead{display:flex;justify-content:space-between;gap:14px;margin-bottom:22px;align-items:start}.modalhead h2{font-size:24px;font-family:var(--font-display);font-weight:800}
-
-.timeline{position:relative;margin:16px 0 22px;padding-left:24px}.timeline::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}.event{position:relative;padding:0 0 20px 18px}.event::before{content:"";position:absolute;left:0px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 5px #7c3aed15;transition:.3s}.event:hover::before{transform:scale(1.2);box-shadow:0 0 0 8px #7c3aed25}.event b{font-size:12px;text-transform:capitalize;font-weight:700}.event small{display:block;color:var(--dim);font-size:10px;margin-top:4px;font-weight:500}
-
-.comment{padding:14px 0;border-top:1px solid var(--line);transition:.3s}.comment:hover{padding-left:8px}.comment b{font-size:11px;font-weight:700}.comment p{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.6}
-
-.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);font-size:11px}.table th{color:var(--dim);text-transform:uppercase;font-size:9px;letter-spacing:1.2px;font-weight:800}.table tr{transition:.2s}.table tr:hover td{background:rgba(255,255,255,.03)}
-
-.toastwrap{position:fixed;right:24px;bottom:24px;z-index:300;display:flex;flex-direction:column;gap:10px;width:min(400px,calc(100vw - 48px))}.toast{background:var(--panel2);backdrop-filter:blur(30px);border:1px solid var(--line);border-left:4px solid #7c3aed;border-radius:16px;padding:14px 18px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:center;font-size:12px;animation:up .3s cubic-bezier(.22,1,.36,1);font-weight:500}.toast.success{border-left-color:#10b981}.toast.error{border-left-color:#f43f5e}.toast.warn{border-left-color:#f59e0b}
-
-.notif{position:relative}.notifpanel{position:absolute;right:0;top:58px;width:380px;max-height:460px;overflow:auto;padding:10px;z-index:50;border-radius:20px}.notice{padding:14px;border-radius:14px;border-bottom:1px solid var(--line);transition:.2s;cursor:pointer}.notice:hover{background:rgba(255,255,255,.04);transform:translateX(4px)}.notice.unread{background:#7c3aed0b;border-left:3px solid #7c3aed}.notice b{font-size:12px;font-weight:700}.notice p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}.notice small{color:var(--dim);font-size:9px;font-weight:600}
-
-.login{min-height:100vh;display:grid;place-items:center;padding:24px;position:relative}.loginbox{width:min(600px,100%);padding:42px;background:var(--panel);backdrop-filter:blur(50px);border:1px solid var(--line);border-radius:36px;box-shadow:var(--shadow);position:relative;overflow:hidden;animation:pop .6s cubic-bezier(.22,1,.36,1)}.loginbox::before{content:"";position:absolute;inset:-2px;background:linear-gradient(120deg,transparent,#8b5cf633,transparent);transform:translateX(-100%);animation:shine 6s infinite;pointer-events:none;z-index:0}.loginbrand{text-align:center;position:relative;z-index:2}.loginbrand .mark{margin:auto;width:72px;height:72px;border-radius:24px;background:var(--grad);display:grid;place-items:center;font-size:30px;color:#fff;box-shadow:0 20px 60px #7c3aed44;animation:pulse 3s infinite}.loginbrand h1{font-size:42px;margin-top:18px;font-weight:900;font-family:var(--font-display);background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px}.loginbrand p{font-size:14px;color:var(--muted);margin-top:8px;font-weight:500}
-.roles{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0}.role{padding:20px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.04);transition:.3s;cursor:pointer;text-align:left;position:relative;overflow:hidden}.role::after{content:"";position:absolute;inset:0;border-radius:20px;border:2px solid transparent;transition:.3s}.role:hover{transform:translateY(-4px);background:rgba(255,255,255,.07);box-shadow:0 16px 40px rgba(0,0,0,.2)}.role.selected::after{border-color:#f59e0b;box-shadow:0 0 30px #f59e0b15 inset}.role i{font-size:24px;margin-bottom:10px;display:block}.role b{display:block;font-size:13px;margin-bottom:4px}.role small{color:var(--dim);font-size:10px;font-weight:500}
-@keyframes shine{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
-
+/* SIDEBAR - Classic */
+.sidebar{
+width:280px;
+position:sticky;
+top:0;
+height:100vh;
+padding:28px 20px;
+background:var(--panel-dark);
+backdrop-filter:blur(20px);
+border-right:2px solid var(--gold);
+display:flex;
+flex-direction:column;
+z-index:20;
+overflow-y:auto;
+}
+.sidebar .brand{
+display:flex;
+align-items:center;
+gap:14px;
+padding-bottom:28px;
+border-bottom:2px solid rgba(201,168,76,.2);
+margin-bottom:20px;
+}
+.sidebar .brand .crest{
+width:52px;
+height:52px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--gold),var(--gold-light));
+display:grid;
+place-items:center;
+color:var(--navy);
+font-size:24px;
+border:2px solid var(--gold-light);
+box-shadow:0 4px 20px rgba(201,168,76,.3);
+}
+.sidebar .brand h1{
+font-family:var(--font-serif);
+font-size:22px;
+font-weight:900;
+color:var(--gold);
+letter-spacing:-.5px;
+}
+.sidebar .brand span{
+display:block;
+font-size:10px;
+color:var(--dim);
+letter-spacing:2px;
+text-transform:uppercase;
+font-weight:300;
+}
+.nav{display:flex;flex-direction:column;gap:3px;flex:1}
+.nav button{
+border:1px solid transparent;
+background:transparent;
+color:var(--muted);
+padding:12px 16px;
+border-radius:var(--r);
+text-align:left;
+display:flex;
+align-items:center;
+gap:14px;
+font-size:14px;
+font-weight:500;
+transition:.3s;
+position:relative;
+}
+.nav button:hover{
+background:rgba(201,168,76,.08);
+color:var(--text);
+transform:translateX(4px);
+}
+.nav button.active{
+background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));
+color:var(--gold);
+border-color:rgba(201,168,76,.3);
+}
+.nav button.active::before{
+content:'';
+position:absolute;
+left:0;
+top:20%;
+height:60%;
+width:3px;
+background:var(--gold);
+border-radius:0 3px 3px 0;
+}
+.nav i{width:22px;text-align:center;font-size:16px}
+.section-label{
+font-size:9px;
+color:var(--dim);
+text-transform:uppercase;
+letter-spacing:2px;
+padding:20px 14px 8px;
+font-weight:600;
+}
+.sidebar-bottom{
+margin-top:auto;
+border-top:2px solid rgba(201,168,76,.15);
+padding-top:16px;
+}
+.user-card{
+display:flex;
+align-items:center;
+gap:12px;
+padding:10px 6px;
+border-radius:var(--r);
+background:rgba(201,168,76,.06);
+}
+.user-card .avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--gold),var(--gold-light));
+display:grid;
+place-items:center;
+font-weight:700;
+color:var(--navy);
+font-size:16px;
+border:2px solid var(--gold-light);
+flex:none;
+}
+.user-card .info{flex:1;min-width:0}
+.user-card .info strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-card .info small{color:var(--dim);font-size:10px;text-transform:capitalize}
+.user-card .logout-btn{
+width:34px;height:34px;
+border-radius:50%;
+border:1px solid rgba(201,168,76,.2);
+background:transparent;
+color:var(--muted);
+display:grid;
+place-items:center;
+transition:.3s;
+}
+.user-card .logout-btn:hover{background:rgba(201,168,76,.15);color:var(--gold);transform:rotate(90deg)}
+/* MAIN */
+.main{flex:1;min-width:0;padding:30px 36px 50px;max-width:1600px;margin:auto;width:100%}
+/* Topbar Classic */
+.topbar{
+display:flex;
+gap:16px;
+align-items:center;
+justify-content:space-between;
+margin-bottom:28px;
+padding-bottom:16px;
+border-bottom:2px solid var(--line);
+}
+.topbar .title h1{
+font-family:var(--font-serif);
+font-size:30px;
+font-weight:900;
+letter-spacing:-.5px;
+color:var(--text);
+}
+.topbar .title p{
+color:var(--muted);
+font-size:13px;
+margin-top:4px;
+font-weight:400;
+}
+.topbar .title p i{color:var(--gold);margin-right:6px}
+.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{
+position:relative;
+width:min(320px,40vw);
+}
+.search i{
+position:absolute;
+left:14px;
+top:50%;
+transform:translateY(-50%);
+color:var(--dim);
+font-size:14px;
+}
+.search input{
+padding-left:42px;
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:var(--r);
+padding:11px 14px 11px 42px;
+font-size:13px;
+color:var(--text);
+outline:none;
+width:100%;
+transition:.3s;
+font-family:var(--font-sans);
+}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+.search input::placeholder{color:var(--dim)}
+/* Buttons Classic */
+.btn{
+border:1px solid var(--line);
+background:var(--panel);
+color:var(--text);
+padding:10px 18px;
+border-radius:var(--r);
+font-weight:600;
+display:inline-flex;
+align-items:center;
+gap:8px;
+transition:.3s;
+font-size:13px;
+font-family:var(--font-sans);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn.primary{
+background:linear-gradient(135deg,var(--gold),#b8953a);
+border-color:var(--gold);
+color:var(--navy);
+box-shadow:0 4px 20px rgba(201,168,76,.25);
+}
+.btn.primary:hover{box-shadow:0 6px 30px rgba(201,168,76,.35);transform:translateY(-2px)}
+.btn.success{
+background:rgba(138,154,138,.15);
+border-color:var(--sage);
+color:var(--sage);
+}
+.btn.danger{
+background:rgba(107,46,62,.15);
+border-color:var(--burgundy);
+color:var(--burgundy);
+}
+.btn.icon{width:40px;height:40px;padding:0;justify-content:center}
+.btn.sm{padding:6px 12px;font-size:11px;border-radius:8px}
+.btn.outline{
+background:transparent;
+border-color:var(--gold);
+color:var(--gold);
+}
+.btn.outline:hover{background:var(--gold);color:var(--navy)}
+/* Panels */
+.panel{
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:var(--r);
+box-shadow:var(--shadow);
+backdrop-filter:blur(10px);
+}
+.panel.pad{padding:22px}
+.panel .head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+margin-bottom:16px;
+}
+.panel .head h3{
+font-family:var(--font-serif);
+font-size:18px;
+font-weight:700;
+}
+.panel .head p{
+color:var(--muted);
+font-size:12px;
+margin-top:3px;
+}
+/* Stats Cards */
+.stats{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:14px;
+margin-bottom:20px;
+}
+.stat-card{
+padding:20px 22px;
+position:relative;
+overflow:hidden;
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:var(--r);
+box-shadow:var(--shadow);
+transition:.3s;
+}
+.stat-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+.stat-card .icon{
+width:44px;
+height:44px;
+border-radius:50%;
+display:grid;
+place-items:center;
+margin-bottom:14px;
+font-size:18px;
+border:1px solid;
+}
+.stat-card .number{font-size:30px;font-weight:900;font-family:var(--font-serif);letter-spacing:-1px}
+.stat-card .label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+.stat-card .badge{
+position:absolute;right:16px;top:16px;
+font-size:9px;
+padding:4px 10px;
+border-radius:20px;
+font-weight:600;
+background:rgba(201,168,76,.12);
+color:var(--gold);
+}
+/* Grid */
+.grid2{display:grid;grid-template-columns:1.4fr .6fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+/* Complaint Row */
+.complaint-row{
+padding:14px 18px;
+border-bottom:1px solid var(--line);
+display:flex;
+align-items:center;
+gap:14px;
+cursor:pointer;
+transition:.3s;
+}
+.complaint-row:last-child{border-bottom:0}
+.complaint-row:hover{background:rgba(201,168,76,.05);transform:translateX(4px)}
+.complaint-row .avatar-sm{
+width:36px;height:36px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--gold),var(--gold-light));
+display:grid;
+place-items:center;
+font-weight:700;
+color:var(--navy);
+font-size:13px;
+flex:none;
+}
+.complaint-row .content{flex:1;min-width:0}
+.complaint-row .content b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.complaint-row .content .meta{
+display:flex;gap:8px;flex-wrap:wrap;
+color:var(--dim);font-size:10px;margin-top:4px;
+}
+.complaint-row .badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.badge{
+padding:4px 10px;
+border-radius:20px;
+font-size:9px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:.5px;
+border:1px solid;
+}
+.badge-gold{color:var(--gold);border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.08)}
+.badge-navy{color:var(--navy);border-color:rgba(26,35,50,.2);background:rgba(26,35,50,.06)}
+.badge-sage{color:var(--sage);border-color:rgba(138,154,138,.3);background:rgba(138,154,138,.08)}
+.badge-rose{color:var(--rose);border-color:rgba(212,160,160,.3);background:rgba(212,160,160,.08)}
+.badge-burgundy{color:var(--burgundy);border-color:rgba(107,46,62,.3);background:rgba(107,46,62,.08)}
+/* Filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filters select,.filters input{
+padding:9px 14px;
+border:1px solid var(--line);
+border-radius:var(--r);
+background:var(--panel);
+color:var(--text);
+outline:none;
+font-size:12px;
+font-family:var(--font-sans);
+min-width:140px;
+transition:.3s;
+}
+.filters select:focus,.filters input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+.filters select option{background:var(--panel-dark);color:var(--text)}
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{
+font-size:11px;
+font-weight:600;
+color:var(--muted);
+text-transform:uppercase;
+letter-spacing:.7px;
+}
+.field .input{
+padding:11px 14px;
+border:1px solid var(--line);
+border-radius:var(--r);
+background:var(--panel);
+color:var(--text);
+outline:none;
+font-size:13px;
+font-family:var(--font-sans);
+transition:.3s;
+width:100%;
+}
+.field .input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+.field .input::placeholder{color:var(--dim)}
+.field textarea.input{resize:vertical;min-height:100px}
+/* Modal */
+.modal{
+position:fixed;inset:0;
+background:rgba(26,35,50,.7);
+backdrop-filter:blur(8px);
+z-index:100;
+display:grid;
+place-items:center;
+padding:20px;
+}
+.modal-box{
+width:min(820px,100%);
+max-height:90vh;
+overflow:auto;
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:16px;
+box-shadow:var(--shadow);
+padding:28px;
+}
+.modal-box .modal-head{
+display:flex;
+justify-content:space-between;
+gap:12px;
+margin-bottom:20px;
+padding-bottom:14px;
+border-bottom:2px solid var(--line);
+}
+.modal-box .modal-head h2{
+font-family:var(--font-serif);
+font-size:22px;
+font-weight:700;
+}
+/* Timeline */
+.timeline{position:relative;padding-left:24px;margin:12px 0 18px}
+.timeline::before{
+content:'';
+position:absolute;left:6px;top:4px;bottom:4px;
+width:2px;
+background:var(--gold);
+opacity:.3;
+}
+.timeline .event{
+position:relative;
+padding:0 0 18px 16px;
+}
+.timeline .event::before{
+content:'';
+position:absolute;left:-4px;top:4px;
+width:12px;height:12px;
+border-radius:50%;
+background:var(--gold);
+border:2px solid var(--panel);
+box-shadow:0 0 0 3px rgba(201,168,76,.2);
+}
+.timeline .event b{font-size:12px;text-transform:capitalize;color:var(--gold)}
+.timeline .event p{font-size:11px;color:var(--muted);margin-top:3px}
+.timeline .event small{color:var(--dim);font-size:9px;display:block;margin-top:2px}
+/* Comments */
+.comment{padding:10px 0;border-top:1px solid var(--line)}
+.comment .author{font-weight:600;font-size:12px}
+.comment .author small{color:var(--dim);font-weight:400;font-size:10px;margin-left:8px}
+.comment p{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
+/* Login */
+.login-page{
+min-height:100vh;
+display:grid;
+place-items:center;
+padding:20px;
+background:var(--cream);
+background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.login-box{
+width:min(540px,100%);
+padding:40px 44px;
+background:var(--panel);
+border:2px solid var(--gold);
+border-radius:16px;
+box-shadow:var(--shadow);
+position:relative;
+}
+.login-box::before{
+content:'';
+position:absolute;inset:-3px;
+background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--gold));
+border-radius:18px;
+z-index:-1;
+opacity:.3;
+}
+.login-box .crest{
+width:72px;height:72px;
+margin:0 auto 16px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--gold),var(--gold-light));
+display:grid;
+place-items:center;
+font-size:32px;
+color:var(--navy);
+border:3px solid var(--gold-light);
+}
+.login-box h1{
+font-family:var(--font-serif);
+font-size:34px;
+font-weight:900;
+text-align:center;
+color:var(--text);
+}
+.login-box .subtitle{
+text-align:center;
+color:var(--muted);
+font-size:13px;
+margin-top:4px;
+}
+.login-box .subtitle i{color:var(--gold);margin-right:4px}
+.role-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin:24px 0;
+}
+.role-card{
+padding:16px;
+border:2px solid var(--line);
+border-radius:var(--r);
+background:transparent;
+text-align:center;
+transition:.3s;
+cursor:pointer;
+}
+.role-card:hover{transform:translateY(-3px);border-color:var(--gold)}
+.role-card.selected{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.role-card i{font-size:28px;margin-bottom:8px;display:block}
+.role-card b{display:block;font-size:14px}
+.role-card small{color:var(--dim);font-size:10px}
+/* Mobile */
 .mobile-nav{display:none}
-
-.rating-stars{display:flex;gap:6px}.rating-stars button{background:transparent;border:none;padding:6px;cursor:pointer;transition:.2s;font-size:20px;color:var(--dim)}.rating-stars button:hover{transform:scale(1.2)}.rating-stars button.active{color:#fbbf24;filter:drop-shadow(0 0 8px #f59e0b55)}
-
-.proof-upload{border:2px dashed var(--line);border-radius:16px;padding:24px;text-align:center;transition:.3s;cursor:pointer;background:rgba(255,255,255,.02)}.proof-upload:hover{border-color:#8b5cf666;background:rgba(124,58,237,.05);transform:translateY(-2px)}.proof-upload i{font-size:28px;color:var(--dim);margin-bottom:10px;display:block}.proof-upload p{font-size:12px;color:var(--muted);font-weight:500}
-
-.status-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;border:1px solid;backdrop-filter:blur(10px)}.status-badge::before{content:"";width:8px;height:8px;border-radius:50%;display:inline-block;animation:pulse 2s infinite}
-
-.approval-badge{padding:6px 12px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;border:1px solid}
-
-.quick-card{padding:24px;transition:.4s;cursor:pointer;position:relative;overflow:hidden}.quick-card::before{content:"";position:absolute;top:0;left:0;right:0;height:0;background:var(--grad);opacity:.1;transition:.3s}.quick-card:hover::before{height:100%}.quick-card:hover{transform:translateY(-6px);border-color:#8b5cf655}.quick-icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:#7c3aed18;color:#a78bfa;margin-bottom:16px;transition:.3s}.quick-card:hover .quick-icon{transform:scale(1.1) rotate(-5deg);background:#7c3aed28}
-
-.command-item{width:100%;text-align:left;padding:12px 16px;border-radius:12px;background:transparent;border:1px solid transparent;color:var(--text);display:flex;align-items:center;gap:12px;transition:.2s;cursor:pointer;font-weight:500}.command-item:hover{background:rgba(255,255,255,.06);border-color:var(--line);transform:translateX(4px)}
-
-.attachment-preview{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid var(--line);margin-top:8px;font-size:11px}.attachment-preview i{color:#a78bfa}
-
-@media(max-width:1200px){.stats{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.sidebar{display:none}.main{padding:18px 16px 100px}.topbar{align-items:flex-start}.search{width:100%}.top-actions{flex-wrap:wrap}.stats{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.mobile-nav{display:flex;position:fixed;bottom:12px;left:12px;right:12px;z-index:40;background:rgba(15,10,30,.95);backdrop-filter:blur(30px);border:1px solid var(--line);border-radius:24px;padding:8px;gap:4px}.mobile-nav button{flex:1;background:transparent;border:0;color:var(--muted);padding:10px 4px;border-radius:16px;font-size:10px;font-weight:600;transition:.2s}.mobile-nav button.active{background:var(--grad);color:#fff;box-shadow:0 8px 24px #7c3aed33}.mobile-nav i{display:block;font-size:16px;margin-bottom:4px}.roles{grid-template-columns:1fr}.loginbox{padding:28px 22px}.title h1{font-size:26px}.topbar{flex-direction:column}.top-actions{width:100%}.top-actions .search{flex:1;width:100%}.complaint{align-items:flex-start}.complaint .badges{margin-left:46px}.tablewrap{overflow:auto}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
-
-.skeleton{background:linear-gradient(90deg,var(--line) 25%,rgba(255,255,255,.05) 50%,var(--line) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
-.modalbox::-webkit-scrollbar{width:6px}.modalbox::-webkit-scrollbar-thumb{background:#5b21b6;border-radius:10px}
-.auto-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;background:rgba(34,211,238,.1);color:#22d3ee;border:1px solid rgba(34,211,238,.3)}
-.section-divider{height:1px;background:var(--line);margin:24px 0;position:relative}.section-divider::before{content:"";position:absolute;left:50%;top:-3px;transform:translateX(-50%);width:6px;height:6px;background:var(--grad);border-radius:50%}
-.glow-card{position:relative}.glow-card::after{content:"";position:absolute;inset:-1px;border-radius:23px;background:linear-gradient(135deg,transparent 40%,rgba(124,58,237,.2),transparent 60%);opacity:0;transition:.4s;z-index:-1;pointer-events:none}.glow-card:hover::after{opacity:1}
+@media(max-width:1150px){.stats{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:800px){
+.sidebar{display:none}
+.main{padding:16px 14px 80px}
+.topbar{flex-direction:column;align-items:stretch}
+.top-actions{flex-wrap:wrap}
+.search{width:100%}
+.stats{grid-template-columns:1fr 1fr}
+.grid3{grid-template-columns:1fr}
+.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.role-grid{grid-template-columns:1fr}
+.login-box{padding:24px 20px}
+.mobile-nav{
+display:flex;
+position:fixed;bottom:12px;left:12px;right:12px;
+z-index:40;
+background:var(--panel-dark);
+backdrop-filter:blur(20px);
+border:1px solid var(--gold);
+border-radius:14px;
+padding:6px;
+gap:2px;
+}
+.mobile-nav button{
+flex:1;
+background:transparent;
+border:0;
+color:var(--muted);
+padding:8px 4px;
+border-radius:10px;
+font-size:9px;
+font-weight:500;
+}
+.mobile-nav button.active{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));color:var(--gold)}
+.mobile-nav i{display:block;font-size:16px;margin-bottom:2px}
+}
+.toast-wrap{
+position:fixed;right:20px;bottom:20px;z-index:300;
+display:flex;flex-direction:column;gap:8px;
+width:min(380px,calc(100vw - 40px));
+}
+.toast{
+background:var(--panel);
+border:1px solid var(--line);
+border-left:4px solid var(--gold);
+border-radius:var(--r);
+padding:12px 16px;
+box-shadow:var(--shadow);
+display:flex;
+gap:10px;
+align-items:center;
+font-size:12px;
+animation:up .3s ease;
+}
+.toast.success{border-left-color:var(--sage)}
+.toast.error{border-left-color:var(--burgundy)}
 </style>
-<base target="_blank">
 </head>
 <body>
-<div class="bg"><div class="grid-bg"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
 <div id="root"></div>
-
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script>
-(() => {
-    "use strict";
-    const { useState, useEffect, useMemo, useRef, useCallback } = React;
+(()=>{
+'use strict';
+const {useState,useEffect,useMemo,useRef,useCallback}=React;
 
-    // ==================== FIREBASE CONFIG ====================
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "smart-complaint-system.firebaseapp.com",
-        projectId: "smart-complaint-system",
-        storageBucket: "smart-complaint-system.appspot.com",
-        messagingSenderId: "123456789",
-        appId: "1:123456789:web:abcdef123456"
-    };
+// Firebase Config - Replace with yours
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-    let db = null, auth = null, storage = null, firebaseConnected = false;
-    try {
-        // Check if Firebase is available AND API key is not the placeholder
-        if (typeof firebase !== 'undefined' && firebaseConfig.apiKey !== 'YOUR_API_KEY') {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            auth = firebase.auth();
-            storage = firebase.storage();
-            firebaseConnected = true;
-            console.log('Firebase connected');
-        } else {
-            console.log('Firebase demo mode - using localStorage');
-            // Create dummy auth object to prevent errors
-            auth = {
-                onAuthStateChanged: (callback) => { callback(null); return () => {}; },
-                signInWithEmailAndPassword: () => Promise.reject(new Error('Demo mode')),
-                createUserWithEmailAndPassword: () => Promise.reject(new Error('Demo mode'))
-            };
-        }
-    } catch(e) {
-        console.log('Firebase demo mode:', e.message);
-        // Create dummy auth object to prevent errors
-        auth = {
-            onAuthStateChanged: (callback) => { callback(null); return () => {}; },
-            signInWithEmailAndPassword: () => Promise.reject(new Error('Demo mode')),
-            createUserWithEmailAndPassword: () => Promise.reject(new Error('Demo mode'))
-        };
+let firebaseApp, firestore, auth;
+try {
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  firestore = firebase.firestore(firebaseApp);
+  auth = firebase.auth(firebaseApp);
+} catch(e){ console.warn("Firebase not configured:",e); }
+
+// Constants
+const STATUSES = ['submitted','reviewing','assigned','in_progress','resolved','closed','rejected'];
+const CATEGORIES = ['Academic','Infrastructure','IT/Technical','Administrative','Hostel','Cafeteria','Library','Transport','Security','Cleanliness','Electricity','Water','Harassment/Misconduct','Other'];
+const DEPARTMENTS = ['Facilities','IT','Examination','Library','Transport','Administration','Academics','Security','Housekeeping','General'];
+const ZONES = ['Academic Lab','Academic Class','Hostel','Library','Cafeteria','Admin Block','Transport'];
+const PRIORITY_MAP = {
+  'Academic':'medium','Infrastructure':'high','IT/Technical':'high','Administrative':'medium',
+  'Hostel':'medium','Cafeteria':'low','Library':'low','Transport':'medium',
+  'Security':'critical','Cleanliness':'low','Electricity':'critical','Water':'high',
+  'Harassment/Misconduct':'critical','Other':'medium'
+};
+
+// Roles
+const ROLES = [
+  {id:'admin',name:'Administrator',icon:'fa-user-shield',color:'#c9a84c'},
+  {id:'student',name:'Student',icon:'fa-user-graduate',color:'#8a9a8a'},
+  {id:'teacher',name:'Teacher',icon:'fa-chalkboard-user',color:'#d4a0a0'},
+  {id:'staff',name:'Staff (IT)',icon:'fa-user-tie',color:'#6b2e3e'}
+];
+
+function generateId(){ return 'CMP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substring(2,6).toUpperCase(); }
+
+function App(){
+  const [user,setUser]=useState(null);
+  const [view,setView]=useState('dashboard');
+  const [query,setQuery]=useState('');
+  const [selected,setSelected]=useState(null);
+  const [toasts,setToasts]=useState([]);
+  const [theme,setTheme]=useState(localStorage.getItem('theme')||'light');
+  const [loading,setLoading]=useState(false);
+  const [complaints,setComplaints]=useState([]);
+  const [users,setUsers]=useState([]);
+  const [notifications,setNotifications]=useState([]);
+
+  useEffect(()=>{
+    document.documentElement.dataset.theme=theme;
+    localStorage.setItem('theme',theme);
+  },[theme]);
+
+  // Load from localStorage if Firebase not available
+  useEffect(()=>{
+    const saved=localStorage.getItem('complaint_data');
+    if(saved){
+      try{
+        const d=JSON.parse(saved);
+        setComplaints(d.complaints||[]);
+        setUsers(d.users||[]);
+        setNotifications(d.notifications||[]);
+      }catch(e){}
     }
-
-    // ==================== CONSTANTS ====================
-    const KEY = "smart_complaint_data_v2", SESSION = "smart_complaint_session", THEME = "smart_complaint_theme";
-    const STATUS = ["submitted", "under review", "assigned", "in progress", "resolved pending approval", "resolved", "closed"];
-    const STATUS_DISPLAY = {
-        "submitted": "Submitted", "under review": "Under Review", "assigned": "Assigned",
-        "in progress": "In Progress", "resolved pending approval": "Pending Approval",
-        "resolved": "Resolved", "closed": "Closed & Approved"
-    };
-    const CATS = ["Infrastructure", "Academic", "Faculty", "Examination", "Hostel", "Transport", "Library", "IT / Technology", "Security", "Cleanliness", "Electricity", "Water", "Harassment / Misconduct", "Administration", "Other"];
-    const PRIORITY_MAP = {
-        "Harassment / Misconduct": "critical", "Security": "critical", "Electricity": "high", "Water": "high",
-        "IT / Technology": "high", "Infrastructure": "high", "Examination": "high", "Faculty": "medium",
-        "Hostel": "medium", "Transport": "medium", "Library": "medium", "Cleanliness": "low",
-        "Academic": "low", "Administration": "low", "Other": "low"
-    };
-    const DEPTS = ["Facilities", "IT", "Examination", "Library", "Transport", "Administration", "Academics", "Security", "Housekeeping", "General"];
-    const ZONES = ["academic", "hostel", "library", "cafeteria", "admin", "transport"];
-    const ACADEMIC_SUB = ["Lab", "Class"];
-    const SC = { 
-        submitted: "#7c3aed", "under review": "#f59e0b", assigned: "#3b82f6", "in progress": "#a855f7", 
-        "resolved pending approval": "#f97316", resolved: "#10b981", closed: "#64748b" 
-    };
-    const PC = { low: "#94a3b8", medium: "#f59e0b", high: "#f97316", critical: "#f43f5e" };
-    const roles = [
-        { id: "admin", name: "Administrator", email: "admin@smartcampus.edu", icon: "fa-user-shield", color: "#a855f7", department: "Administration" },
-        { id: "student", name: "Student", email: "student@smartcampus.edu", icon: "fa-user-graduate", color: "#10b981", department: "Engineering" },
-        { id: "teacher", name: "Teacher", email: "teacher@smartcampus.edu", icon: "fa-chalkboard-user", color: "#f59e0b", department: "Academics" },
-        { id: "staff", name: "IT Staff", email: "staff@smartcampus.edu", icon: "fa-user-tie", color: "#3b82f6", department: "IT" }
-    ];
-    const now = Date.now();
-    const users = [
-        { id: "u1", name: "Admin", email: "admin@smartcampus.edu", role: "admin", department: "Administration" },
-        { id: "u2", name: "Rahul Kumar", email: "student@smartcampus.edu", role: "student", department: "Computer Science" },
-        { id: "u3", name: "Dr. Sharma", email: "teacher@smartcampus.edu", role: "teacher", department: "Academics" },
-        { id: "u4", name: "IT Staff", email: "staff@smartcampus.edu", role: "staff", department: "IT" },
-        { id: "u5", name: "Priya Singh", email: "priya@smartcampus.edu", role: "student", department: "Electronics" },
-        { id: "u6", name: "Amit Patel", email: "amit@smartcampus.edu", role: "staff", department: "Facilities" }
-    ];
-
-    // ==================== HELPERS ====================
-    function comp(id, subject, description, category, priority, status, department, location, zone, zoneSub, by, assigned, age, upvotes) {
-        const created = now - age;
-        const timeline = [{ status: "submitted", timestamp: created, note: "Complaint submitted by " + (users.find(u=>u.id===by)?.name||"User") }];
-        if (status !== "submitted") timeline.push({ status: "under review", timestamp: created + age*.2, note: "Case reviewed by department head" });
-        if (["assigned","in progress","resolved pending approval","resolved","closed"].includes(status))
-            timeline.push({ status: "assigned", timestamp: created + age*.35, note: "Assigned to " + department + " department" });
-        if (["in progress","resolved pending approval","resolved","closed"].includes(status))
-            timeline.push({ status: "in progress", timestamp: created + age*.5, note: "Resolution work initiated" });
-        if (["resolved pending approval","resolved","closed"].includes(status))
-            timeline.push({ status: "resolved pending approval", timestamp: created + age*.75, note: "Resolution completed, awaiting admin approval" });
-        if (["resolved","closed"].includes(status))
-            timeline.push({ status: "resolved", timestamp: created + age*.9, note: "Resolution verified and approved" });
-        if (status === "closed")
-            timeline.push({ status: "closed", timestamp: now - age*.02, note: "Case officially closed with user feedback" });
-        return { 
-            id, subject, description, category, priority, status, department, location, zone, zoneSub: zoneSub||"", 
-            submittedBy: by, assignedTo: assigned, upvotes, upvotedBy: [], comments: [], timeline, 
-            resolution: status === "resolved" || status === "closed" ? "Issue resolved and verified." : "",
-            resolutionProof: null, adminApproved: false, approvedBy: null, approvedAt: null,
-            feedback: null, rating: 0, reviewComment: "", createdAt: created, updatedAt: created + age*.9, 
-            slaHours: priority === "critical" ? 8 : priority === "high" ? 24 : priority === "medium" ? 48 : 72
-        };
+    // Try Firebase
+    if(firestore){
+      firestore.collection('complaints').onSnapshot(snap=>{
+        const data=snap.docs.map(d=>({id:d.id,...d.data()}));
+        setComplaints(data);
+      });
+      firestore.collection('users').onSnapshot(snap=>{
+        setUsers(snap.docs.map(d=>({id:d.id,...d.data()})));
+      });
     }
+    const sess=localStorage.getItem('session');
+    if(sess) setUser(JSON.parse(sess));
+  },[]);
 
-    const seedComplaints = [
-        comp("CMP-2026-0001", "Broken AC in Lab 301", "AC not cooling during practical sessions. Students unable to work.", "Infrastructure", "high", "in progress", "Facilities", "Building A · Lab 301", "academic", "Lab", "u2", "u6", 86400000*2, 12),
-        comp("CMP-2026-0002", "WiFi down in Hostel C", "No internet connectivity in entire hostel block since morning.", "IT / Technology", "high", "assigned", "IT", "Hostel Block C", "hostel", "", "u5", "u4", 86400000*1.5, 8),
-        comp("CMP-2026-0003", "Exam schedule clash", "Two exams scheduled same day for 3rd semester students.", "Examination", "critical", "under review", "Examination", "Academic Office", "admin", "", "u2", null, 86400000*1, 15),
-        comp("CMP-2026-0004", "Library noise issue", "Construction noise disturbing quiet study area.", "Library", "medium", "resolved pending approval", "Library", "Central Library", "library", "", "u5", "u3", 86400000*3, 5),
-        comp("CMP-2026-0005", "Cafeteria hygiene", "Food area needs better cleaning during lunch hours.", "Cleanliness", "low", "submitted", "Housekeeping", "Main Cafeteria", "cafeteria", "", "u2", null, 3600000*6, 3),
-        comp("CMP-2026-0006", "Security camera broken", "CCTV not functioning near north entrance.", "Security", "critical", "in progress", "Security", "North Gate", "academic", "Class", "u3", "u1", 86400000*4, 20),
-        comp("CMP-2026-0007", "Bus timing issue", "Evening bus leaves too early, students miss it.", "Transport", "medium", "resolved", "Transport", "Main Gate", "transport", "", "u5", "u6", 86400000*5, 7),
-        comp("CMP-2026-0008", "Portal login error", "Cannot access exam portal from any device.", "IT / Technology", "high", "resolved pending approval", "IT", "Online Portal", "admin", "", "u2", "u4", 3600000*18, 11)
-    ];
-
-    function defaults() {
-        return { 
-            users, complaints: seedComplaints, notifications: [
-                { id: "n1", userId: "u2", title: "Complaint Assigned", message: "CMP-2026-0001 assigned to Facilities.", read: false, createdAt: now-3600000 },
-                { id: "n2", userId: "u4", title: "New Assignment", message: "CMP-2026-0002 requires your attention.", read: false, createdAt: now-7200000 },
-                { id: "n3", userId: "u1", title: "Critical Alert", message: "CMP-2026-0003 needs admin review.", read: false, createdAt: now-1800000 }
-            ], audit: [
-                { id: "a1", actorName: "Admin", role: "admin", action: "login", description: "System administrator logged in", createdAt: now-7200000 },
-                { id: "a2", actorName: "IT Staff", role: "staff", action: "assignment", description: "CMP-2026-0004 assigned to IT department", createdAt: now-5000000 }
-            ], settings: { theme: "dark", autoRefresh: true }
-        };
+  useEffect(()=>{
+    if(!firestore){
+      localStorage.setItem('complaint_data',JSON.stringify({complaints,users,notifications}));
     }
+  },[complaints,users,notifications]);
 
-    function load() { try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && d.complaints) return d; } catch(e){} return defaults(); }
-    function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
-    function loadSession() { try { return JSON.parse(localStorage.getItem(SESSION)); } catch(e){ return null; } }
-    function fmt(ts) { return new Date(ts).toLocaleString([], {month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"}); }
-    function ago(ts) { let s = Math.max(0, Math.floor((Date.now()-ts)/1000)); if(s<60) return "just now"; if(s<3600) return Math.floor(s/60)+"m ago"; if(s<86400) return Math.floor(s/3600)+"h ago"; return Math.floor(s/86400)+"d ago"; }
-    function titleCase(s) { return s.replace(/\b\w/g, x => x.toUpperCase()); }
-    function genId() { return "CMP-"+new Date().getFullYear()+"-"+String(Math.floor(Math.random()*99999)).padStart(5,"0"); }
-    function statusColor(s) { return SC[s] || "#94a3b8"; }
-    function priorityColor(s) { return PC[s] || "#94a3b8"; }
-    function recommendDept(cat) { return ({"IT / Technology":"IT","Examination":"Examination","Library":"Library","Transport":"Transport","Infrastructure":"Facilities","Electricity":"Facilities","Cleanliness":"Housekeeping","Hostel":"Facilities","Academic":"Academics","Faculty":"Academics","Security":"Security","Water":"Facilities"})[cat] || "Administration"; }
-    function getAutoPriority(cat) { return PRIORITY_MAP[cat] || "medium"; }
+  const currentUser = useMemo(()=>{
+    if(!user) return null;
+    return users.find(u=>u.id===user.id)||user;
+  },[user,users]);
 
-    // ==================== MAIN APP ====================
-    function App() {
-        const [data, setData] = useState(load);
-        const [session, setSession] = useState(loadSession);
-        const [view, setView] = useState("dashboard");
-        const [query, setQuery] = useState("");
-        const [selected, setSelected] = useState(null);
-        const [toast, setToast] = useState([]);
-        const [theme, setTheme] = useState(localStorage.getItem(THEME) || "dark");
-        const [notifOpen, setNotifOpen] = useState(false);
-        const [command, setCommand] = useState(false);
+  const isAdmin = currentUser?.role==='admin';
+  const isStaff = currentUser?.role==='staff';
+  const isTeacher = currentUser?.role==='teacher';
+  const isStudent = currentUser?.role==='student';
 
-        useEffect(() => { save(data); }, [data]);
-        useEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem(THEME, theme); }, [theme]);
-        useEffect(() => {
-            const fn = e => {
-                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setCommand(true); }
-                if (e.key === "Escape") { setCommand(false); setSelected(null); setNotifOpen(false); }
-            };
-            addEventListener("keydown", fn);
-            return () => removeEventListener("keydown", fn);
-        }, []);
+  function addToast(msg,type='info'){
+    const t={id:Date.now()+Math.random(),msg,type};
+    setToasts(prev=>[...prev,t]);
+    setTimeout(()=>setToasts(prev=>prev.filter(x=>x.id!==t.id)),4000);
+  }
 
-        useEffect(() => {
-            if (firebaseConnected && db) {
-                const unsub = db.collection("complaints").onSnapshot(() => console.log("Realtime sync"));
-                return () => unsub();
-            }
-        }, []);
-
-        const user = data.users.find(u => u.id === session?.userId);
-        const isAdmin = session?.role === "admin";
-        const isStaff = session?.role === "staff";
-        const isStudent = session?.role === "student";
-        const isTeacher = session?.role === "teacher";
-
-        function notify(msg, type="info") { const x = { id: Date.now()+Math.random(), msg, type }; setToast(t => [...t, x]); setTimeout(() => setToast(t => t.filter(a => a.id !== x.id)), 4000); }
-        function audit(action, description) { setData(d => ({...d, audit: [{id:"a"+Date.now(), actorName: user?.name||"System", role: session?.role||"system", action, description, createdAt: Date.now()}, ...d.audit]})); }
-        function go(v) { setView(v); setSelected(null); window.scrollTo({top:0, behavior:"smooth"}); }
-
-        function login(r) {
-            const u = data.users.find(x => x.role === r);
-            if (!u) return;
-            const s = { userId: u.id, role: u.role, name: u.name, email: u.email, department: u.department };
-            setSession(s);
-            localStorage.setItem(SESSION, JSON.stringify(s));
-            audit("login", u.name + " logged into " + u.role + " workspace");
-            notify("Welcome, " + u.name + " ✨", "success");
-        }
-
-        function logout() { audit("logout", user.name + " logged out"); setSession(null); localStorage.removeItem(SESSION); setView("dashboard"); }
-
-        function updateComplaint(id, changes, note) {
-            setData(d => ({...d, complaints: d.complaints.map(c => c.id === id ? {...c, ...changes, updatedAt: Date.now(), timeline: note ? [...(c.timeline||[]), {status: changes.status||c.status, timestamp: Date.now(), note}] : c.timeline} : c)}));
-        }
-
-        function addNotification(userId, title, message) {
-            setData(d => ({...d, notifications: [{id:"n"+Date.now()+Math.random(), userId, title, message, read: false, createdAt: Date.now()}, ...d.notifications]}));
-        }
-
-        const visible = useMemo(() => {
-            let filtered = data.complaints;
-            if (isStudent || isTeacher) filtered = filtered.filter(c => c.submittedBy === session?.userId);
-            else if (isStaff) filtered = filtered.filter(c => c.assignedTo === session?.userId || c.department === user?.department);
-            return filtered.filter(c => { const q = query.toLowerCase(); return !q || (c.id+" "+c.subject+" "+c.description+" "+c.category+" "+c.department+" "+c.location).toLowerCase().includes(q); });
-        }, [data.complaints, query, session, isAdmin, isStaff, isStudent, isTeacher, user]);
-
-        if (!session) return React.createElement(Login, { onLogin: login, theme, setTheme });
-
-        return React.createElement(React.Fragment, null,
-            React.createElement("div", {className: "app"},
-                React.createElement(Sidebar, { view, go, isAdmin, isStaff, isStudent, isTeacher, user, logout }),
-                React.createElement("main", {className: "main"},
-                    React.createElement(Topbar, { title: getPageTitle(view, session.role), query, setQuery, theme, setTheme, notifOpen, setNotifOpen, data, session, go, command: () => setCommand(true), user }),
-                    view === "dashboard" && React.createElement(RoleDashboard, { data, user, isAdmin, isStaff, isStudent, isTeacher, visible, setSelected, go, session }),
-                    view === "complaints" && React.createElement(Complaints, { data, visible, setSelected, go, query, setQuery, isAdmin, isStaff, isStudent, isTeacher, session, user }),
-                    view === "new" && React.createElement(NewComplaint, { data, setData, user, session, notify, go, addNotification }),
-                    view === "approvals" && isAdmin && React.createElement(Approvals, { data, setData, setSelected, notify, addNotification, user }),
-                    view === "analytics" && isAdmin && React.createElement(Analytics, { data, user }),
-                    view === "heatmap" && React.createElement(Heatmap, { data }),
-                    view === "leaderboard" && React.createElement(Leaderboard, { data }),
-                    view === "users" && isAdmin && React.createElement(Users, { data, setData, notify }),
-                    view === "audit" && isAdmin && React.createElement(Audit, { data }),
-                    view === "settings" && React.createElement(Settings, { data, setData, theme, setTheme, notify }),
-                    view === "my-tickets" && (isStudent || isTeacher) && React.createElement(MyTickets, { data, user, setSelected, notify }),
-                    view === "staff-workspace" && isStaff && React.createElement(StaffWorkspace, { data, user, setSelected, setData, notify, addNotification, updateComplaint })
-                ),
-                React.createElement(MobileNav, { view, go, isAdmin, isStaff, isStudent, isTeacher })
-            ),
-            selected && React.createElement(Detail, { complaint: data.complaints.find(c => c.id === selected.id) || selected, data, setData, session, user, isAdmin, isStaff, close: () => setSelected(null), notify, addNotification, updateComplaint }),
-            command && React.createElement(CommandPalette, { close: () => setCommand(false), go, setQuery, isAdmin, isStaff, isStudent, isTeacher }),
-            React.createElement("div", {className: "toastwrap"}, toast.map(t => React.createElement("div", {className: "toast "+t.type, key: t.id},
-                React.createElement("i", {className: "fas "+(t.type==="success"?"fa-check-circle":t.type==="error"?"fa-circle-exclamation":"fa-sparkles")}),
-                t.msg
-            )))
-        );
-    }
-
-    function getPageTitle(view, role) {
-        const titles = {
-            dashboard: role === "admin" ? "Admin Command Center" : role === "staff" ? "IT Workspace" : "My Dashboard",
-            complaints: "Complaint Intelligence", new: "Report New Issue", approvals: "Resolution Approvals",
-            analytics: "Executive Analytics", heatmap: "Campus Heatmap", leaderboard: "Performance Leaderboard",
-            users: "User Management", audit: "Audit Trail", settings: "System Settings",
-            "my-tickets": "My Tickets", "staff-workspace": "Department Workspace"
-        };
-        return titles[view] || "Smart Complaint System";
-    }
-
-    // ==================== SIDEBAR ====================
-    function Sidebar({ view, go, isAdmin, isStaff, isStudent, isTeacher, user, logout }) {
-        const items = [];
-        if (isAdmin) {
-            items.push(["dashboard", "fa-gauge-high", "Dashboard"], ["complaints", "fa-layer-group", "All Complaints"], ["approvals", "fa-check-double", "Approvals"], ["analytics", "fa-chart-line", "Analytics"], ["heatmap", "fa-map-location-dot", "Heatmap"], ["leaderboard", "fa-ranking-star", "Leaderboard"], ["users", "fa-users-gear", "Users"], ["audit", "fa-fingerprint", "Audit Trail"]);
-        } else if (isStaff) {
-            items.push(["dashboard", "fa-gauge-high", "Dashboard"], ["staff-workspace", "fa-briefcase", "My Workspace"], ["complaints", "fa-layer-group", "Department Cases"], ["heatmap", "fa-map-location-dot", "Campus Map"]);
-        } else if (isStudent || isTeacher) {
-            items.push(["dashboard", "fa-gauge-high", "Dashboard"], ["new", "fa-circle-plus", "New Complaint"], ["my-tickets", "fa-ticket", "My Tickets"], ["heatmap", "fa-map-location-dot", "Campus Map"]);
-        }
-        return React.createElement("aside", {className: "sidebar"},
-            React.createElement("div", {className: "brand"},
-                React.createElement("div", {className: "brand-mark"}, React.createElement("i", {className: "fas fa-shield-halved"})),
-                React.createElement("div", null, React.createElement("b", null, "Smart Complaint"), React.createElement("small", null, "Intelligent Resolution OS"))
-            ),
-            React.createElement("nav", {className: "nav"},
-                items.map(x => React.createElement("button", {className: view===x[0]?"active":"", onClick: ()=>go(x[0]), key: x[0]},
-                    React.createElement("i", {className: "fas "+x[1]}), React.createElement("span", null, x[2])
-                )),
-                React.createElement("div", {className: "section-label"}, "System"),
-                React.createElement("button", {className: view==="settings"?"active":"", onClick: ()=>go("settings")},
-                    React.createElement("i", {className: "fas fa-sliders"}), React.createElement("span", null, "Settings"))
-            ),
-            React.createElement("div", {className: "sidebar-bottom"},
-                React.createElement("div", {className: "mini-user"},
-                    React.createElement("div", {className: "avatar"}, user?.name?.[0]||"U"),
-                    React.createElement("div", null, React.createElement("strong", null, user?.name), React.createElement("small", null, user?.role + " · " + user?.department)),
-                    React.createElement("button", {className: "btn icon sm", onClick: logout, title: "Logout"}, React.createElement("i", {className: "fas fa-arrow-right-from-bracket"}))
-                )
-            )
-        );
-    }
-
-    // ==================== TOPBAR ====================
-    function Topbar({ title, query, setQuery, theme, setTheme, notifOpen, setNotifOpen, data, session, go, command, user }) {
-        const notes = data.notifications.filter(n => n.userId === session.userId);
-        const unread = notes.filter(n => !n.read).length;
-        return React.createElement("div", {className: "topbar"},
-            React.createElement("div", {className: "title"},
-                React.createElement("h1", null, title),
-                React.createElement("p", null, new Date().toLocaleDateString([], {weekday:"long", month:"long", day:"numeric", year:"numeric"}) + " · " + (user?.department||""))
-            ),
-            React.createElement("div", {className: "top-actions"},
-                React.createElement("div", {className: "search"},
-                    React.createElement("i", {className: "fas fa-magnifying-glass"}),
-                    React.createElement("input", {className: "input", value: query, onChange: e=>setQuery(e.target.value), placeholder: "Search anything... (Ctrl K)"})
-                ),
-                React.createElement("button", {className: "btn icon", onClick: ()=>setTheme(theme==="dark"?"light":"dark")},
-                    React.createElement("i", {className: "fas "+(theme==="dark"?"fa-sun":"fa-moon")})),
-                React.createElement("div", {className: "notif"},
-                    React.createElement("button", {className: "btn icon", onClick: ()=>setNotifOpen(!notifOpen)},
-                        React.createElement("i", {className: "fas fa-bell"}),
-                        unread>0 && React.createElement("span", {style: {position:"absolute",top:-4,right:-4,width:18,height:18,borderRadius:"50%",background:"#f43f5e",color:"#fff",fontSize:9,display:"grid",placeItems:"center",fontWeight:800}}, unread)),
-                    notifOpen && React.createElement("div", {className: "notifpanel panel"},
-                        React.createElement("div", {className: "head"},
-                            React.createElement("h3", null, "Notifications"),
-                            React.createElement("span", {className: "badge", style: {color:"#fbbf24",borderColor:"#f59e0b44",background:"#f59e0b0d"}}, unread + " new")),
-                        notes.length ? notes.map(n => React.createElement("div", {className: "notice "+(!n.read?"unread":""), key: n.id},
-                            React.createElement("b", null, n.title), React.createElement("p", null, n.message), React.createElement("small", null, ago(n.createdAt))
-                        )) : React.createElement("div", {className: "empty"}, "All caught up! 🎉")
-                    )
-                ),
-                React.createElement("button", {className: "btn primary", onClick: ()=>go("new")},
-                    React.createElement("i", {className: "fas fa-plus"}), " New Issue")
-            )
-        );
-    }
-
-    // ==================== STAT COMPONENT ====================
-    function Stat({ icon, num, label, color, delta }) {
-        return React.createElement("div", {className: "panel stat animate"},
-            React.createElement("div", {className: "ico", style: {background: color+"1f", color}}, React.createElement("i", {className: "fas "+icon})),
-            React.createElement("div", {className: "num"}, num),
-            React.createElement("div", {className: "lab"}, label),
-            delta && React.createElement("span", {className: "delta"}, delta)
-        );
-    }
-
-    // ==================== ROLE DASHBOARDS ====================
-    function RoleDashboard({ data, user, isAdmin, isStaff, isStudent, isTeacher, visible, setSelected, go, session }) {
-        if (isAdmin) return React.createElement(AdminDashboard, { data, visible, setSelected, go });
-        if (isStaff) return React.createElement(StaffDashboard, { data, user, visible, setSelected, go });
-        return React.createElement(StudentDashboard, { data, user, visible, setSelected, go, session });
-    }
-
-    function AdminDashboard({ data, visible, setSelected, go }) {
-        const total = data.complaints.length;
-        const pending = data.complaints.filter(c => !["resolved","closed"].includes(c.status)).length;
-        const pendingApproval = data.complaints.filter(c => c.status === "resolved pending approval").length;
-        const resolved = data.complaints.filter(c => c.status === "resolved" || c.status === "closed").length;
-        const critical = data.complaints.filter(c => c.priority === "critical" && !["resolved","closed"].includes(c.status)).length;
-        const rate = total ? Math.round(resolved/total*100) : 0;
-        const latest = [...data.complaints].sort((a,b) => b.createdAt - a.createdAt).slice(0,5);
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "stats"},
-                React.createElement(Stat, {icon: "fa-folder-open", num: total, label: "Total Cases", color: "#8b5cf6", delta: "+5%"}),
-                React.createElement(Stat, {icon: "fa-clock", num: pending, label: "Active Cases", color: "#f59e0b"}),
-                React.createElement(Stat, {icon: "fa-hourglass-half", num: pendingApproval, label: "Pending Approval", color: "#f97316"}),
-                React.createElement(Stat, {icon: "fa-circle-check", num: resolved, label: "Resolved", color: "#10b981", delta: rate+"%"}),
-                React.createElement(Stat, {icon: "fa-triangle-exclamation", num: critical, label: "Critical Alert", color: "#f43f5e"})
-            ),
-            React.createElement("div", {className: "grid2"},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Live Complaint Stream"), React.createElement("p", null, "Real-time activity across all departments")),
-                        React.createElement("button", {className: "btn sm", onClick: ()=>go("complaints")}, "View All ", React.createElement("i", {className: "fas fa-arrow-right"}))),
-                    latest.length ? latest.map(c => React.createElement(ComplaintRow, {c, key: c.id, setSelected})) : React.createElement("div", {className: "empty"}, React.createElement("i", {className: "fas fa-inbox"}), "No cases yet")
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Resolution Health"), React.createElement("p", null, "Performance snapshot"))),
-                    React.createElement("div", {style: {textAlign:"center", padding: "20px 0"}},
-                        React.createElement("div", {className: "donut", style: {background: `conic-gradient(#10b981 0 ${rate}%, #7c3aed ${rate}% 100%)`}},
-                            React.createElement("b", null, rate+"%")),
-                        React.createElement("p", {className: "muted", style: {fontSize: 12, marginTop: 14, fontWeight: 600}}, "Overall Resolution Rate")
-                    ),
-                    React.createElement("div", {style: {display: "grid", gap: 14, marginTop: 14}},
-                        [["Pending Approval", pendingApproval, "#f97316"], ["Active", pending, "#f59e0b"], ["Closed", resolved, "#10b981"]].map(x =>
-                            React.createElement("div", {key: x[0]},
-                                React.createElement("div", {style: {display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6, fontWeight: 600}},
-                                    React.createElement("span", null, x[0]), React.createElement("b", null, x[1])),
-                                React.createElement("div", {className: "progress"}, React.createElement("i", {style: {width: Math.min(100, total?x[1]/total*100:0)+"%", background: x[2]}}))
-                            )
-                        )
-                    )
-                )
-            ),
-            React.createElement("div", {className: "grid3", style: {marginTop: 20}},
-                React.createElement(QuickCard, {icon: "fa-check-double", title: "Approval Queue", text: pendingApproval + " cases awaiting your final approval.", action: ()=>go("approvals")}),
-                React.createElement(QuickCard, {icon: "fa-chart-simple", title: "Analytics", text: "Explore trends, workloads, and SLA health.", action: ()=>go("analytics")}),
-                React.createElement(QuickCard, {icon: "fa-users-gear", title: "User Ops", text: "Manage staff, students, and permissions.", action: ()=>go("users")})
-            )
-        );
-    }
-
-    function StaffDashboard({ data, user, visible, setSelected, go }) {
-        const myCases = data.complaints.filter(c => c.assignedTo === user.id || c.department === user.department);
-        const active = myCases.filter(c => !["resolved","closed","resolved pending approval"].includes(c.status));
-        const pendingApproval = myCases.filter(c => c.status === "resolved pending approval");
-        const resolved = myCases.filter(c => ["resolved","closed"].includes(c.status));
-        const rate = myCases.length ? Math.round(resolved.length/myCases.length*100) : 0;
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "stats"},
-                React.createElement(Stat, {icon: "fa-briefcase", num: myCases.length, label: "My Cases", color: "#3b82f6"}),
-                React.createElement(Stat, {icon: "fa-spinner", num: active.length, label: "Active", color: "#f59e0b"}),
-                React.createElement(Stat, {icon: "fa-hourglass-half", num: pendingApproval.length, label: "Pending Approval", color: "#f97316"}),
-                React.createElement(Stat, {icon: "fa-circle-check", num: resolved.length, label: "Resolved", color: "#10b981", delta: rate+"%"})
-            ),
-            React.createElement("div", {className: "grid2"},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Department Cases"), React.createElement("p", null, "Cases assigned to " + user.department)),
-                        React.createElement("button", {className: "btn sm", onClick: ()=>go("staff-workspace")}, "Workspace ", React.createElement("i", {className: "fas fa-arrow-right"}))),
-                    myCases.slice(0,5).map(c => React.createElement(ComplaintRow, {c, key: c.id, setSelected}))
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Performance"), React.createElement("p", null, "Your resolution metrics"))),
-                    React.createElement("div", {style: {textAlign:"center", padding: "20px 0"}},
-                        React.createElement("div", {className: "donut", style: {background: `conic-gradient(#10b981 0 ${rate}%, #3b82f6 ${rate}% 100%)`}},
-                            React.createElement("b", null, rate+"%")),
-                        React.createElement("p", {className: "muted", style: {fontSize: 12, marginTop: 14}}, "Resolution Rate")
-                    )
-                )
-            )
-        );
-    }
-
-    function StudentDashboard({ data, user, visible, setSelected, go, session }) {
-        const myCases = data.complaints.filter(c => c.submittedBy === session.userId);
-        const active = myCases.filter(c => !["resolved","closed"].includes(c.status));
-        const resolved = myCases.filter(c => ["resolved","closed"].includes(c.status));
-        const pendingFeedback = myCases.filter(c => c.status === "resolved" && !c.rating);
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "stats"},
-                React.createElement(Stat, {icon: "fa-ticket", num: myCases.length, label: "My Tickets", color: "#8b5cf6"}),
-                React.createElement(Stat, {icon: "fa-clock", num: active.length, label: "In Progress", color: "#f59e0b"}),
-                React.createElement(Stat, {icon: "fa-circle-check", num: resolved.length, label: "Resolved", color: "#10b981"}),
-                React.createElement(Stat, {icon: "fa-star", num: pendingFeedback.length, label: "Pending Rating", color: "#fbbf24"})
-            ),
-            React.createElement("div", {className: "grid2"},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Recent Tickets"), React.createElement("p", null, "Your complaint history")),
-                        React.createElement("button", {className: "btn sm", onClick: ()=>go("my-tickets")}, "View All ", React.createElement("i", {className: "fas fa-arrow-right"}))),
-                    myCases.slice(0,5).map(c => React.createElement(ComplaintRow, {c, key: c.id, setSelected}))
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Quick Actions"), React.createElement("p", null, "What would you like to do?"))),
-                    React.createElement("div", {style: {display: "grid", gap: 12}},
-                        React.createElement("button", {className: "btn primary", style: {width: "100%", justifyContent: "flex-start"}, onClick: ()=>go("new")},
-                            React.createElement("i", {className: "fas fa-plus"}), " File New Complaint"),
-                        React.createElement("button", {className: "btn", style: {width: "100%", justifyContent: "flex-start"}, onClick: ()=>go("my-tickets")},
-                            React.createElement("i", {className: "fas fa-ticket"}), " View My Tickets"),
-                        React.createElement("button", {className: "btn", style: {width: "100%", justifyContent: "flex-start"}, onClick: ()=>go("heatmap")},
-                            React.createElement("i", {className: "fas fa-map"}), " Campus Heatmap")
-                    )
-                )
-            )
-        );
-    }
-
-    function QuickCard({ icon, title, text, action }) {
-        return React.createElement("div", {className: "panel pad quick-card glow-card", onClick: action},
-            React.createElement("div", {className: "quick-icon"}, React.createElement("i", {className: "fas "+icon})),
-            React.createElement("h3", {style: {fontSize: 15, marginBottom: 6}}, title),
-            React.createElement("p", {className: "muted", style: {fontSize: 11, lineHeight: 1.6, marginBottom: 14}}, text),
-            React.createElement("span", {className: "btn sm", style: {pointerEvents: "none"}}, "Explore ", React.createElement("i", {className: "fas fa-arrow-right"}))
-        );
-    }
-
-    function ComplaintRow({ c, setSelected }) {
-        return React.createElement("div", {className: "complaint", onClick: () => setSelected(c)},
-            React.createElement("div", {className: "avatar sm"}, c.subject[0]),
-            React.createElement("div", {className: "cmain"},
-                React.createElement("b", null, c.subject),
-                React.createElement("div", {className: "meta"},
-                    React.createElement("span", null, c.id),
-                    React.createElement("span", null, "•"),
-                    React.createElement("span", null, c.category),
-                    React.createElement("span", null, "•"),
-                    React.createElement("span", null, ago(c.createdAt)),
-                    React.createElement("span", null, "•"),
-                    React.createElement("span", null, c.department)
-                )
-            ),
-            React.createElement("div", {className: "badges"},
-                React.createElement("span", {className: "badge", style: {color: priorityColor(c.priority), background: priorityColor(c.priority)+"10", borderColor: priorityColor(c.priority)+"44"}}, c.priority),
-                React.createElement("span", {className: "badge", style: {color: statusColor(c.status), background: statusColor(c.status)+"10", borderColor: statusColor(c.status)+"44"}}, STATUS_DISPLAY[c.status] || c.status),
-                React.createElement("span", {className: "up"}, React.createElement("i", {className: "fas fa-arrow-up"}), " "+c.upvotes)
-            )
-        );
-    }
-
-    // ==================== COMPLAINTS LIST ====================
-    function Complaints({ data, visible, setSelected, go, query, setQuery, isAdmin, isStaff, isStudent, isTeacher, session, user }) {
-        const [mode, setMode] = useState("list"), [status, setStatus] = useState("all"), [priority, setPriority] = useState("all"), [cat, setCat] = useState("all");
-        const filtered = visible.filter(c => (status === "all" || c.status === status) && (priority === "all" || c.priority === priority) && (cat === "all" || c.category === cat));
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "filters"},
-                React.createElement("select", {className: "input", value: status, onChange: e => setStatus(e.target.value)},
-                    React.createElement("option", {value: "all"}, "All Statuses"),
-                    STATUS.map(s => React.createElement("option", {key: s}, STATUS_DISPLAY[s] || s))
-                ),
-                React.createElement("select", {className: "input", value: priority, onChange: e => setPriority(e.target.value)},
-                    React.createElement("option", {value: "all"}, "All Priorities"),
-                    Object.keys(PC).map(s => React.createElement("option", {key: s}, titleCase(s)))
-                ),
-                React.createElement("select", {className: "input", value: cat, onChange: e => setCat(e.target.value)},
-                    React.createElement("option", {value: "all"}, "All Categories"),
-                    CATS.map(s => React.createElement("option", {key: s}, s))
-                ),
-                React.createElement("button", {className: "btn sm "+(mode==="list"?"primary":""), onClick: ()=>setMode("list")}, React.createElement("i", {className: "fas fa-list"})),
-                React.createElement("button", {className: "btn sm "+(mode==="kanban"?"primary":""), onClick: ()=>setMode("kanban")}, React.createElement("i", {className: "fas fa-table-columns"})),
-                React.createElement("span", {className: "muted", style: {fontSize: 11, alignSelf: "center", fontWeight: 600}}, filtered.length + " matching cases")
-            ),
-            mode === "list" ? 
-                React.createElement("section", {className: "panel"}, 
-                    filtered.length ? filtered.map(c => React.createElement(ComplaintRow, {key: c.id, c, setSelected})) : 
-                    React.createElement("div", {className: "empty"}, React.createElement("i", {className: "fas fa-filter-circle-xmark"}), "No complaints match your filters."))
-                : React.createElement("div", {className: "kanban"}, 
-                    STATUS.map(s => React.createElement("div", {className: "col", key: s},
-                        React.createElement("div", {className: "colhead", style: {color: statusColor(s)}},
-                            React.createElement("span", null, STATUS_DISPLAY[s] || s),
-                            React.createElement("span", null, filtered.filter(c => c.status === s).length)),
-                        filtered.filter(c => c.status === s).map(c => React.createElement("div", {className: "kcard", key: c.id, onClick: ()=>setSelected(c)},
-                            React.createElement("b", null, c.subject),
-                            React.createElement("small", null, c.id + " · " + c.department),
-                            React.createElement("div", {style: {marginTop: 10}},
-                                React.createElement("span", {className: "badge", style: {color: priorityColor(c.priority), borderColor: priorityColor(c.priority)+"44", background: priorityColor(c.priority)+"10"}}, c.priority)
-                            )
-                        ))
-                    ))
-                )
-        );
-    }
-
-    // ==================== NEW COMPLAINT ====================
-    function NewComplaint({ data, setData, user, session, notify, go, addNotification }) {
-        const [f, setF] = useState({ 
-            subject: "", description: "", category: "Infrastructure", priority: "medium", 
-            department: user?.department || "", location: "", zone: "academic", zoneSub: "", 
-            anonymous: false 
+  function login(role){
+    let u = users.find(x=>x.role===role);
+    if(!u){
+      const newUser = {
+        id:'u'+Date.now(),
+        name: role==='admin'?'Administrator':role==='student'?'Student User':role==='teacher'?'Teacher':`Staff (${role})`,
+        email:`${role}@complaint.demo`,
+        role:role,
+        department: role==='staff'?'IT':role==='admin'?'Administration':role==='teacher'?'Academics':'General'
+      };
+      if(firestore){
+        firestore.collection('users').add(newUser).then(ref=>{
+          setUsers(prev=>[...prev,{...newUser,id:ref.id}]);
         });
-        const [busy, setBusy] = useState(false);
-        const [errors, setErrors] = useState({});
-
-        const recommended = recommendDept(f.category);
-        const autoPriority = getAutoPriority(f.category);
-
-        useEffect(() => {
-            setF(prev => ({...prev, priority: autoPriority, department: user?.role === "staff" ? user.department : (prev.department || recommended)}));
-        }, [f.category]);
-
-        function validate() {
-            const e = {};
-            if (!f.subject.trim() || f.subject.trim().length < 5) e.subject = "Title must be at least 5 characters";
-            if (!f.description.trim() || f.description.trim().length < 15) e.description = "Description must be at least 15 characters";
-            if (!f.location.trim()) e.location = "Location is required";
-            setErrors(e);
-            return Object.keys(e).length === 0;
-        }
-
-        function submit(e) {
-            e.preventDefault();
-            if (!validate()) {
-                notify("Please fix the errors before submitting.", "error");
-                return;
-            }
-            setBusy(true);
-            setTimeout(() => {
-                const t = Date.now();
-                const c = {
-                    id: genId(), subject: f.subject.trim(), description: f.description.trim(),
-                    category: f.category, priority: f.priority, status: "submitted",
-                    department: f.department || recommended, location: f.location || "Campus",
-                    zone: f.zone, zoneSub: f.zone === "academic" ? f.zoneSub : "",
-                    anonymous: false, submittedBy: session.userId, assignedTo: null,
-                    upvotes: 0, upvotedBy: [], comments: [],
-                    timeline: [{status: "submitted", timestamp: t, note: "Complaint submitted by " + user.name}],
-                    resolution: "", resolutionProof: null, adminApproved: false, approvedBy: null, approvedAt: null,
-                    feedback: null, rating: 0, reviewComment: "", createdAt: t, updatedAt: t,
-                    slaHours: f.priority === "critical" ? 8 : f.priority === "high" ? 24 : f.priority === "medium" ? 48 : 72
-                };
-                setData(d => ({...d, complaints: [c, ...d.complaints]}));
-                addNotification("u1", "New complaint received", c.id + " requires review.");
-                notify("Complaint " + c.id + " created successfully ✨", "success");
-                setBusy(false);
-                go("my-tickets");
-            }, 800);
-        }
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("section", {className: "panel pad", style: {maxWidth: 960, margin: "auto"}},
-                React.createElement("div", {className: "head"},
-                    React.createElement("div", null, React.createElement("h3", null, "Report a New Issue"), React.createElement("p", null, "Provide detailed context for faster routing and resolution")),
-                    React.createElement("span", {className: "badge", style: {color: "#22d3ee", borderColor: "#22d3ee44", background: "#22d3ee10"}}, React.createElement("i", {className: "fas fa-wand-magic-sparkles"}), " Smart Assist")
-                ),
-                React.createElement("form", {onSubmit: submit},
-                    React.createElement("div", {className: "formgrid"},
-                        React.createElement("div", {className: "field full"},
-                            React.createElement("label", null, "Issue Title *"),
-                            React.createElement("input", {className: "input", value: f.subject, onChange: e => setF({...f, subject: e.target.value}), placeholder: "e.g. WiFi unavailable in hostel block C"}),
-                            errors.subject && React.createElement("small", {style: {color: "#f43f5e", fontSize: 10, marginTop: 5, display: "block"}}, errors.subject)
-                        ),
-                        React.createElement("div", {className: "field full"},
-                            React.createElement("label", null, "Detailed Description *"),
-                            React.createElement("textarea", {className: "input", value: f.description, onChange: e => setF({...f, description: e.target.value}), placeholder: "Describe what happened, where, and how it affects you..."}),
-                            errors.description && React.createElement("small", {style: {color: "#f43f5e", fontSize: 10, marginTop: 5, display: "block"}}, errors.description)
-                        ),
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Category"),
-                            React.createElement("select", {className: "input", value: f.category, onChange: e => setF({...f, category: e.target.value})}, CATS.map(x => React.createElement("option", {key: x}, x)))
-                        ),
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Auto Priority"),
-                            React.createElement("div", {className: "auto-badge"}, React.createElement("i", {className: "fas fa-bolt"}), " " + titleCase(autoPriority))
-                        ),
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Department"),
-                            React.createElement("input", {className: "input", value: f.department, onChange: e => setF({...f, department: e.target.value}), placeholder: "Auto: " + recommended, readOnly: user?.role === "staff"})
-                        ),
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Location *"),
-                            React.createElement("input", {className: "input", value: f.location, onChange: e => setF({...f, location: e.target.value}), placeholder: "Building / room / area"}),
-                            errors.location && React.createElement("small", {style: {color: "#f43f5e", fontSize: 10, marginTop: 5, display: "block"}}, errors.location)
-                        ),
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Campus Zone"),
-                            React.createElement("select", {className: "input", value: f.zone, onChange: e => setF({...f, zone: e.target.value, zoneSub: ""})}, ZONES.map(x => React.createElement("option", {key: x}, titleCase(x))))
-                        ),
-                        f.zone === "academic" && React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Academic Sub-zone"),
-                            React.createElement("select", {className: "input", value: f.zoneSub, onChange: e => setF({...f, zoneSub: e.target.value})}, 
-                                React.createElement("option", {value: ""}, "Select..."), ACADEMIC_SUB.map(x => React.createElement("option", {key: x}, x)))
-                        )
-                    ),
-                    React.createElement("div", {style: {display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 22}},
-                        React.createElement("button", {type: "button", className: "btn", onClick: ()=>go("dashboard")}, "Cancel"),
-                        React.createElement("button", {className: "btn primary", disabled: busy || !f.subject.trim()},
-                            busy ? React.createElement(React.Fragment, null, React.createElement("i", {className: "fas fa-spinner fa-spin"}), " Creating...") : 
-                            React.createElement(React.Fragment, null, React.createElement("i", {className: "fas fa-paper-plane"}), " Submit Securely")
-                        )
-                    )
-                )
-            )
-        );
+      } else {
+        setUsers(prev=>[...prev,newUser]);
+      }
+      u=newUser;
     }
+    setUser(u);
+    localStorage.setItem('session',JSON.stringify(u));
+    addToast(`Welcome ${u.name} ✨`,'success');
+    setView('dashboard');
+  }
 
-    // ==================== DETAIL MODAL ====================
-    function Detail({ complaint, data, setData, session, user, isAdmin, isStaff, close, notify, addNotification, updateComplaint }) {
-        const [comment, setComment] = useState("");
-        const [resolution, setResolution] = useState(complaint.resolution || "");
-        const [proofFile, setProofFile] = useState(null);
-        const [rating, setRating] = useState(complaint.rating || 0);
-        const [reviewText, setReviewText] = useState(complaint.reviewComment || "");
-        const [showProofInput, setShowProofInput] = useState(false);
+  function logout(){
+    if(auth) auth.signOut();
+    setUser(null);
+    localStorage.removeItem('session');
+    addToast('Logged out','info');
+  }
 
-        const assigned = data.users.find(u => u.id === complaint.assignedTo);
-        const submitter = data.users.find(u => u.id === complaint.submittedBy);
-        const ageH = (Date.now() - complaint.createdAt) / 3600000;
-        const overdue = ageH > complaint.slaHours && !["resolved","closed"].includes(complaint.status);
-
-        function assign(e) {
-            const uid = e.target.value;
-            const staff = data.users.find(u => u.id === uid);
-            updateComplaint(complaint.id, {assignedTo: uid, status: uid ? "assigned" : "submitted"}, "Assigned to " + (staff?.name || "unassigned"));
-            if (uid) addNotification(uid, "New Assignment", complaint.id + " assigned to you.");
-            notify("Assignment updated", "success");
-        }
-
-        function statusChange(e) {
-            const s = e.target.value;
-            updateComplaint(complaint.id, {status: s}, "Status changed to " + STATUS_DISPLAY[s]);
-            addNotification(complaint.submittedBy, "Status Update", complaint.id + " is now " + STATUS_DISPLAY[s] + ".");
-            notify("Status updated", "success");
-        }
-
-        function resolveWithProof() {
-            if (!resolution.trim()) {
-                notify("Please provide a resolution description.", "error");
-                return;
-            }
-            updateComplaint(complaint.id, {
-                status: "resolved pending approval", 
-                resolution: resolution.trim(),
-                resolutionProof: proofFile || "Resolution documentation provided"
-            }, "Resolution submitted for admin approval");
-            addNotification("u1", "Resolution Pending Approval", complaint.id + " needs your approval.");
-            addNotification(complaint.submittedBy, "Update on " + complaint.id, "Your complaint has been resolved and is pending final approval.");
-            notify("Resolution submitted for approval ✨", "success");
-            setShowProofInput(false);
-        }
-
-        function adminApprove() {
-            setData(d => ({...d, complaints: d.complaints.map(c => c.id === complaint.id ? {
-                ...c, status: "resolved", adminApproved: true, approvedBy: user.id, approvedAt: Date.now(),
-                timeline: [...c.timeline, {status: "resolved", timestamp: Date.now(), note: "Approved by administrator " + user.name}]
-            } : c)}));
-            addNotification(complaint.submittedBy, "Complaint Approved", complaint.id + " has been approved by admin. Please provide your rating.");
-            addNotification(complaint.assignedTo, "Case Approved", complaint.id + " approved by admin.");
-            notify("Case approved and resolved 🎉", "success");
-        }
-
-        function adminReject() {
-            setData(d => ({...d, complaints: d.complaints.map(c => c.id === complaint.id ? {
-                ...c, status: "in progress",
-                timeline: [...c.timeline, {status: "in progress", timestamp: Date.now(), note: "Rejected by administrator - requires more work"}]
-            } : c)}));
-            addNotification(complaint.assignedTo, "Case Rejected", complaint.id + " rejected by admin. More work needed.");
-            notify("Case sent back for rework", "warn");
-        }
-
-        function commentAdd() {
-            if (!comment.trim()) return;
-            setData(d => ({...d, complaints: d.complaints.map(c => c.id === complaint.id ? {
-                ...c, comments: [...(c.comments||[]), {id: "c"+Date.now(), userId: session.userId, name: user.name, role: user.role, message: comment.trim(), timestamp: Date.now()}]
-            } : c)}));
-            setComment("");
-            notify("Comment added", "success");
-        }
-
-        function submitRating() {
-            setData(d => ({...d, complaints: d.complaints.map(c => c.id === complaint.id ? {
-                ...c, rating: rating, reviewComment: reviewText, status: "closed",
-                timeline: [...c.timeline, {status: "closed", timestamp: Date.now(), note: "User rated " + rating + " stars - " + (reviewText || "No comment")}]
-            } : c)}));
-            addNotification(complaint.assignedTo, "New Rating", "You received a " + rating + " star rating for " + complaint.id);
-            notify("Thank you for your feedback! ⭐", "success");
-        }
-
-        return React.createElement("div", {className: "modal", onMouseDown: e => e.target === e.currentTarget && close()},
-            React.createElement("div", {className: "modalbox pop"},
-                React.createElement("div", {className: "modalhead"},
-                    React.createElement("div", null,
-                        React.createElement("div", {className: "badges"},
-                            React.createElement("span", {className: "badge", style: {color: priorityColor(complaint.priority), borderColor: priorityColor(complaint.priority)+"44", background: priorityColor(complaint.priority)+"10"}}, complaint.priority),
-                            React.createElement("span", {className: "badge", style: {color: statusColor(complaint.status), borderColor: statusColor(complaint.status)+"44", background: statusColor(complaint.status)+"10"}}, STATUS_DISPLAY[complaint.status] || complaint.status),
-                            overdue && React.createElement("span", {className: "badge", style: {color: "#fb7185", borderColor: "#fb718544", background: "#f43f5e10"}}, "SLA Overdue")
-                        ),
-                        React.createElement("h2", {style: {marginTop: 12}}, complaint.subject),
-                        React.createElement("p", {className: "muted", style: {fontSize: 11, marginTop: 6}}, complaint.id + " · " + complaint.category + " · created " + ago(complaint.createdAt))
-                    ),
-                    React.createElement("button", {className: "btn icon", onClick: close}, React.createElement("i", {className: "fas fa-xmark"}))
-                ),
-
-                React.createElement("p", {className: "muted", style: {fontSize: 13, lineHeight: 1.7, marginBottom: 20}}, complaint.description),
-
-                React.createElement("div", {className: "grid3", style: {marginBottom: 20}},
-                    React.createElement(Info, {label: "Department", value: complaint.department}),
-                    React.createElement(Info, {label: "Location", value: complaint.location + (complaint.zoneSub ? " (" + complaint.zoneSub + ")" : "")}),
-                    React.createElement(Info, {label: "Reporter", value: submitter?.name || "Unknown"})
-                ),
-
-                // Admin Controls
-                isAdmin && React.createElement("div", {className: "panel pad", style: {marginBottom: 20}},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("h3", null, "Admin Controls"),
-                        React.createElement("span", {className: "muted", style: {fontSize: 9}}, "Workflow Management")
-                    ),
-                    React.createElement("div", {className: "formgrid"},
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Status"),
-                            React.createElement("select", {className: "input", value: complaint.status, onChange: statusChange}, 
-                                STATUS.map(s => React.createElement("option", {key: s}, STATUS_DISPLAY[s] || s)))
-                        ),
-                        React.createElement("div", {className: "field"},
-                            React.createElement("label", null, "Assign To"),
-                            React.createElement("select", {className: "input", value: complaint.assignedTo || "", onChange: assign},
-                                React.createElement("option", {value: ""}, "Unassigned"),
-                                data.users.filter(u => u.role === "staff" || u.role === "admin").map(u => React.createElement("option", {key: u.id, value: u.id}, u.name + " · " + u.department))
-                            )
-                        )
-                    ),
-                    complaint.status === "resolved pending approval" && React.createElement("div", {style: {marginTop: 16, padding: 16, background: "rgba(249,115,22,.08)", borderRadius: 16, border: "1px solid rgba(249,115,22,.3)"}},
-                        React.createElement("h4", {style: {fontSize: 13, marginBottom: 10, color: "#f97316"}}, React.createElement("i", {className: "fas fa-gavel"}), " Approval Required"),
-                        React.createElement("p", {style: {fontSize: 12, marginBottom: 12}}, "Resolution: " + complaint.resolution),
-                        complaint.resolutionProof && React.createElement("div", {className: "attachment-preview"}, React.createElement("i", {className: "fas fa-paperclip"}), "Proof: " + complaint.resolutionProof),
-                        React.createElement("div", {style: {display: "flex", gap: 10, marginTop: 12}},
-                            React.createElement("button", {className: "btn success", onClick: adminApprove}, React.createElement("i", {className: "fas fa-check"}), " Approve & Close"),
-                            React.createElement("button", {className: "btn danger", onClick: adminReject}, React.createElement("i", {className: "fas fa-xmark"}), " Reject & Rework")
-                        )
-                    )
-                ),
-
-                // Staff Controls
-                isStaff && complaint.assignedTo === user.id && !["resolved pending approval", "resolved", "closed"].includes(complaint.status) && React.createElement("div", {className: "panel pad", style: {marginBottom: 20}},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("h3", null, "Resolve Case"),
-                        React.createElement("span", {className: "muted", style: {fontSize: 9}}, "Submit for admin approval")
-                    ),
-                    !showProofInput ? React.createElement("button", {className: "btn success", onClick: () => setShowProofInput(true)}, 
-                        React.createElement("i", {className: "fas fa-check-double"}), " Mark as Resolved") :
-                    React.createElement("div", null,
-                        React.createElement("div", {className: "field full"},
-                            React.createElement("label", null, "Resolution Description *"),
-                            React.createElement("textarea", {className: "input", value: resolution, onChange: e => setResolution(e.target.value), placeholder: "Describe how the issue was resolved..."})
-                        ),
-                        React.createElement("div", {className: "field full"},
-                            React.createElement("label", null, "Proof of Resolution"),
-                            React.createElement("div", {className: "proof-upload", onClick: () => { const fname = "proof_"+complaint.id+"_"+Date.now()+".jpg"; setProofFile(fname); notify("Proof file simulated: " + fname, "success"); }},
-                                React.createElement("i", {className: "fas fa-cloud-arrow-up"}),
-                                React.createElement("p", null, "Click to upload photo/document proof")
-                            ),
-                            proofFile && React.createElement("div", {className: "attachment-preview"}, React.createElement("i", {className: "fas fa-file-image"}), proofFile)
-                        ),
-                        React.createElement("div", {style: {display: "flex", gap: 10, marginTop: 12}},
-                            React.createElement("button", {className: "btn", onClick: () => setShowProofInput(false)}, "Cancel"),
-                            React.createElement("button", {className: "btn success", onClick: resolveWithProof}, React.createElement("i", {className: "fas fa-paper-plane"}), " Submit for Approval")
-                        )
-                    )
-                ),
-
-                // Assignment Info
-                assigned && React.createElement("p", {className: "muted", style: {fontSize: 11, marginBottom: 16}}, 
-                    "Assigned to: ", React.createElement("b", {style: {color: "var(--text)"}}, assigned.name), " · ", assigned.department
-                ),
-
-                // Timeline
-                React.createElement("div", {className: "head"},
-                    React.createElement("h3", null, "Resolution Timeline"),
-                    React.createElement("span", {className: "muted", style: {fontSize: 9}}, "SLA: " + complaint.slaHours + "h")
-                ),
-                React.createElement("div", {className: "timeline"}, 
-                    complaint.timeline?.map((e, i) => React.createElement("div", {className: "event", key: i},
-                        React.createElement("b", {style: {color: statusColor(e.status)}}, STATUS_DISPLAY[e.status] || e.status),
-                        React.createElement("div", {className: "muted", style: {fontSize: 11, marginTop: 4}}, e.note),
-                        React.createElement("small", null, fmt(e.timestamp))
-                    ))
-                ),
-
-                // Comments
-                React.createElement("div", {className: "head"},
-                    React.createElement("h3", null, "Conversation"),
-                    React.createElement("span", {className: "muted", style: {fontSize: 9}}, (complaint.comments?.length || 0) + " comments")
-                ),
-                (complaint.comments || []).map(c => React.createElement("div", {className: "comment", key: c.id},
-                    React.createElement("b", null, c.name), 
-                    React.createElement("span", {className: "dim", style: {fontSize: 9, marginLeft: 8}}, "@" + c.role + " · " + ago(c.timestamp)),
-                    React.createElement("p", null, c.message)
-                )),
-                React.createElement("div", {style: {display: "flex", gap: 10, marginTop: 14}},
-                    React.createElement("input", {className: "input", value: comment, onChange: e => setComment(e.target.value), onKeyDown: e => e.key === "Enter" && commentAdd(), placeholder: "Add a comment..."}),
-                    React.createElement("button", {className: "btn primary", onClick: commentAdd}, React.createElement("i", {className: "fas fa-paper-plane"}))
-                ),
-
-                // Rating Section (for resolved cases by submitter)
-                (complaint.status === "resolved" || complaint.status === "closed") && (session.userId === complaint.submittedBy) && React.createElement("div", {className: "panel pad", style: {marginTop: 20}},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("h3", null, "Rate Resolution"),
-                        React.createElement("span", {className: "muted", style: {fontSize: 9}}, "Your feedback matters")
-                    ),
-                    React.createElement("p", {style: {fontSize: 12, marginBottom: 12}}, "How satisfied are you with the resolution?"),
-                    React.createElement("div", {className: "rating-stars"}, [1,2,3,4,5].map(n => 
-                        React.createElement("button", {key: n, className: n <= rating ? "active" : "", onClick: () => setRating(n)}, 
-                            React.createElement("i", {className: "fas fa-star"})
-                        )
-                    )),
-                    React.createElement("div", {className: "field full", style: {marginTop: 12}},
-                        React.createElement("textarea", {className: "input", value: reviewText, onChange: e => setReviewText(e.target.value), placeholder: "Share your experience (optional)...", style: {minHeight: 80}})
-                    ),
-                    React.createElement("button", {className: "btn primary", style: {marginTop: 10}, onClick: submitRating}, 
-                        React.createElement("i", {className: "fas fa-star"}), " Submit Rating & Close Case"
-                    )
-                ),
-
-                // Display Rating if exists
-                complaint.rating > 0 && React.createElement("div", {style: {marginTop: 16, padding: 14, background: "rgba(251,191,36,.08)", borderRadius: 16, border: "1px solid rgba(251,191,36,.3)"}},
-                    React.createElement("div", {style: {display: "flex", alignItems: "center", gap: 8, marginBottom: 6}},
-                        React.createElement("span", {style: {color: "#fbbf24"}}, Array(complaint.rating).fill("★").join("")),
-                        React.createElement("span", {className: "muted", style: {fontSize: 11}}, "Rated by " + submitter?.name)
-                    ),
-                    complaint.reviewComment && React.createElement("p", {style: {fontSize: 12, color: "var(--muted)"}}, """ + complaint.reviewComment + """)
-                )
-            )
-        );
+  function saveComplaint(data){
+    const newC = {
+      ...data,
+      id: generateId(),
+      status:'submitted',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      timeline: [{status:'submitted',timestamp:Date.now(),note:'Complaint submitted'}],
+      comments:[],
+      resolution:'',
+      rating:0,
+      feedback:'',
+      approved:false,
+      resolvedBy:null,
+      departmentApproved:false,
+      reviewedBy:null
+    };
+    if(firestore){
+      firestore.collection('complaints').add(newC).then(ref=>{
+        setComplaints(prev=>[...prev,{...newC,id:ref.id}]);
+      });
+    } else {
+      setComplaints(prev=>[newC,...prev]);
     }
+    addToast(`Complaint ${newC.id} submitted`,'success');
+    setView('complaints');
+  }
 
-    function Info({ label, value }) {
-        return React.createElement("div", {style: {padding: 14, border: "1px solid var(--line)", borderRadius: 16, background: "rgba(255,255,255,.02)"}},
-            React.createElement("small", {className: "dim", style: {fontSize: 9, textTransform: "uppercase", fontWeight: 800}}, label),
-            React.createElement("div", {style: {fontSize: 12, fontWeight: 700, marginTop: 6}}, value)
-        );
+  function updateComplaint(id,changes,note){
+    const updated = complaints.map(c=>{
+      if(c.id!==id) return c;
+      const newC={...c,...changes,updatedAt:Date.now()};
+      if(note){
+        newC.timeline=[...c.timeline,{status:changes.status||c.status,timestamp:Date.now(),note}];
+      }
+      return newC;
+    });
+    setComplaints(updated);
+    if(firestore){
+      firestore.collection('complaints').doc(id).update(changes);
     }
+  }
 
-    // ==================== APPROVALS (ADMIN ONLY) ====================
-    function Approvals({ data, setData, setSelected, notify, addNotification, user }) {
-        const pending = data.complaints.filter(c => c.status === "resolved pending approval");
+  function addComment(cid,msg){
+    const c={id:'cmt'+Date.now(),userId:currentUser?.id||'anon',name:currentUser?.name||'Anonymous',role:currentUser?.role||'user',message:msg,timestamp:Date.now()};
+    updateComplaint(cid,{comments:[...complaints.find(x=>x.id===cid)?.comments||[],c]},'Comment added');
+  }
 
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "head"},
-                React.createElement("div", null, React.createElement("h3", null, "Resolution Approvals"), React.createElement("p", null, "Review and approve department resolutions")),
-                React.createElement("span", {className: "badge", style: {color: "#f97316", borderColor: "#f9731644", background: "#f9731610"}}, pending.length + " pending")
-            ),
-            pending.length === 0 && React.createElement("div", {className: "panel pad empty"}, 
-                React.createElement("i", {className: "fas fa-check-circle"}), "No pending approvals. All caught up! 🎉"),
-            pending.map(c => React.createElement("div", {className: "panel pad", style: {marginBottom: 14, cursor: "pointer"}, key: c.id, onClick: () => setSelected(c)},
-                React.createElement("div", {style: {display: "flex", justifyContent: "space-between", alignItems: "flex-start"}},
-                    React.createElement("div", null,
-                        React.createElement("h4", {style: {fontSize: 14, marginBottom: 6}}, c.subject),
-                        React.createElement("p", {className: "muted", style: {fontSize: 11}}, c.id + " · " + c.department + " · " + ago(c.updatedAt))
-                    ),
-                    React.createElement("span", {className: "badge", style: {color: "#f97316", borderColor: "#f9731644", background: "#f9731610"}}, "Pending Approval")
-                ),
-                React.createElement("div", {style: {marginTop: 12, padding: 12, background: "rgba(255,255,255,.03)", borderRadius: 12}},
-                    React.createElement("small", {className: "dim", style: {fontSize: 9, textTransform: "uppercase", fontWeight: 800}}, "Resolution Note"),
-                    React.createElement("p", {style: {fontSize: 12, marginTop: 4}}, c.resolution)
-                ),
-                c.resolutionProof && React.createElement("div", {className: "attachment-preview", style: {marginTop: 8}}, 
-                    React.createElement("i", {className: "fas fa-file-image"}), "Proof attached: " + c.resolutionProof
-                ),
-                React.createElement("div", {style: {display: "flex", gap: 10, marginTop: 14}},
-                    React.createElement("button", {className: "btn success sm", onClick: (e) => { e.stopPropagation(); 
-                        setData(d => ({...d, complaints: d.complaints.map(x => x.id === c.id ? {...x, status: "resolved", adminApproved: true, approvedBy: user.id, approvedAt: Date.now(), timeline: [...x.timeline, {status: "resolved", timestamp: Date.now(), note: "Approved by " + user.name}]} : x)}));
-                        addNotification(c.submittedBy, "Case Approved", c.id + " approved. Please rate the resolution.");
-                        notify("Approved " + c.id, "success");
-                    }}, React.createElement("i", {className: "fas fa-check"}), " Approve"),
-                    React.createElement("button", {className: "btn danger sm", onClick: (e) => { e.stopPropagation();
-                        setData(d => ({...d, complaints: d.complaints.map(x => x.id === c.id ? {...x, status: "in progress", timeline: [...x.timeline, {status: "in progress", timestamp: Date.now(), note: "Rejected by admin - more work needed"}]} : x)}));
-                        addNotification(c.assignedTo, "Case Rejected", c.id + " needs more work.");
-                        notify("Rejected " + c.id, "warn");
-                    }}, React.createElement("i", {className: "fas fa-xmark"}), " Reject")
-                )
-            ))
-        );
+  function rateComplaint(cid,rating,feedback){
+    updateComplaint(cid,{rating,feedback,status:'closed'},`Rated ${rating}/5 - ${feedback}`);
+    addToast('Feedback submitted!','success');
+  }
+
+  function approveComplaint(cid){
+    updateComplaint(cid,{approved:true,status:'closed'},'Approved by Admin');
+    addToast('Complaint approved and closed','success');
+  }
+
+  function resolveComplaint(cid,resolution){
+    updateComplaint(cid,{status:'resolved',resolution,resolvedBy:currentUser?.id,departmentApproved:true},'Resolved by department');
+    addToast('Complaint resolved, pending admin approval','success');
+  }
+
+  // Filter complaints based on role
+  const visibleComplaints = useMemo(()=>{
+    let list = complaints;
+    if(query){
+      const q=query.toLowerCase();
+      list = list.filter(c=> 
+        (c.id||'').toLowerCase().includes(q) ||
+        (c.title||'').toLowerCase().includes(q) ||
+        (c.category||'').toLowerCase().includes(q) ||
+        (c.department||'').toLowerCase().includes(q)
+      );
     }
-
-    // ==================== ANALYTICS ====================
-    function Analytics({ data, user }) {
-        const total = data.complaints.length;
-        const res = data.complaints.filter(c => ["resolved","closed"].includes(c.status)).length;
-        const rate = total ? Math.round(res/total*100) : 0;
-        const cats = Object.entries(data.complaints.reduce((a,c) => (a[c.category]=(a[c.category]||0)+1,a), {})).sort((a,b) => b[1]-a[1]).slice(0,7);
-        const statuses = STATUS.map(s => ({s, n: data.complaints.filter(c => c.status === s).length}));
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "stats"},
-                React.createElement(Stat, {icon: "fa-database", num: total, label: "Total Volume", color: "#8b5cf6"}),
-                React.createElement(Stat, {icon: "fa-circle-check", num: res, label: "Resolved", color: "#10b981"}),
-                React.createElement(Stat, {icon: "fa-percent", num: rate+"%", label: "Resolution Rate", color: "#22d3ee"}),
-                React.createElement(Stat, {icon: "fa-triangle-exclamation", num: data.complaints.filter(c => c.priority === "critical").length, label: "Critical", color: "#f43f5e"}),
-                React.createElement(Stat, {icon: "fa-hourglass-half", num: data.complaints.filter(c => Date.now()-c.createdAt > c.slaHours*3600000 && !["resolved","closed"].includes(c.status)).length, label: "SLA Overdue", color: "#f59e0b"})
-            ),
-            React.createElement("div", {className: "grid2"},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Status Throughput"), React.createElement("p", null, "Distribution across workflow"))),
-                    React.createElement("div", {className: "chart"}, statuses.map(x => React.createElement("div", {className: "bar", key: x.s},
-                        React.createElement("i", {style: {height: Math.max(4, (x.n/Math.max(...statuses.map(z=>z.n),1))*180), background: statusColor(x.s)}}),
-                        React.createElement("span", null, STATUS_DISPLAY[x.s] || x.s),
-                        React.createElement("b", {style: {fontSize: 11}}, x.n)
-                    )))
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Category Concentration"), React.createElement("p", null, "Where complaints originate"))),
-                    cats.map(x => React.createElement("div", {key: x[0], style: {marginBottom: 12}},
-                        React.createElement("div", {style: {display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6, fontWeight: 600}},
-                            React.createElement("span", null, x[0]), React.createElement("b", null, x[1])),
-                        React.createElement("div", {className: "progress"}, React.createElement("i", {style: {width: (x[1]/Math.max(cats[0]?.[1]||1,1)*100)+"%"}}))
-                    ))
-                )
-            ),
-            React.createElement("div", {className: "grid3", style: {marginTop: 20}},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"}, React.createElement("h3", null, "Priority Mix")),
-                    Object.keys(PC).map(p => {
-                        const n = data.complaints.filter(c => c.priority === p).length;
-                        return React.createElement("div", {key: p, style: {display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--line)", fontSize: 11}},
-                            React.createElement("span", {style: {color: priorityColor(p), fontWeight: 600}}, titleCase(p)),
-                            React.createElement("b", null, n)
-                        );
-                    })
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"}, React.createElement("h3", null, "Department Workload")),
-                    DEPTS.map(d => {
-                        const n = data.complaints.filter(c => c.department === d).length;
-                        if (!n) return null;
-                        return React.createElement("div", {key: d, style: {display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--line)", fontSize: 11}},
-                            React.createElement("span", null, d), React.createElement("b", null, n)
-                        );
-                    })
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"}, React.createElement("h3", null, "Executive Insight")),
-                    React.createElement("p", {className: "muted", style: {fontSize: 12, lineHeight: 1.7}},
-                        "Platform has ", React.createElement("b", {style: {color: "var(--text)"}}, rate + "%"), " resolution rate. ",
-                        data.complaints.filter(c => c.priority === "critical").length, " critical cases need monitoring. ",
-                        "Use SLA and department views to identify bottlenecks."
-                    )
-                )
-            )
-        );
+    // Role-based filtering
+    if(isAdmin) return list;
+    if(isStaff){
+      // Staff sees complaints assigned to their department or IT
+      return list.filter(c=>c.department===currentUser?.department || c.assignedTo===currentUser?.id);
     }
-
-    // ==================== HEATMAP ====================
-    function Heatmap({ data }) {
-        const counts = ZONES.map(z => ({z, n: data.complaints.filter(c => c.zone === z).length}));
-        const max = Math.max(...counts.map(x => x.n), 1);
-        return React.createElement("div", {className: "animate"},
-            React.createElement("section", {className: "panel pad"},
-                React.createElement("div", {className: "head"},
-                    React.createElement("div", null, React.createElement("h3", null, "Campus Issue Intensity"), React.createElement("p", null, "Higher intensity = more reported complaints"))),
-                React.createElement("div", {className: "grid3"}, counts.map(x => React.createElement("div", {key: x.z, style: {
-                    aspectRatio: "1.3", borderRadius: 24, padding: 22, display: "flex", flexDirection: "column", justifyContent: "space-between",
-                    background: `linear-gradient(135deg,rgba(124,58,237,${.08+x.n/max*.55}),rgba(236,72,153,${.04+x.n/max*.3}))`,
-                    border: "1px solid var(--line)", transition: ".3s", cursor: "pointer"
-                }},
-                    React.createElement("span", {className: "dim", style: {fontSize: 11, textTransform: "uppercase", fontWeight: 800}}, x.z),
-                    React.createElement("b", {style: {fontSize: 42, fontFamily: "var(--font-display)"}}, x.n),
-                    React.createElement("div", null,
-                        React.createElement("span", {className: "muted", style: {fontSize: 10}}, "reported issues"),
-                        React.createElement("div", {className: "progress", style: {marginTop: 8}}, React.createElement("i", {style: {width: x.n/max*100+"%"}}))
-                    )
-                )))
-            )
-        );
+    if(isTeacher){
+      // Teacher sees complaints from their department
+      return list.filter(c=>c.department===currentUser?.department);
     }
-
-    // ==================== LEADERBOARD ====================
-    function Leaderboard({ data }) {
-        const arr = DEPTS.map(d => {
-            const a = data.complaints.filter(c => c.department === d);
-            const r = a.filter(c => ["resolved","closed"].includes(c.status));
-            return {name: d, total: a.length, res: r.length, rate: a.length ? Math.round(r.length/a.length*100) : 0};
-        }).filter(x => x.total).sort((a,b) => b.rate - a.rate);
-
-        return React.createElement("div", {className: "animate"},
-            React.createElement("section", {className: "panel pad"},
-                React.createElement("div", {className: "head"},
-                    React.createElement("div", null, React.createElement("h3", null, "Department Resolution Leaderboard"), React.createElement("p", null, "Ranked by resolution percentage"))),
-                arr.map((x, i) => React.createElement("div", {key: x.name, style: {
-                    display: "grid", gridTemplateColumns: "50px 140px 1fr 60px", gap: 14, alignItems: "center", 
-                    padding: "16px 8px", borderBottom: "1px solid var(--line)"
-                }},
-                    React.createElement("b", {style: {fontSize: 22, color: i<3 ? ["#fbbf24","#cbd5e1","#d97706"][i] : "var(--muted)", fontFamily: "var(--font-display)"}}, i<3 ? ["🥇","🥈","🥉"][i] : i+1),
-                    React.createElement("b", {style: {fontSize: 12}}, x.name),
-                    React.createElement("div", {className: "progress"}, React.createElement("i", {style: {width: x.rate+"%"}})),
-                    React.createElement("b", {style: {color: "#fbbf24", fontSize: 12}}, x.rate+"%")
-                )),
-                !arr.length && React.createElement("div", {className: "empty"}, "Not enough data yet.")
-            )
-        );
+    if(isStudent){
+      return list.filter(c=>c.submittedBy===currentUser?.id);
     }
+    return list;
+  },[complaints,query,currentUser,isAdmin,isStaff,isTeacher,isStudent]);
 
-    // ==================== USERS ====================
-    function Users({ data, setData, notify }) {
-        const [q, setQ] = useState("");
-        const list = data.users.filter(u => (u.name+" "+u.email+" "+u.department+" "+u.role).toLowerCase().includes(q.toLowerCase()));
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "filters"},
-                React.createElement("div", {className: "search", style: {width: 320}},
-                    React.createElement("i", {className: "fas fa-search"}),
-                    React.createElement("input", {className: "input", value: q, onChange: e => setQ(e.target.value), placeholder: "Search users..."})
-                )
-            ),
-            React.createElement("section", {className: "panel pad tablewrap"},
-                React.createElement("table", {className: "table"},
-                    React.createElement("thead", null, React.createElement("tr", null,
-                        React.createElement("th", null, "User"), React.createElement("th", null, "Role"), React.createElement("th", null, "Department"),
-                        React.createElement("th", null, "Cases"), React.createElement("th", null, "Action"))),
-                    React.createElement("tbody", null, list.map(u => React.createElement("tr", {key: u.id},
-                        React.createElement("td", null, React.createElement("div", {style: {display: "flex", gap: 10, alignItems: "center"}},
-                            React.createElement("div", {className: "avatar sm"}, u.name[0]),
-                            React.createElement("div", null, React.createElement("b", {style: {fontSize: 11}}, u.name), React.createElement("small", {className: "dim", style: {display: "block", fontSize: 9}}, u.email))
-                        )),
-                        React.createElement("td", null, React.createElement("span", {className: "badge", style: {color: u.role==="admin"?"#fbbf24":"#a78bfa", borderColor: "#a78bfa44", background: "#a78bfa0d"}}, u.role)),
-                        React.createElement("td", null, u.department),
-                        React.createElement("td", null, data.complaints.filter(c => c.assignedTo === u.id || c.submittedBy === u.id).length),
-                        React.createElement("td", null, React.createElement("button", {className: "btn sm", onClick: () => notify("User management connected to backend.", "info")}, "Manage"))
-                    )))
-                )
-            )
-        );
+  const stats = useMemo(()=>{
+    const total=visibleComplaints.length;
+    const pending=visibleComplaints.filter(c=>!['resolved','closed','rejected'].includes(c.status)).length;
+    const resolved=visibleComplaints.filter(c=>c.status==='resolved' || c.status==='closed').length;
+    const approved=visibleComplaints.filter(c=>c.approved).length;
+    const critical=visibleComplaints.filter(c=>c.priority==='critical').length;
+    return {total,pending,resolved,approved,critical};
+  },[visibleComplaints]);
+
+  if(!currentUser){
+    return <LoginPage onLogin={login} theme={theme} setTheme={setTheme} />;
+  }
+
+  return (
+    <>
+      <div className="app">
+        <Sidebar view={view} setView={setView} user={currentUser} logout={logout} isAdmin={isAdmin} />
+        <main className="main">
+          <Topbar 
+            view={view} setView={setView}
+            query={query} setQuery={setQuery}
+            theme={theme} setTheme={setTheme}
+            user={currentUser}
+            complaints={visibleComplaints}
+          />
+          {view==='dashboard' && <Dashboard stats={stats} complaints={visibleComplaints} setSelected={setSelected} setView={setView} user={currentUser} />}
+          {view==='complaints' && <ComplaintsList complaints={visibleComplaints} setSelected={setSelected} setView={setView} user={currentUser} isAdmin={isAdmin} isStaff={isStaff} />}
+          {view==='new' && <NewComplaint user={currentUser} onSubmit={saveComplaint} />}
+          {view==='analytics' && isAdmin && <Analytics complaints={complaints} users={users} />}
+          {view==='users' && isAdmin && <UserManagement users={users} setUsers={setUsers} />}
+          {view==='audit' && isAdmin && <AuditLog complaints={complaints} users={users} />}
+          {view==='settings' && <Settings theme={theme} setTheme={setTheme} />}
+        </main>
+        <MobileNav view={view} setView={setView} />
+      </div>
+      {selected && <ComplaintDetail 
+        complaint={selected}
+        user={currentUser}
+        isAdmin={isAdmin}
+        isStaff={isStaff}
+        onClose={()=>setSelected(null)}
+        onUpdate={updateComplaint}
+        onComment={addComment}
+        onResolve={resolveComplaint}
+        onApprove={approveComplaint}
+        onRate={rateComplaint}
+      />}
+      <div className="toast-wrap">
+        {toasts.map(t=>(
+          <div key={t.id} className={`toast ${t.type}`}>
+            <i className={`fas ${t.type==='success'?'fa-check-circle':t.type==='error'?'fa-exclamation-circle':'fa-info-circle'}`} />
+            {t.msg}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function LoginPage({onLogin,theme,setTheme}){
+  const [selected,setSelected]=useState(null);
+  return (
+    <div className="login-page">
+      <div className="login-box pop">
+        <button className="btn icon" onClick={()=>setTheme(theme==='dark'?'light':'dark')} style={{position:'absolute',top:16,right:16,zIndex:5,background:'transparent',border:'1px solid var(--line)'}}>
+          <i className={`fas ${theme==='dark'?'fa-sun':'fa-moon'}`} />
+        </button>
+        <div className="crest"><i className="fas fa-scale-balanced" /></div>
+        <h1>ResolveHub</h1>
+        <p className="subtitle"><i className="fas fa-crown" /> Smart Complaint System · Classic Edition</p>
+        <div className="role-grid">
+          {ROLES.map(r=>(
+            <button key={r.id} className={`role-card ${selected===r.id?'selected':''}`} onClick={()=>setSelected(r.id)}>
+              <i className={`fas ${r.icon}`} style={{color:r.color}} />
+              <b>{r.name}</b>
+              <small>{r.id==='staff'?'IT Department':r.id==='admin'?'Full Access':r.id==='teacher'?'Faculty':r.id==='student'?'General User':''}</small>
+            </button>
+          ))}
+        </div>
+        <button className="btn primary" style={{width:'100%',padding:'14px',justifyContent:'center'}} onClick={()=>selected&&onLogin(selected)} disabled={!selected}>
+          <i className="fas fa-arrow-right-to-bracket" /> Continue as {selected||'select a role'}
+        </button>
+        <p style={{textAlign:'center',marginTop:12,color:'var(--dim)',fontSize:10}}>Demo login · no password required</p>
+      </div>
+    </div>
+  );
+}
+
+function Sidebar({view,setView,user,logout,isAdmin}){
+  const items = [
+    ['dashboard','fa-gauge-high','Dashboard'],
+    ['complaints','fa-list-check','Complaints'],
+    ['new','fa-plus-circle','New Issue'],
+  ];
+  if(isAdmin) items.push(['analytics','fa-chart-pie','Analytics'],['users','fa-users','Users'],['audit','fa-clock-rotate-left','Audit']);
+  items.push(['settings','fa-sliders','Settings']);
+  return (
+    <aside className="sidebar">
+      <div className="brand">
+        <div className="crest"><i className="fas fa-scale-balanced" /></div>
+        <div><h1>ResolveHub</h1><span>Smart Complaint System</span></div>
+      </div>
+      <nav className="nav">
+        {items.map(([id,icon,label])=>(
+          <button key={id} className={view===id?'active':''} onClick={()=>setView(id)}>
+            <i className={`fas ${icon}`} /> {label}
+          </button>
+        ))}
+      </nav>
+      <div className="sidebar-bottom">
+        <div className="user-card">
+          <div className="avatar">{user?.name?.[0]||'U'}</div>
+          <div className="info">
+            <strong>{user?.name}</strong>
+            <small>{user?.role} · {user?.department}</small>
+          </div>
+          <button className="logout-btn" onClick={logout}><i className="fas fa-sign-out-alt" /></button>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function Topbar({view,setView,query,setQuery,theme,setTheme,user,complaints}){
+  const titles = {
+    dashboard:'Command Center',
+    complaints:'Complaint Intelligence',
+    new:'Report an Issue',
+    analytics:'Analytics',
+    users:'User Management',
+    audit:'Audit Trail',
+    settings:'Settings'
+  };
+  return (
+    <div className="topbar">
+      <div className="title">
+        <h1>{titles[view]||'ResolveHub'}</h1>
+        <p><i className="fas fa-clock" /> {new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</p>
+      </div>
+      <div className="top-actions">
+        <div className="search">
+          <i className="fas fa-search" />
+          <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search complaints..." />
+        </div>
+        <button className="btn icon" onClick={()=>setTheme(theme==='dark'?'light':'dark')}>
+          <i className={`fas ${theme==='dark'?'fa-sun':'fa-moon'}`} />
+        </button>
+        <button className="btn primary" onClick={()=>setView('new')}>
+          <i className="fas fa-plus" /> New Complaint
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Dashboard({stats,complaints,setSelected,setView,user}){
+  const recent = [...complaints].sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
+  return (
+    <div className="animate">
+      <div className="stats">
+        <div className="stat-card"><div className="icon" style={{color:'var(--gold)',borderColor:'rgba(201,168,76,.3)'}}><i className="fas fa-folder-open" /></div><div className="number">{stats.total}</div><div className="label">Total Cases</div></div>
+        <div className="stat-card"><div className="icon" style={{color:'var(--burgundy)',borderColor:'rgba(107,46,62,.3)'}}><i className="fas fa-clock" /></div><div className="number">{stats.pending}</div><div className="label">Pending</div></div>
+        <div className="stat-card"><div className="icon" style={{color:'var(--sage)',borderColor:'rgba(138,154,138,.3)'}}><i className="fas fa-check-circle" /></div><div className="number">{stats.resolved}</div><div className="label">Resolved</div></div>
+        <div className="stat-card"><div className="icon" style={{color:'var(--gold)',borderColor:'rgba(201,168,76,.3)'}}><i className="fas fa-crown" /></div><div className="number">{stats.approved}</div><div className="label">Approved</div></div>
+        <div className="stat-card"><div className="icon" style={{color:'var(--rose)',borderColor:'rgba(212,160,160,.3)'}}><i className="fas fa-triangle-exclamation" /></div><div className="number">{stats.critical}</div><div className="label">Critical</div></div>
+      </div>
+      <div className="panel pad">
+        <div className="head"><div><h3>Recent Activity</h3><p>Latest complaints from your workspace</p></div><button className="btn sm outline" onClick={()=>setView('complaints')}>View All</button></div>
+        {recent.length?recent.map(c=><ComplaintRow key={c.id} complaint={c} onClick={setSelected} />):<div style={{textAlign:'center',color:'var(--dim)',padding:30}}><i className="fas fa-inbox" style={{fontSize:24,display:'block',marginBottom:8}} />No complaints yet</div>}
+      </div>
+    </div>
+  );
+}
+
+function ComplaintRow({complaint,onClick}){
+  const statusColors = {submitted:'badge-navy',reviewing:'badge-gold',assigned:'badge-sage',in_progress:'badge-gold',resolved:'badge-sage',closed:'badge-navy',rejected:'badge-rose'};
+  const priorityColors = {low:'badge-sage',medium:'badge-gold',high:'badge-rose',critical:'badge-burgundy'};
+  return (
+    <div className="complaint-row" onClick={()=>onClick(complaint)}>
+      <div className="avatar-sm">{complaint.title?.[0]||'?'}</div>
+      <div className="content">
+        <b>{complaint.title||'Untitled'}</b>
+        <div className="meta">
+          <span>{complaint.id}</span>
+          <span>·</span>
+          <span>{complaint.category}</span>
+          <span>·</span>
+          <span>{new Date(complaint.createdAt).toLocaleDateString()}</span>
+          <span>·</span>
+          <span>{complaint.department}</span>
+        </div>
+      </div>
+      <div className="badges">
+        <span className={`badge ${priorityColors[complaint.priority]||'badge-navy'}`}>{complaint.priority||'medium'}</span>
+        <span className={`badge ${statusColors[complaint.status]||'badge-navy'}`}>{complaint.status||'submitted'}</span>
+        {complaint.approved && <span className="badge badge-gold"><i className="fas fa-check" /> Approved</span>}
+      </div>
+    </div>
+  );
+}
+
+function ComplaintsList({complaints,setSelected,setView,user,isAdmin,isStaff}){
+  const [filterStatus,setFilterStatus]=useState('all');
+  const [filterPriority,setFilterPriority]=useState('all');
+  const filtered = complaints.filter(c=>filterStatus==='all'||c.status===filterStatus).filter(c=>filterPriority==='all'||c.priority===filterPriority);
+  return (
+    <div className="animate">
+      <div className="filters">
+        <select value={filterStatus} onChange={e=>setFilterStatus(e.target.value)}>
+          <option value="all">All Status</option>
+          {STATUSES.map(s=><option key={s}>{s}</option>)}
+        </select>
+        <select value={filterPriority} onChange={e=>setFilterPriority(e.target.value)}>
+          <option value="all">All Priority</option>
+          <option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option>
+        </select>
+        <span style={{fontSize:12,color:'var(--dim)',alignSelf:'center'}}>{filtered.length} complaints</span>
+        {!isAdmin&&!isStaff&&<button className="btn sm" onClick={()=>setView('new')}><i className="fas fa-plus" /> New</button>}
+      </div>
+      <div className="panel">
+        {filtered.length?filtered.map(c=><ComplaintRow key={c.id} complaint={c} onClick={setSelected} />):
+          <div style={{textAlign:'center',color:'var(--dim)',padding:40}}><i className="fas fa-search" style={{fontSize:28,display:'block',marginBottom:10}} />No complaints match your filters</div>}
+      </div>
+    </div>
+  );
+}
+
+function NewComplaint({user,onSubmit}){
+  const [form,setForm]=useState({
+    title:'',description:'',category:'Academic',priority:'medium',
+    department:user?.department||'General',location:'',zone:'Academic Lab',
+    submittedBy:user?.id
+  });
+  const [error,setError]=useState('');
+
+  const handleCategoryChange = (cat)=>{
+    const priority = PRIORITY_MAP[cat]||'medium';
+    setForm({...form,category:cat,priority});
+  };
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    if(!form.title.trim()){
+      setError('Title is required');
+      return;
     }
-
-    // ==================== AUDIT ====================
-    function Audit({ data }) {
-        return React.createElement("div", {className: "animate"},
-            React.createElement("section", {className: "panel pad tablewrap"},
-                React.createElement("div", {className: "head"},
-                    React.createElement("div", null, React.createElement("h3", null, "Activity Audit Trail"), React.createElement("p", null, "Immutable local records for demo"))),
-                React.createElement("table", {className: "table"},
-                    React.createElement("thead", null, React.createElement("tr", null,
-                        React.createElement("th", null, "Actor"), React.createElement("th", null, "Action"), 
-                        React.createElement("th", null, "Description"), React.createElement("th", null, "Time"))),
-                    React.createElement("tbody", null, data.audit.slice(0, 100).map(a => React.createElement("tr", {key: a.id},
-                        React.createElement("td", null, React.createElement("b", null, a.actorName), React.createElement("small", {className: "dim", style: {display: "block"}}, a.role)),
-                        React.createElement("td", null, React.createElement("span", {className: "badge", style: {color: "#a78bfa", borderColor: "#a78bfa44"}}, a.action)),
-                        React.createElement("td", null, a.description),
-                        React.createElement("td", null, fmt(a.createdAt))
-                    )))
-                )
-            )
-        );
+    if(form.title.trim().length<5){
+      setError('Title must be at least 5 characters');
+      return;
     }
-
-    // ==================== SETTINGS ====================
-    function Settings({ data, setData, theme, setTheme, notify }) {
-        function reset() { if (confirm("Reset all demo data?")) { setData(defaults()); notify("Demo data reset", "success"); } }
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "grid2"},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Appearance"), React.createElement("p", null, "Customize the interface"))),
-                    React.createElement("button", {className: "btn", onClick: () => setTheme(theme==="dark"?"light":"dark")},
-                        React.createElement("i", {className: "fas "+(theme==="dark"?"fa-sun":"fa-moon")}), " Switch to " + (theme==="dark"?"light":"dark") + " mode")
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Data Portability"), React.createElement("p", null, "Export your data"))),
-                    React.createElement("div", {style: {display: "flex", gap: 10, flexWrap: "wrap"}},
-                        React.createElement("button", {className: "btn primary", onClick: () => {
-                            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
-                            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "smart-complaint-backup.json"; a.click();
-                            notify("JSON exported", "success");
-                        }}, React.createElement("i", {className: "fas fa-file-export"}), " JSON Backup"),
-                        React.createElement("button", {className: "btn", onClick: () => {
-                            const rows = [["ID","Subject","Category","Priority","Status","Department","Location","Created","Rating"], ...data.complaints.map(c => [c.id,c.subject,c.category,c.priority,c.status,c.department,c.location,fmt(c.createdAt),c.rating])];
-                            const csv = rows.map(r => r.map(v => `"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");
-                            const blob = new Blob([csv], {type: "text/csv"}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "smart-complaint-report.csv"; a.click();
-                            notify("CSV exported", "success");
-                        }}, React.createElement("i", {className: "fas fa-file-csv"}), " CSV Report")
-                    )
-                )
-            ),
-            React.createElement("section", {className: "panel pad", style: {marginTop: 20}},
-                React.createElement("div", {className: "head"},
-                    React.createElement("div", null, React.createElement("h3", null, "Demo Controls"), React.createElement("p", null, "Stored in browser localStorage")),
-                    React.createElement("span", {className: "badge", style: {color: "#22d3ee", borderColor: "#22d3ee44"}}, "Smart Complaint System v5.0")
-                ),
-                React.createElement("button", {className: "btn danger", onClick: reset},
-                    React.createElement("i", {className: "fas fa-rotate-left"}), " Reset Demo Data"),
-                React.createElement("div", {style: {marginTop: 20, padding: 16, borderRadius: 16, background: "rgba(255,255,255,.035)", fontSize: 11, color: "var(--muted)", lineHeight: 1.6}},
-                    React.createElement("i", {className: "fas fa-circle-info", style: {color: "#22d3ee", marginRight: 8}}),
-                    "This is a standalone frontend demo. For production: connect Firebase credentials, enable real-time sync, add file upload storage, and implement server-side authentication."
-                )
-            )
-        );
+    if(!form.description.trim()){
+      setError('Description is required');
+      return;
     }
+    setError('');
+    onSubmit(form);
+  };
 
-    // ==================== MY TICKETS (STUDENT/TEACHER) ====================
-    function MyTickets({ data, user, setSelected, notify }) {
-        const myCases = data.complaints.filter(c => c.submittedBy === user.id).sort((a,b) => b.createdAt - a.createdAt);
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "head"},
-                React.createElement("div", null, React.createElement("h3", null, "My Tickets"), React.createElement("p", null, "All complaints filed by you")),
-                React.createElement("span", {className: "badge", style: {color: "#a78bfa", borderColor: "#a78bfa44", background: "#a78bfa0d"}}, myCases.length + " total")
-            ),
-            React.createElement("section", {className: "panel"},
-                myCases.length ? myCases.map(c => React.createElement(ComplaintRow, {c, key: c.id, setSelected})) :
-                React.createElement("div", {className: "empty"}, React.createElement("i", {className: "fas fa-ticket"}), "No tickets yet. File your first complaint!")
-            )
-        );
-    }
+  return (
+    <div className="animate">
+      <div className="panel pad" style={{maxWidth:900,margin:'auto'}}>
+        <div className="head"><div><h3>Report a New Issue</h3><p>Fill in the details below</p></div></div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="field full">
+              <label>Issue Title <span style={{color:'var(--burgundy)'}}>*</span></label>
+              <input className="input" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="Enter a clear, descriptive title..." />
+              {error && <span style={{color:'var(--burgundy)',fontSize:11,marginTop:4}}><i className="fas fa-exclamation-circle" /> {error}</span>}
+            </div>
+            <div className="field full">
+              <label>Description <span style={{color:'var(--burgundy)'}}>*</span></label>
+              <textarea className="input" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Describe the issue in detail..." rows={4} />
+            </div>
+            <div className="field">
+              <label>Category</label>
+              <select className="input" value={form.category} onChange={e=>handleCategoryChange(e.target.value)}>
+                {CATEGORIES.map(c=><option key={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Priority <span style={{color:'var(--dim)',fontWeight:400,textTransform:'none'}}>(auto-set)</span></label>
+              <input className="input" value={form.priority} disabled style={{opacity:.7,background:'rgba(201,168,76,.06)'}} />
+            </div>
+            <div className="field">
+              <label>Department <span style={{color:'var(--dim)',fontWeight:400,textTransform:'none'}}>(auto-filled)</span></label>
+              <input className="input" value={form.department} disabled style={{opacity:.7,background:'rgba(201,168,76,.06)'}} />
+            </div>
+            <div className="field">
+              <label>Campus Zone</label>
+              <select className="input" value={form.zone} onChange={e=>setForm({...form,zone:e.target.value})}>
+                {ZONES.map(z=><option key={z}>{z}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Location (optional)</label>
+              <input className="input" value={form.location} onChange={e=>setForm({...form,location:e.target.value})} placeholder="Building / room number" />
+            </div>
+          </div>
+          <div style={{display:'flex',justifyContent:'flex-end',gap:12,marginTop:18,borderTop:'1px solid var(--line)',paddingTop:18}}>
+            <button type="button" className="btn" onClick={()=>window.history.back()}>Cancel</button>
+            <button type="submit" className="btn primary"><i className="fas fa-paper-plane" /> Submit Complaint</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
-    // ==================== STAFF WORKSPACE ====================
-    function StaffWorkspace({ data, user, setSelected, setData, notify, addNotification, updateComplaint }) {
-        const deptCases = data.complaints.filter(c => c.department === user.department);
-        const active = deptCases.filter(c => !["resolved","closed","resolved pending approval"].includes(c.status));
-        const myAssigned = deptCases.filter(c => c.assignedTo === user.id);
-        const pendingMyApproval = deptCases.filter(c => c.status === "resolved pending approval" && c.assignedTo === user.id);
+function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onUpdate,onComment,onResolve,onApprove,onRate}){
+  const [comment,setComment]=useState('');
+  const [resolution,setResolution]=useState('');
+  const [rating,setRating]=useState(0);
+  const [feedback,setFeedback]=useState('');
+  const [showResolve,setShowResolve]=useState(false);
 
-        return React.createElement("div", {className: "animate"},
-            React.createElement("div", {className: "stats"},
-                React.createElement(Stat, {icon: "fa-briefcase", num: deptCases.length, label: "Dept Cases", color: "#3b82f6"}),
-                React.createElement(Stat, {icon: "fa-user-check", num: myAssigned.length, label: "Assigned to Me", color: "#a855f7"}),
-                React.createElement(Stat, {icon: "fa-spinner", num: active.length, label: "Active", color: "#f59e0b"}),
-                React.createElement(Stat, {icon: "fa-hourglass-half", num: pendingMyApproval.length, label: "Pending Approval", color: "#f97316"})
-            ),
-            React.createElement("div", {className: "grid2"},
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Active Cases"), React.createElement("p", null, "Cases requiring your attention"))),
-                    active.filter(c => c.assignedTo === user.id).length === 0 && 
-                        React.createElement("div", {className: "empty"}, React.createElement("i", {className: "fas fa-clipboard-check"}), "No active cases assigned to you."),
-                    active.filter(c => c.assignedTo === user.id).map(c => React.createElement(ComplaintRow, {c, key: c.id, setSelected}))
-                ),
-                React.createElement("section", {className: "panel pad"},
-                    React.createElement("div", {className: "head"},
-                        React.createElement("div", null, React.createElement("h3", null, "Pending Admin Approval"), React.createElement("p", null, "Your resolved cases awaiting approval"))),
-                    pendingMyApproval.length === 0 &&
-                        React.createElement("div", {className: "empty"}, React.createElement("i", {className: "fas fa-check-circle"}), "No pending approvals."),
-                    pendingMyApproval.map(c => React.createElement("div", {key: c.id, className: "complaint", onClick: () => setSelected(c)},
-                        React.createElement("div", {className: "cmain"},
-                            React.createElement("b", null, c.subject),
-                            React.createElement("div", {className: "meta"}, React.createElement("span", null, c.id), React.createElement("span", null, "•"), React.createElement("span", null, ago(c.updatedAt)))
-                        ),
-                        React.createElement("span", {className: "badge", style: {color: "#f97316", borderColor: "#f9731644", background: "#f9731610"}}, "Pending")
-                    ))
-                )
-            )
-        );
-    }
+  const isResolved = complaint.status==='resolved'||complaint.status==='closed';
+  const canResolve = isStaff && !isResolved && complaint.status!=='rejected';
+  const canApprove = isAdmin && complaint.status==='resolved' && !complaint.approved;
+  const canRate = !isAdmin && complaint.status==='resolved' && complaint.approved && !complaint.rating;
 
-    // ==================== LOGIN ====================
-    function Login({ onLogin, theme, setTheme }) {
-        const [sel, setSel] = useState(null), [loading, setLoading] = useState(false);
-        function go() { if (!sel) return; setLoading(true); setTimeout(() => { onLogin(sel); setLoading(false); }, 600); }
-        return React.createElement("div", {className: "login"},
-            React.createElement("div", {className: "loginbox pop"},
-                React.createElement("button", {className: "btn icon", onClick: () => setTheme(theme==="dark"?"light":"dark"), style: {position: "absolute", top: 20, right: 20, zIndex: 5}},
-                    React.createElement("i", {className: "fas "+(theme==="dark"?"fa-sun":"fa-moon")})),
-                React.createElement("div", {className: "loginbrand"},
-                    React.createElement("div", {className: "mark"}, React.createElement("i", {className: "fas fa-shield-halved"})),
-                    React.createElement("h1", null, "Smart Complaint"),
-                    React.createElement("p", null, "Intelligent Campus Resolution System")
-                ),
-                React.createElement("div", {style: {marginTop: 32}},
-                    React.createElement("div", {className: "dim", style: {fontSize: 10, textTransform: "uppercase", letterSpacing: 1.6, fontWeight: 800, marginBottom: 16}}, "Select Your Workspace"),
-                    React.createElement("div", {className: "roles"}, roles.map(r => React.createElement("button", {
-                        type: "button", className: "role "+(sel===r.id?"selected":""), onClick: () => setSel(r.id), key: r.id
-                    },
-                        React.createElement("i", {className: "fas "+r.icon, style: {color: r.color}}),
-                        React.createElement("b", null, r.name),
-                        React.createElement("small", null, r.department + " · " + r.email)
-                    ))),
-                    React.createElement("button", {className: "btn primary", style: {width: "100%", padding: 16}, onClick: go, disabled: !sel || loading},
-                        loading ? React.createElement(React.Fragment, null, React.createElement("i", {className: "fas fa-spinner fa-spin"}), " Launching...") :
-                        React.createElement(React.Fragment, null, React.createElement("i", {className: "fas fa-arrow-right-to-bracket"}), " Continue as " + (sel ? roles.find(r=>r.id===sel)?.name : "Guest"))),
-                    React.createElement("div", {style: {textAlign: "center", marginTop: 16, color: "var(--dim)", fontSize: 10}},
-                        "Demo Login · No Password · Ctrl+K opens Command Palette")
-                )
-            )
-        );
-    }
+  const addComment=()=>{
+    if(!comment.trim()) return;
+    onComment(complaint.id,comment);
+    setComment('');
+  };
 
-    // ==================== MOBILE NAV ====================
-    function MobileNav({ view, go, isAdmin, isStaff, isStudent, isTeacher }) {
-        let items = [];
-        if (isAdmin) items = [["dashboard","fa-house","Home"],["complaints","fa-layer-group","Cases"],["approvals","fa-check","Approve"],["analytics","fa-chart-line","Stats"],["settings","fa-sliders","More"]];
-        else if (isStaff) items = [["dashboard","fa-house","Home"],["staff-workspace","fa-briefcase","Work"],["complaints","fa-layer-group","Cases"],["settings","fa-sliders","More"]];
-        else items = [["dashboard","fa-house","Home"],["new","fa-plus","New"],["my-tickets","fa-ticket","Tickets"],["settings","fa-sliders","More"]];
-        return React.createElement("nav", {className: "mobile-nav"}, items.map(x => 
-            React.createElement("button", {className: view===x[0]?"active":"", onClick: ()=>go(x[0]), key: x[0]},
-                React.createElement("i", {className: "fas "+x[1]}), x[2]
-            )
-        ));
-    }
+  return (
+    <div className="modal" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal-box pop">
+        <div className="modal-head">
+          <div>
+            <div className="badges" style={{marginBottom:6}}>
+              <span className={`badge badge-${complaint.priority==='critical'?'burgundy':complaint.priority==='high'?'rose':'sage'}`}>{complaint.priority}</span>
+              <span className={`badge badge-${complaint.status==='resolved'?'sage':complaint.status==='closed'?'navy':'gold'}`}>{complaint.status}</span>
+              {complaint.approved && <span className="badge badge-gold"><i className="fas fa-check" /> Approved</span>}
+            </div>
+            <h2>{complaint.title}</h2>
+            <p style={{fontSize:12,color:'var(--muted)'}}>{complaint.id} · {complaint.category} · {complaint.department}</p>
+          </div>
+          <button className="btn icon" onClick={onClose}><i className="fas fa-times" /></button>
+        </div>
 
-    // ==================== COMMAND PALETTE ====================
-    function CommandPalette({ close, go, setQuery, isAdmin, isStaff, isStudent, isTeacher }) {
-        const [q, setQ] = useState("");
-        let items = [["dashboard","fa-gauge-high","Dashboard"],["complaints","fa-layer-group","Complaints"],["new","fa-circle-plus","New Complaint"],["heatmap","fa-map-location-dot","Campus Heatmap"],["leaderboard","fa-ranking-star","Leaderboard"],["settings","fa-sliders","Settings"]];
-        if (isAdmin) items.push(["approvals","fa-check-double","Approvals"],["analytics","fa-chart-line","Analytics"],["users","fa-users","Users"],["audit","fa-fingerprint","Audit Trail"]);
-        if (isStaff) items.push(["staff-workspace","fa-briefcase","My Workspace"]);
-        if (isStudent || isTeacher) items.push(["my-tickets","fa-ticket","My Tickets"]);
-        const arr = items.filter(x => x[2].toLowerCase().includes(q.toLowerCase()));
+        <p style={{color:'var(--text)',lineHeight:1.7,marginBottom:16,fontSize:14}}>{complaint.description}</p>
 
-        return React.createElement("div", {className: "modal", onMouseDown: e => e.target === e.currentTarget && close()},
-            React.createElement("div", {className: "modalbox pop", style: {maxWidth: 580, padding: 16}},
-                React.createElement("div", {style: {position: "relative"}},
-                    React.createElement("i", {className: "fas fa-magnifying-glass", style: {position: "absolute", left: 18, top: 18, color: "var(--dim)"}}),
-                    React.createElement("input", {autoFocus: true, className: "input", style: {paddingLeft: 48}, value: q, onChange: e => setQ(e.target.value), placeholder: "Jump to any workspace..."})
-                ),
-                React.createElement("div", {style: {marginTop: 10}},
-                    arr.map(x => React.createElement("button", {key: x[0], className: "command-item", onClick: () => { go(x[0]); close(); }},
-                        React.createElement("i", {className: "fas "+x[1]}), x[2], React.createElement("span", {style: {marginLeft: "auto", color: "var(--dim)", fontSize: 10}}, "↵")
-                    )),
-                    !arr.length && React.createElement("div", {className: "empty"}, "No commands found.")
-                )
-            )
-        );
-    }
+        <div className="grid3" style={{marginBottom:16}}>
+          <div><small className="dim">Submitted</small><div style={{fontWeight:600,fontSize:13}}>{new Date(complaint.createdAt).toLocaleString()}</div></div>
+          <div><small className="dim">By</small><div style={{fontWeight:600,fontSize:13}}>{user?.name||'Anonymous'}</div></div>
+          <div><small className="dim">Location</small><div style={{fontWeight:600,fontSize:13}}>{complaint.location||complaint.zone||'N/A'}</div></div>
+        </div>
 
-    // ==================== RENDER ====================
-    ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, null));
+        {complaint.resolution && (
+          <div className="panel pad" style={{marginBottom:16,background:'rgba(138,154,138,.06)',borderColor:'var(--sage)'}}>
+            <b style={{color:'var(--sage)'}}><i className="fas fa-check-circle" /> Resolution</b>
+            <p style={{fontSize:13,color:'var(--text)',marginTop:4}}>{complaint.resolution}</p>
+            {complaint.resolvedBy && <small className="dim">Resolved by: {users?.find(u=>u.id===complaint.resolvedBy)?.name||'Staff'}</small>}
+          </div>
+        )}
+
+        {!isResolved && complaint.timeline && (
+          <div className="timeline">
+            {complaint.timeline.map((t,i)=><div key={i} className="event"><b>{t.status}</b><p>{t.note}</p><small>{new Date(t.timestamp).toLocaleString()}</small></div>)}
+          </div>
+        )}
+
+        {/* Staff: Resolve */}
+        {canResolve && (
+          <div className="panel pad" style={{marginBottom:16}}>
+            <div className="head"><h3>Resolve This Complaint</h3></div>
+            <textarea className="input" value={resolution} onChange={e=>setResolution(e.target.value)} placeholder="Describe how this issue was resolved..." rows={2} />
+            <button className="btn success" style={{marginTop:8}} onClick={()=>{if(resolution.trim()){onResolve(complaint.id,resolution);setShowResolve(false);}}}><i className="fas fa-check-double" /> Mark Resolved</button>
+          </div>
+        )}
+
+        {/* Admin: Approve */}
+        {canApprove && (
+          <div className="panel pad" style={{marginBottom:16,borderColor:'var(--gold)'}}>
+            <div className="head"><h3 style={{color:'var(--gold)'}}>Admin Approval</h3></div>
+            <p style={{fontSize:12,color:'var(--muted)',marginBottom:8}}>This complaint has been resolved by the department. Approve to close it officially.</p>
+            <button className="btn primary" onClick={()=>onApprove(complaint.id)}><i className="fas fa-crown" /> Approve & Close</button>
+          </div>
+        )}
+
+        {/* User: Rating */}
+        {canRate && (
+          <div className="panel pad" style={{marginBottom:16,borderColor:'var(--gold)'}}>
+            <div className="head"><h3>Rate Resolution</h3></div>
+            <div style={{display:'flex',gap:6,marginBottom:8}}>
+              {[1,2,3,4,5].map(n=><button key={n} className="btn icon" style={{color:n<=rating?'var(--gold)':'var(--dim)'}} onClick={()=>setRating(n)}><i className="fas fa-star" /></button>)}
+            </div>
+            <input className="input" value={feedback} onChange={e=>setFeedback(e.target.value)} placeholder="Share your feedback..." />
+            <button className="btn primary" style={{marginTop:8}} onClick={()=>{if(rating){onRate(complaint.id,rating,feedback);}}}><i className="fas fa-comment" /> Submit Feedback</button>
+          </div>
+        )}
+
+        {/* Comments */}
+        <div className="head" style={{marginTop:12}}><h3>Comments</h3></div>
+        {complaint.comments?.map(c=>(
+          <div key={c.id} className="comment">
+            <div className="author">{c.name} <small>@{c.role} · {new Date(c.timestamp).toLocaleString()}</small></div>
+            <p>{c.message}</p>
+          </div>
+        ))||<p className="dim" style={{fontSize:12}}>No comments yet</p>}
+
+        <div style={{display:'flex',gap:8,marginTop:12}}>
+          <input className="input" value={comment} onChange={e=>setComment(e.target.value)} placeholder="Add a comment..." onKeyDown={e=>e.key==='Enter'&&addComment()} />
+          <button className="btn primary" onClick={addComment}><i className="fas fa-paper-plane" /></button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Placeholder components for other views
+function Analytics({complaints,users}){ return <div className="animate panel pad"><h3>Analytics Dashboard</h3><p className="muted">Complaint statistics and insights</p><div className="stats" style={{marginTop:16}}><div className="stat-card"><div className="number">{complaints.length}</div><div className="label">Total</div></div><div className="stat-card"><div className="number">{complaints.filter(c=>c.status==='resolved').length}</div><div className="label">Resolved</div></div><div className="stat-card"><div className="number">{complaints.filter(c=>c.approved).length}</div><div className="label">Approved</div></div></div></div>; }
+function UserManagement({users,setUsers}){ return <div className="animate panel pad"><h3>User Management</h3><table className="table" style={{width:'100%',borderCollapse:'collapse',marginTop:12}}><thead><tr style={{borderBottom:'2px solid var(--line)'}}><th style={{textAlign:'left',padding:10,fontSize:11,color:'var(--dim)'}}>Name</th><th style={{textAlign:'left',padding:10,fontSize:11,color:'var(--dim)'}}>Role</th><th style={{textAlign:'left',padding:10,fontSize:11,color:'var(--dim)'}}>Department</th></tr></thead><tbody>{users.map(u=><tr key={u.id} style={{borderBottom:'1px solid var(--line)'}}><td style={{padding:10}}>{u.name}</td><td style={{padding:10}}><span className="badge badge-gold">{u.role}</span></td><td style={{padding:10}}>{u.department}</td></tr>)}</tbody></table></div>; }
+function AuditLog({complaints,users}){ return <div className="animate panel pad"><h3>Audit Trail</h3><p className="muted">Recent activity log</p><div style={{marginTop:12}}>{complaints.slice(0,10).map(c=><div key={c.id} style={{padding:8,borderBottom:'1px solid var(--line)',fontSize:12}}><span className="badge badge-navy">{c.status}</span> {c.id} - {c.title} <span className="dim">{new Date(c.updatedAt).toLocaleString()}</span></div>)}</div></div>; }
+function Settings({theme,setTheme}){ return <div className="animate panel pad"><h3>Settings</h3><div style={{display:'flex',gap:12,alignItems:'center',marginTop:12}}><button className="btn" onClick={()=>setTheme(theme==='dark'?'light':'dark')}><i className={`fas ${theme==='dark'?'fa-sun':'fa-moon'}`} /> Switch to {theme==='dark'?'Light':'Dark'} Mode</button></div><p className="muted" style={{fontSize:11,marginTop:16}}>Data is stored locally. Connect Firebase for cloud sync.</p></div>; }
+
+function MobileNav({view,setView}){
+  const items=[['dashboard','fa-gauge-high','Home'],['complaints','fa-list','Cases'],['new','fa-plus','New'],['settings','fa-sliders','More']];
+  return <nav className="mobile-nav">{items.map(([id,icon,label])=><button key={id} className={view===id?'active':''} onClick={()=>setView(id)}><i className={`fas ${icon}`} />{label}</button>)}</nav>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 })();
 </script>
 </body>
