@@ -137,6 +137,7 @@ gap:14px;
 font-size:14px;
 font-weight:500;
 transition:all .3s ease;
+position:relative;
 }
 .nav button:hover{
 background:rgba(201,168,76,.08);
@@ -158,7 +159,7 @@ width:3px;
 background:var(--gold);
 border-radius:0 3px 3px 0;
 }
-.nav i{width:22px;text-align:center;font-size:16px;position:relative}
+.nav i{width:22px;text-align:center;font-size:16px}
 .sidebar-bottom{
 margin-top:auto;
 border-top:2px solid rgba(201,168,76,.15);
@@ -288,6 +289,7 @@ border-color:var(--gold);
 color:var(--gold);
 }
 .btn.outline:hover{background:var(--gold);color:var(--navy)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 
 /* ===== PANELS ===== */
 .panel{
@@ -322,6 +324,7 @@ border:1px solid var(--line);
 border-radius:var(--r);
 box-shadow:var(--shadow);
 transition:all .3s ease;
+position:relative;
 }
 .stat-card:hover{transform:translateY(-4px);border-color:var(--gold)}
 .stat-card .icon{
@@ -335,15 +338,6 @@ border:1px solid;
 }
 .stat-card .number{font-size:30px;font-weight:900;font-family:var(--font-serif)}
 .stat-card .label{font-size:12px;color:var(--muted);margin-top:4px}
-.stat-card .badge{
-position:absolute;right:16px;top:16px;
-font-size:9px;
-padding:4px 10px;
-border-radius:20px;
-font-weight:600;
-background:rgba(201,168,76,.12);
-color:var(--gold);
-}
 
 /* ===== GRIDS ===== */
 .grid2{display:grid;grid-template-columns:1.4fr .6fr;gap:18px}
@@ -651,13 +645,15 @@ const DEFAULT_USERS = [
   {id:'u2',name:'Student User',email:'student@demo.com',role:'student',department:'General'},
   {id:'u3',name:'Dr. Teacher',email:'teacher@demo.com',role:'teacher',department:'Academics'},
   {id:'u4',name:'IT Staff',email:'staff@demo.com',role:'staff',department:'IT'},
-  {id:'u5',name:'Facilities Staff',email:'facilities@demo.com',role:'staff',department:'Facilities'}
+  {id:'u5',name:'Facilities Staff',email:'facilities@demo.com',role:'staff',department:'Facilities'},
+  {id:'u6',name:'Library Staff',email:'library@demo.com',role:'staff',department:'Library'},
+  {id:'u7',name:'Examination Staff',email:'exam@demo.com',role:'staff',department:'Examination'}
 ];
 
 const seedComplaints = [
-  {id:'CMP-001',title:'Broken AC in Lab 301',description:'AC not cooling properly, students unable to work comfortably.',category:'Infrastructure',priority:'high',status:'assigned',department:'Facilities',zone:'Academic Lab',location:'Building A',submittedBy:'u2',assignedTo:'u5',createdAt:Date.now()-86400000*2,updatedAt:Date.now()-86400000*1.5,timeline:[{status:'submitted',timestamp:Date.now()-86400000*2,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*1.5,note:'Assigned to Facilities'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false},
-  {id:'CMP-002',title:'Exam Schedule Conflict',description:'Two major exams scheduled on same day.',category:'Examination',priority:'critical',status:'reviewing',department:'Examination',zone:'Admin Block',location:'Academic Block',submittedBy:'u3',assignedTo:null,createdAt:Date.now()-86400000*1.5,updatedAt:Date.now()-86400000*1.2,timeline:[{status:'submitted',timestamp:Date.now()-86400000*1.5,note:'Complaint submitted'},{status:'reviewing',timestamp:Date.now()-86400000*1.2,note:'Under review'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false},
-  {id:'CMP-003',title:'WiFi Connectivity Issue',description:'No reliable WiFi in hostel block C.',category:'IT/Technical',priority:'high',status:'in_progress',department:'IT',zone:'Hostel',location:'Hostel C',submittedBy:'u2',assignedTo:'u4',createdAt:Date.now()-86400000*3,updatedAt:Date.now()-86400000*1,timeline:[{status:'submitted',timestamp:Date.now()-86400000*3,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*2.5,note:'Assigned to IT'},{status:'in_progress',timestamp:Date.now()-86400000*1,note:'Work in progress'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false}
+  {id:'CMP-001',title:'Broken AC in Lab 301',description:'AC not cooling properly, students unable to work comfortably.',category:'Infrastructure',priority:'high',status:'assigned',department:'Facilities',zone:'Academic Lab',location:'Building A',submittedBy:'u2',assignedTo:'u5',createdAt:Date.now()-86400000*2,updatedAt:Date.now()-86400000*1.5,timeline:[{status:'submitted',timestamp:Date.now()-86400000*2,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*1.5,note:'Assigned to Facilities Staff'}],comments:[{id:'c1',userId:'u5',name:'Facilities Staff',role:'staff',message:'We are looking into this issue.',timestamp:Date.now()-86400000*1}],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false},
+  {id:'CMP-002',title:'Exam Schedule Conflict',description:'Two major exams scheduled on same day.',category:'Examination',priority:'critical',status:'reviewing',department:'Examination',zone:'Admin Block',location:'Academic Block',submittedBy:'u3',assignedTo:null,createdAt:Date.now()-86400000*1.5,updatedAt:Date.now()-86400000*1.2,timeline:[{status:'submitted',timestamp:Date.now()-86400000*1.5,note:'Complaint submitted'},{status:'reviewing',timestamp:Date.now()-86400000*1.2,note:'Under review by Examination Department'}],comments:[],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false},
+  {id:'CMP-003',title:'WiFi Connectivity Issue',description:'No reliable WiFi in hostel block C.',category:'IT/Technical',priority:'high',status:'in_progress',department:'IT',zone:'Hostel',location:'Hostel C',submittedBy:'u2',assignedTo:'u4',createdAt:Date.now()-86400000*3,updatedAt:Date.now()-86400000*1,timeline:[{status:'submitted',timestamp:Date.now()-86400000*3,note:'Complaint submitted'},{status:'assigned',timestamp:Date.now()-86400000*2.5,note:'Assigned to IT Staff'},{status:'in_progress',timestamp:Date.now()-86400000*1,note:'Work in progress - checking routers'}],comments:[{id:'c2',userId:'u4',name:'IT Staff',role:'staff',message:'We have identified the issue and are working on a fix.',timestamp:Date.now()-86400000*0.5}],resolution:'',rating:0,feedback:'',approved:false,resolvedBy:null,departmentApproved:false}
 ];
 
 function generateId(){ return 'CMP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substring(2,6).toUpperCase(); }
@@ -709,6 +705,7 @@ function App(){
   const isAdmin = currentUser?.role==='admin';
   const isStaff = currentUser?.role==='staff';
   const isStudent = currentUser?.role==='student';
+  const isTeacher = currentUser?.role==='teacher';
 
   function addToast(msg,type='info'){
     const t={id:Date.now()+Math.random(),msg,type};
@@ -759,7 +756,7 @@ function App(){
       departmentApproved:false
     };
     setComplaints(prev=>[newC,...prev]);
-    addToast(`Complaint ${newC.id} submitted`,'success');
+    addToast(`Complaint ${newC.id} submitted successfully!`,'success');
     setView('complaints');
   }
 
@@ -772,7 +769,6 @@ function App(){
       }
       return newC;
     }));
-    addToast('Complaint updated','success');
   }
 
   function assignComplaint(id,assignedTo,department){
@@ -781,8 +777,8 @@ function App(){
       assignedTo: assignedTo,
       department: department || staffUser?.department,
       status:'assigned'
-    },`Assigned to ${staffUser?.name||'Staff'}`);
-    addToast(`Complaint assigned to ${staffUser?.name||'Staff'}`,'success');
+    },`Assigned to ${staffUser?.name||'Staff'} (${staffUser?.department||department})`);
+    addToast(`Complaint assigned to ${staffUser?.name||'Staff'} successfully!`,'success');
   }
 
   function addComment(cid,msg){
@@ -793,25 +789,30 @@ function App(){
       }
       return comp;
     }));
-    addToast('Comment added','success');
+    addToast('Comment added!','success');
   }
 
   function rateComplaint(cid,rating,feedback){
-    updateComplaint(cid,{rating,feedback,status:'closed'},`Rated ${rating}/5`);
-    addToast('Feedback submitted! Thank you!','success');
+    updateComplaint(cid,{rating,feedback,status:'closed'},`Rated ${rating}/5 - Feedback: ${feedback}`);
+    addToast('Thank you for your feedback! 🙏','success');
   }
 
   function approveComplaint(cid){
     updateComplaint(cid,{approved:true,status:'closed'},'Approved by Admin');
-    addToast('Complaint approved and closed','success');
+    addToast('Complaint approved and closed!','success');
   }
 
   function resolveComplaint(cid,resolution){
-    updateComplaint(cid,{status:'resolved',resolution,resolvedBy:currentUser?.id,departmentApproved:true},'Resolved by department');
-    addToast('Complaint resolved, pending admin approval','success');
+    updateComplaint(cid,{
+      status:'resolved',
+      resolution:resolution,
+      resolvedBy:currentUser?.id,
+      departmentApproved:true
+    },'Resolved by department - pending admin approval');
+    addToast('Complaint resolved! Waiting for admin approval.','success');
   }
 
-  // Role-based filtering
+  // Role-based filtering - FIXED: Staff can see assigned complaints
   const visibleComplaints = useMemo(()=>{
     let list = complaints;
     if(query){
@@ -825,13 +826,17 @@ function App(){
     }
     if(isAdmin) return list;
     if(isStaff){
-      return list.filter(c=>c.department===currentUser?.department || c.assignedTo===currentUser?.id);
+      // Staff sees complaints assigned to them OR complaints in their department
+      return list.filter(c=>c.assignedTo===currentUser?.id || c.department===currentUser?.department);
+    }
+    if(isTeacher){
+      return list.filter(c=>c.department===currentUser?.department || c.submittedBy===currentUser?.id);
     }
     if(isStudent){
       return list.filter(c=>c.submittedBy===currentUser?.id);
     }
     return list;
-  },[complaints,query,currentUser,isAdmin,isStaff,isStudent]);
+  },[complaints,query,currentUser,isAdmin,isStaff,isTeacher,isStudent]);
 
   const stats = useMemo(()=>{
     const total=visibleComplaints.length;
@@ -839,7 +844,8 @@ function App(){
     const resolved=visibleComplaints.filter(c=>c.status==='resolved' || c.status==='closed').length;
     const approved=visibleComplaints.filter(c=>c.approved).length;
     const critical=visibleComplaints.filter(c=>c.priority==='critical').length;
-    return {total,pending,resolved,approved,critical};
+    const assigned=visibleComplaints.filter(c=>c.assignedTo).length;
+    return {total,pending,resolved,approved,critical,assigned};
   },[visibleComplaints]);
 
   if(!currentUser){
@@ -866,6 +872,7 @@ function App(){
       user:currentUser,
       isAdmin:isAdmin,
       isStaff:isStaff,
+      isStudent:isStudent,
       onClose:()=>setSelected(null),
       onComment:addComment,
       onResolve:resolveComplaint,
@@ -1077,7 +1084,8 @@ function ComplaintRow({complaint,onClick}){
       createElement('span', {className:'badge '+(priorityColors[complaint.priority]||'badge-navy')}, complaint.priority||'medium'),
       createElement('span', {className:'badge '+(statusColors[complaint.status]||'badge-navy')}, complaint.status||'submitted'),
       complaint.assignedTo && createElement('span', {className:'badge badge-sage'}, createElement('i', {className:'fas fa-user-check'}), ' Assigned'),
-      complaint.approved && createElement('span', {className:'badge badge-gold'}, createElement('i', {className:'fas fa-check'}), ' Approved')
+      complaint.approved && createElement('span', {className:'badge badge-gold'}, createElement('i', {className:'fas fa-check'}), ' Approved'),
+      complaint.rating > 0 && createElement('span', {className:'badge badge-gold'}, createElement('i', {className:'fas fa-star'}), ' ', complaint.rating, '/5')
     )
   );
 }
@@ -1195,7 +1203,7 @@ function NewComplaint({user,onSubmit}){
 }
 
 // ===== COMPLAINT DETAIL =====
-function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onResolve,onApprove,onRate,onAssign,users,departments}){
+function ComplaintDetail({complaint,user,isAdmin,isStaff,isStudent,onClose,onComment,onResolve,onApprove,onRate,onAssign,users,departments}){
   const [comment,setComment]=useState('');
   const [resolution,setResolution]=useState('');
   const [rating,setRating]=useState(0);
@@ -1205,9 +1213,9 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
   const [selectedStaff,setSelectedStaff]=useState(complaint.assignedTo||'');
 
   const isResolved = complaint.status==='resolved'||complaint.status==='closed';
-  const canResolve = isStaff && !isResolved && complaint.status!=='rejected';
+  const canResolve = isStaff && !isResolved && complaint.status!=='rejected' && complaint.assignedTo===user?.id;
   const canApprove = isAdmin && complaint.status==='resolved' && !complaint.approved;
-  const canRate = !isAdmin && complaint.status==='resolved' && complaint.approved && !complaint.rating;
+  const canRate = !isAdmin && complaint.status==='resolved' && complaint.approved && !complaint.rating && complaint.submittedBy===user?.id;
   const canAssign = isAdmin && !complaint.assignedTo && complaint.status!=='resolved' && complaint.status!=='closed';
 
   const staffUsers = users.filter(u=>u.role==='staff' || u.role==='admin');
@@ -1218,6 +1226,7 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
       const staff = users.find(u=>u.id===selectedStaff);
       onAssign(complaint.id,selectedStaff,selectedDept);
       setShowAssign(false);
+      setSelectedStaff('');
     }
   };
 
@@ -1235,7 +1244,8 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
             createElement('span', {className:'badge badge-'+(complaint.priority==='critical'?'burgundy':complaint.priority==='high'?'rose':'sage')}, complaint.priority),
             createElement('span', {className:'badge badge-'+(complaint.status==='resolved'?'sage':complaint.status==='closed'?'navy':'gold')}, complaint.status),
             complaint.assignedTo && createElement('span', {className:'badge badge-sage'}, createElement('i', {className:'fas fa-user-check'}), ' Assigned'),
-            complaint.approved && createElement('span', {className:'badge badge-gold'}, createElement('i', {className:'fas fa-check'}), ' Approved')
+            complaint.approved && createElement('span', {className:'badge badge-gold'}, createElement('i', {className:'fas fa-check'}), ' Approved'),
+            complaint.rating > 0 && createElement('span', {className:'badge badge-gold'}, createElement('i', {className:'fas fa-star'}), ' ', complaint.rating, '/5')
           ),
           createElement('h2', null, complaint.title),
           createElement('p', {style:{fontSize:12,color:'var(--muted)'}}, complaint.id, ' · ', complaint.category, ' · ', complaint.department)
@@ -1260,18 +1270,21 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
         )
       ),
 
+      // Assigned To
       complaint.assignedTo && createElement('div', {className:'panel pad', style:{marginBottom:16,background:'rgba(138,154,138,.06)'}},
         createElement('b', {style:{color:'var(--sage)'}}, createElement('i', {className:'fas fa-user-check'}), ' Assigned To'),
         createElement('p', {style:{fontSize:13,color:'var(--text)',marginTop:4}}, users.find(u=>u.id===complaint.assignedTo)?.name||'Staff'),
         createElement('small', {className:'dim'}, 'Department: ', complaint.department)
       ),
 
+      // Resolution
       complaint.resolution && createElement('div', {className:'panel pad', style:{marginBottom:16,background:'rgba(138,154,138,.06)',borderColor:'var(--sage)'}},
         createElement('b', {style:{color:'var(--sage)'}}, createElement('i', {className:'fas fa-check-circle'}), ' Resolution'),
         createElement('p', {style:{fontSize:13,color:'var(--text)',marginTop:4}}, complaint.resolution),
         complaint.resolvedBy && createElement('small', {className:'dim'}, 'Resolved by: ', users.find(u=>u.id===complaint.resolvedBy)?.name||'Staff')
       ),
 
+      // Timeline
       complaint.timeline && createElement('div', {className:'timeline'},
         complaint.timeline.map((t,i)=>createElement('div', {key:i, className:'event'},
           createElement('b', null, t.status),
@@ -1280,7 +1293,7 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
         ))
       ),
 
-      // Admin: Assign
+      // Admin: Assign - FIXED: Added proper submit button
       canAssign && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
         createElement('div', {className:'head'},
           createElement('h3', {style:{color:'var(--gold)'}}, createElement('i', {className:'fas fa-user-plus'}), ' Assign Complaint')
@@ -1301,20 +1314,20 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
                 createElement('label', null, 'Staff Member'),
                 createElement('select', {className:'input', value:selectedStaff, onChange:e=>setSelectedStaff(e.target.value)},
                   createElement('option', {value:''}, 'Select staff...'),
-                  filteredStaff.map(u=>createElement('option', {key:u.id, value:u.id}, u.name))
+                  filteredStaff.map(u=>createElement('option', {key:u.id, value:u.id}, u.name+' ('+u.department+')'))
                 )
               )
             ),
             createElement('div', {style:{display:'flex',gap:8,marginTop:12}},
               createElement('button', {className:'btn success', onClick:handleAssign, disabled:!selectedStaff},
-                createElement('i', {className:'fas fa-check'}), ' Assign'
+                createElement('i', {className:'fas fa-check'}), ' Assign Complaint'
               ),
               createElement('button', {className:'btn', onClick:()=>setShowAssign(false)}, 'Cancel')
             )
           )
       ),
 
-      // Staff: Resolve
+      // Staff: Resolve - Only if assigned to this staff
       canResolve && createElement('div', {className:'panel pad', style:{marginBottom:16}},
         createElement('div', {className:'head'}, createElement('h3', null, 'Resolve This Complaint')),
         createElement('textarea', {className:'input', value:resolution, onChange:e=>setResolution(e.target.value), placeholder:'Describe how this issue was resolved...', rows:2}),
@@ -1332,15 +1345,16 @@ function ComplaintDetail({complaint,user,isAdmin,isStaff,onClose,onComment,onRes
         )
       ),
 
-      // User: Rate
+      // User: Rate - Only the person who filed the complaint can rate
       canRate && createElement('div', {className:'panel pad', style:{marginBottom:16,borderColor:'var(--gold)'}},
         createElement('div', {className:'head'}, createElement('h3', null, 'Rate Resolution')),
+        createElement('p', {style:{fontSize:12,color:'var(--muted)',marginBottom:8}}, 'Please rate how the complaint was resolved:'),
         createElement('div', {style:{display:'flex',gap:6,marginBottom:8}},
-          [1,2,3,4,5].map(n=>createElement('button', {key:n, className:'btn icon', style:{color:n<=rating?'var(--gold)':'var(--dim)'}, onClick:()=>setRating(n)},
+          [1,2,3,4,5].map(n=>createElement('button', {key:n, className:'btn icon', style:{color:n<=rating?'var(--gold)':'var(--dim)',borderColor:n<=rating?'var(--gold)':'var(--line)'}, onClick:()=>setRating(n)},
             createElement('i', {className:'fas fa-star'})
           ))
         ),
-        createElement('input', {className:'input', value:feedback, onChange:e=>setFeedback(e.target.value), placeholder:'Share your feedback...'}),
+        createElement('input', {className:'input', value:feedback, onChange:e=>setFeedback(e.target.value), placeholder:'Share your feedback about the resolution...'}),
         createElement('button', {className:'btn primary', style:{marginTop:8}, onClick:()=>{if(rating){onRate(complaint.id,rating,feedback);}}},
           createElement('i', {className:'fas fa-comment'}), ' Submit Feedback'
         )
@@ -1502,13 +1516,13 @@ function Settings({theme,setTheme}){
     createElement('div', {style:{marginTop:12,padding:12,background:'rgba(201,168,76,.06)',borderRadius:'var(--r)',fontSize:11}},
       createElement('b', null, createElement('i', {className:'fas fa-info-circle'}), ' Features:'),
       createElement('ul', {style:{marginTop:6,paddingLeft:20,color:'var(--muted)',lineHeight:1.8}},
-        createElement('li', null, 'Role-based access control (Admin, Student, Teacher, Staff)'),
-        createElement('li', null, 'Admin can assign complaints to any department/staff'),
-        createElement('li', null, 'Auto-priority based on category selection'),
-        createElement('li', null, 'Auto-department from user login role'),
-        createElement('li', null, 'Staff resolves, Admin approves'),
-        createElement('li', null, 'Users rate resolved complaints'),
-        createElement('li', null, 'Full audit trail and timeline')
+        createElement('li', null, '✅ Role-based access control (Admin, Student, Teacher, Staff)'),
+        createElement('li', null, '✅ Admin can assign complaints to any department/staff'),
+        createElement('li', null, '✅ Auto-priority based on category selection'),
+        createElement('li', null, '✅ Auto-department from user login role'),
+        createElement('li', null, '✅ Staff resolves, Admin approves'),
+        createElement('li', null, '✅ Users rate resolved complaints'),
+        createElement('li', null, '✅ Full audit trail and timeline')
       )
     )
   );
