@@ -140,6 +140,7 @@ a{color:inherit}
 
     let db = null, auth = null, storage = null, firebaseConnected = false;
     try {
+        // Check if Firebase is available AND API key is not the placeholder
         if (typeof firebase !== 'undefined' && firebaseConfig.apiKey !== 'YOUR_API_KEY') {
             firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
@@ -147,9 +148,23 @@ a{color:inherit}
             storage = firebase.storage();
             firebaseConnected = true;
             console.log('Firebase connected');
+        } else {
+            console.log('Firebase demo mode - using localStorage');
+            // Create dummy auth object to prevent errors
+            auth = {
+                onAuthStateChanged: (callback) => { callback(null); return () => {}; },
+                signInWithEmailAndPassword: () => Promise.reject(new Error('Demo mode')),
+                createUserWithEmailAndPassword: () => Promise.reject(new Error('Demo mode'))
+            };
         }
     } catch(e) {
         console.log('Firebase demo mode:', e.message);
+        // Create dummy auth object to prevent errors
+        auth = {
+            onAuthStateChanged: (callback) => { callback(null); return () => {}; },
+            signInWithEmailAndPassword: () => Promise.reject(new Error('Demo mode')),
+            createUserWithEmailAndPassword: () => Promise.reject(new Error('Demo mode'))
+        };
     }
 
     // ==================== CONSTANTS ====================
