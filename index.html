@@ -4,36 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
   <meta name="theme-color" content="#4f46e5">
-  <meta name="description" content="ResolveHub — Next-Gen Smart Complaint Management">
   <title>ResolveHub · Next-Gen Issue Resolution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Load React and ReactDOM with error handling -->
-  <script>
-    // Check if CDN loads, if not show error
-    window.ReactLoaded = false;
-    window.ReactDOMLoaded = false;
-  </script>
-  
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js" 
-          onload="window.ReactLoaded = true"
-          onerror="console.error('React failed to load from CDN')">
-  </script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
-          onload="window.ReactDOMLoaded = true"
-          onerror="console.error('ReactDOM failed to load from CDN')">
-  </script>
-  
-  <!-- Babel Standalone -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"
-          onerror="console.error('Babel failed to load from CDN')">
-  </script>
-  
   <style>
-    /* --- RESET & ROOT VARIABLES --- */
     :root {
       --primary: #6366f1;
       --primary-dark: #4f46e5;
@@ -97,6 +74,8 @@
     @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.92) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes confetti-fall { 0% { transform: translateY(-120vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(120vh) rotate(960deg); opacity: 0; } }
 
     .animate-fade { animation: fadeIn 0.4s ease forwards; }
     .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -120,6 +99,7 @@
     .btn-ghost { background: transparent; color: var(--text-secondary); }
     .btn-ghost:hover { background: rgba(99,102,241,0.08); color: var(--primary); }
     .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 20px; }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
 
     .badge {
       display: inline-flex; align-items: center; gap: 4px;
@@ -275,7 +255,6 @@
       position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
       animation: float 8s ease-in-out infinite;
     }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
     .checkbox-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .checkbox-wrap input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
@@ -307,25 +286,10 @@
     }
     .kanban-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--border-strong); }
 
-    .shortcut-key { 
-      display: inline-flex; align-items: center; justify-content: center; 
-      padding: 2px 8px; border-radius: 6px; background: var(--border); 
-      font-size: 12px; font-weight: 700; font-family: monospace; 
-      color: var(--text-secondary); border: 1px solid var(--border-strong); 
-    }
-
-    .notification-dropdown {
-      position: absolute; top: 48px; right: 0; width: 360px; max-height: 480px;
-      overflow-y: auto; border-radius: var(--radius-lg); z-index: 60;
-      background: var(--surface); border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg); animation: scaleIn 0.2s ease;
-    }
-
     .confetti-piece {
       position: fixed; width: 10px; height: 10px; top: -10px; z-index: 99999;
       animation: confetti-fall 3s linear forwards;
     }
-    @keyframes confetti-fall { 0% { transform: translateY(-120vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(120vh) rotate(960deg); opacity: 0; } }
 
     .activity-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
     .activity-item:last-child { border-bottom: none; }
@@ -352,1018 +316,1044 @@
 </head>
 <body>
   <div id="root">
-    <!-- Loading state shown while React loads -->
     <div style="height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; background:#f8fafc; font-family:'Inter',sans-serif;">
       <div style="width:64px; height:64px; border-radius:50%; border:4px solid rgba(99,102,241,0.12); border-top-color:#6366f1; animation:spin 0.9s linear infinite;"></div>
       <div style="font-weight:600; color:#64748b; font-size:16px;">Loading ResolveHub...</div>
     </div>
   </div>
 
-  <script type="text/babel" data-presets="react">
-    const { useState, useEffect, useCallback, useContext, useRef, createContext } = React;
-
-    // ===================== CONSTANTS & HELPERS =====================
-    const STORAGE_KEY = 'resolvehub_data_v2';
-    const SESSION_KEY = 'resolvehub_session';
-
-    const STATUS_COLORS = {
-      submitted: '#94a3b8', 'under review': '#f59e0b', assigned: '#6366f1',
-      'in progress': '#8b5cf6', resolved: '#10b981', closed: '#64748b',
-      reopened: '#ef4444', rejected: '#ef4444'
-    };
-    const PRIORITY_COLORS = { low: '#94a3b8', medium: '#f59e0b', high: '#f97316', critical: '#ef4444' };
-    const ZONES = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
-    const ZONE_LABELS = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
-    const CATEGORIES = ['Infrastructure','Academic','Faculty','Examination','Hostel','Transport','Library','IT / Technology','Security','Cleanliness','Electricity','Water','Harassment / Misconduct','Administration','Other'];
-    const PRIORITIES = ['low','medium','high','critical'];
-    const SLA_HOURS = { critical: 4, high: 24, medium: 72, low: 168 };
-
-    function getStatusColor(s) { return STATUS_COLORS[(s||'').toLowerCase()] || '#94a3b8'; }
-    function getPriorityColor(p) { return PRIORITY_COLORS[(p||'').toLowerCase()] || '#94a3b8'; }
-    function formatDate(ts) { if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
-    function timeAgo(ts) { const s=Math.floor((Date.now()-ts)/1000); const intervals={y:31536000,m:2592000,w:604800,d:86400,h:3600,n:60}; for(let[k,v]of Object.entries(intervals)){const c=Math.floor(s/v); if(c>0) return c+' '+k+(c>1?'s':'')+' ago'; } return 'Just now'; }
-    function generateId() { return 'CMP-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*100000)).padStart(5,'0'); }
-    function getGreeting() { const h=new Date().getHours(); if(h<12)return 'Good morning'; if(h<17)return 'Good afternoon'; return 'Good evening'; }
-    
-    const KEYWORD_MAP = [
-      { regex: /wifi|internet|network|lan/i, category: 'IT / Technology', priority: 'high' },
-      { regex: /broken|not working|damaged|repair/i, category: 'Infrastructure', priority: 'medium' },
-      { regex: /ac|cooling|temperature|hot|cold/i, category: 'Infrastructure', priority: 'high' },
-      { regex: /harassment|abuse|misconduct|inappropriate/i, category: 'Harassment / Misconduct', priority: 'critical' },
-      { regex: /exam|schedule|timetable|clash|grading/i, category: 'Examination', priority: 'high' },
-      { regex: /water|leak|pipe|plumbing|flood/i, category: 'Water', priority: 'high' },
-    ];
-    
-    function suggestFromText(text) { 
-      if(!text) return null; 
-      for(const rule of KEYWORD_MAP){ 
-        if(rule.regex.test(text)) return { category: rule.category, priority: rule.priority }; 
-      } 
-      return null; 
-    }
-
-    const defaultUsers = [
-      { id:'u1', name:'Admin', email:'admin@portal.demo', role:'admin', department:'Administration' },
-      { id:'u2', name:'Student', email:'student@portal.demo', role:'student', department:'Engineering' },
-      { id:'u3', name:'Teacher', email:'teacher@portal.demo', role:'teacher', department:'CS' },
-      { id:'u4', name:'Staff', email:'staff@portal.demo', role:'staff', department:'Facilities' },
-    ];
-
-    const defaultComplaints = [
-      { id:'CMP-2026-0001', subject:'Broken AC in lab 301', description:'AC not cooling since monday.', category:'Infrastructure', priority:'high', status:'in progress', department:'Facilities', location:'Building A', zone:'academic', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:5, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-500000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-300000,note:'Assigned'},{status:'in progress',timestamp:Date.now()-150000,note:'In progress'}], resolution:'', feedback:null, createdAt:Date.now()-500000, updatedAt:Date.now()-100000 },
-      { id:'CMP-2026-0002', subject:'Exam schedule conflict', description:'Two major exams on same day.', category:'Examination', priority:'critical', status:'under review', department:'Examination', location:'Online', zone:'admin', anonymous:false, submittedBy:'u3', assignedTo:null, upvotes:12, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-400000,note:'Submitted'},{status:'under review',timestamp:Date.now()-250000,note:'Under review'}], resolution:'', feedback:null, createdAt:Date.now()-400000, updatedAt:Date.now()-200000 },
-      { id:'CMP-2026-0003', subject:'Library quiet zone noise', description:'Construction noise near library.', category:'Library', priority:'medium', status:'resolved', department:'Library', location:'Library', zone:'library', anonymous:true, submittedBy:'u2', assignedTo:'u4', upvotes:8, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-600000,note:'Submitted'},{status:'in progress',timestamp:Date.now()-400000,note:'In progress'},{status:'resolved',timestamp:Date.now()-100000,note:'Resolved'}], resolution:'Noise reduced', feedback:{rating:4,comment:'Better'}, createdAt:Date.now()-600000, updatedAt:Date.now()-100000 },
-      { id:'CMP-2026-0004', subject:'WiFi connectivity issue', description:'No WiFi in hostel block C.', category:'IT / Technology', priority:'high', status:'assigned', department:'IT', location:'Hostel C', zone:'hostel', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:15, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-300000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-150000,note:'Assigned'}], resolution:'', feedback:null, createdAt:Date.now()-300000, updatedAt:Date.now()-150000 },
-      { id:'CMP-2026-0005', subject:'Harassment complaint', description:'Inappropriate behavior in cafeteria.', category:'Harassment / Misconduct', priority:'critical', status:'submitted', department:'Administration', location:'Cafeteria', zone:'cafeteria', anonymous:true, submittedBy:'u2', assignedTo:null, upvotes:3, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-100000,note:'Submitted'}], resolution:'', feedback:null, createdAt:Date.now()-100000, updatedAt:Date.now()-100000 },
-    ];
-
-    const defaultNotifications = [
-      { id:'n1', userId:'u2', type:'status', title:'Complaint assigned', message:'Your complaint CMP-2026-0001 has been assigned.', read:false, createdAt:Date.now()-200000 },
-    ];
-
-    const defaultAudit = [
-      { id:'a1', actorId:'u1', actorName:'Admin', role:'admin', action:'login', description:'Admin logged in', createdAt:Date.now()-10000 },
-    ];
-
-    function getDefaultData() {
-      return { users: defaultUsers, complaints: defaultComplaints, notifications: defaultNotifications, auditLogs: defaultAudit, settings: { theme:'light' } };
-    }
-
-    function loadData() { 
-      try { 
-        const raw = localStorage.getItem(STORAGE_KEY); 
-        if(raw){ 
-          const parsed = JSON.parse(raw); 
-          const def = getDefaultData(); 
-          for(const k in def) if(!(k in parsed)) parsed[k] = def[k]; 
-          return parsed; 
-        } 
-      } catch(e){} 
-      return getDefaultData(); 
-    }
-    function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-    function loadSession() { try{ const s=localStorage.getItem(SESSION_KEY); return s?JSON.parse(s):null; }catch{return null;} }
-    function saveSession(s) { if(s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
-
-    // ===================== CONTEXT =====================
-    const DataContext = createContext(null);
-
-    function DataProvider({ children }) {
-      const [data, setData] = useState(loadData);
-      const [session, setSession] = useState(loadSession);
-      const [toasts, setToasts] = useState([]);
-
-      useEffect(() => { saveData(data); }, [data]);
-
-      const addToast = useCallback((message, type='info', duration=4000) => {
-        const id = Date.now() + Math.random();
-        setToasts(prev => [...prev, { id, message, type, duration }]);
-        setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
-      }, []);
-
-      const login = useCallback((email, password) => {
-        const user = data.users.find(u => u.email === email);
-        if (user) {
-          const sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
-          setSession(sess); 
-          saveSession(sess);
-          const auditEntry = { id:'a'+Date.now(), actorId:user.id, actorName:user.name, role:user.role, action:'login', description:user.name+' logged in', createdAt:Date.now() };
-          setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
-          return { success:true, user };
-        }
-        return { success:false, error:'Invalid email or password' };
-      }, [data.users]);
-
-      const logout = useCallback(() => {
-        if (session) {
-          const auditEntry = { id:'a'+Date.now(), actorId:session.userId, actorName:session.name, role:session.role, action:'logout', description:session.name+' logged out', createdAt:Date.now() };
-          setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
-        }
-        setSession(null); 
-        saveSession(null);
-      }, [session]);
-
-      const updateData = useCallback((fn) => setData(prev => typeof fn === 'function' ? fn(prev) : fn), []);
-
-      return (
-        <DataContext.Provider value={{ data, setData, updateData, session, login, logout, toasts, addToast }}>
-          {children}
-        </DataContext.Provider>
-      );
-    }
-
-    function useData() { return useContext(DataContext); }
-
-    // ===================== COMPONENTS =====================
-    function Badge({ children, color }) {
-      return <span className="badge" style={{ background: color+'18', color: color }}>{children}</span>;
-    }
-
-    function Avatar({ name, size }) {
-      return <div className={`avatar ${size==='sm'?'avatar-sm':''}`}>{name ? name[0] : 'U'}</div>;
-    }
-
-    function EmptyState({ icon='fa-inbox', message }) {
-      return (
-        <div className="empty-state animate-fade">
-          <i className={`fas ${icon}`} />
-          <p style={{ fontWeight: 600 }}>{message}</p>
+  <!-- Load React and ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- The app is rendered via this script -->
+  <script>
+    // Check if React loaded
+    if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+      document.getElementById('root').innerHTML = `
+        <div style="height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px; font-family:'Inter',sans-serif; padding:20px; text-align:center;">
+          <div style="font-size:48px;">⚠️</div>
+          <h2 style="color:#0f172a;">Failed to load React</h2>
+          <p style="color:#64748b; max-width:400px;">Please check your internet connection and try again. Make sure you can access unpkg.com.</p>
+          <button onclick="location.reload()" style="padding:10px 24px; background:#6366f1; color:white; border:none; border-radius:12px; font-weight:600; cursor:pointer;">Retry</button>
         </div>
-      );
-    }
+      `;
+    } else {
+      // If React loaded, render the app using plain JavaScript (no JSX)
+      const { useState, useEffect, useCallback, useContext, useRef, createContext } = React;
 
-    function ToastContainer() {
-      const { toasts } = useData();
-      if (!toasts.length) return null;
-      return (
-        <div className="toast-container">
-          {toasts.map(t => (
-            <div key={t.id} className={`toast toast-${t.type} slide-up`}>
-              <i className={`fas ${t.type==='success'?'fa-check-circle':t.type==='error'?'fa-exclamation-circle':'fa-info-circle'}`} />
-              {t.message}
-            </div>
-          ))}
-        </div>
-      );
-    }
+      // ===================== CONSTANTS & HELPERS =====================
+      const STORAGE_KEY = 'resolvehub_data_v2';
+      const SESSION_KEY = 'resolvehub_session';
 
-    function Confetti({ active }) {
-      const [pieces, setPieces] = useState([]);
-      useEffect(() => {
-        if (!active) return;
-        const colors = ['#6366f1','#a855f7','#06b6d4','#10b981','#f59e0b','#ef4444'];
-        const newPieces = Array.from({length:40}).map((_,i)=>({
-          id: i, 
-          left: Math.random()*100+'vw',
-          bg: colors[Math.floor(Math.random()*colors.length)],
-          delay: Math.random()*0.5+'s',
-          duration: (2+Math.random()*2)+'s',
-          size: (6+Math.random()*8)+'px'
-        }));
-        setPieces(newPieces);
-        const timer = setTimeout(() => setPieces([]), 4000);
-        return () => clearTimeout(timer);
-      }, [active]);
-      if (!pieces.length) return null;
-      return (
-        <div style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:99999 }}>
-          {pieces.map(p => (
-            <div key={p.id} className="confetti-piece" style={{
-              left: p.left, background: p.bg, width: p.size, height: p.size,
-              animationDelay: p.delay, animationDuration: p.duration
-            }} />
-          ))}
-        </div>
-      );
-    }
-
-    function NotificationCenter() {
-      const { data, session, updateData } = useData();
-      const [open, setOpen] = useState(false);
-      const ref = useRef();
-      const userNotes = data.notifications.filter(n => n.userId === session?.userId);
-      const unread = userNotes.filter(n => !n.read);
-
-      useEffect(() => {
-        function handleClick(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
-        document.addEventListener('mousedown', handleClick);
-        return () => document.removeEventListener('mousedown', handleClick);
-      }, []);
-
-      return (
-        <div ref={ref} style={{ position:'relative' }}>
-          <button className="btn btn-ghost btn-sm" onClick={() => setOpen(!open)} style={{ position:'relative' }}>
-            <i className="fas fa-bell" />
-            {unread.length > 0 && (
-              <span style={{ position:'absolute', top:-2, right:-2, width:18, height:18, borderRadius:'50%', background:'var(--danger)', color:'white', fontSize:10, fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center' }}>{unread.length}</span>
-            )}
-          </button>
-          {open && (
-            <div className="notification-dropdown glass">
-              <div style={{ padding:'14px 18px', borderBottom:'1px solid var(--border)', fontWeight:700 }}>Notifications</div>
-              {userNotes.length === 0 ? <div style={{ padding:20, textAlign:'center', color:'var(--text-secondary)' }}>No notifications</div> :
-                userNotes.map(n => (
-                  <div key={n.id} style={{ padding:'12px 18px', borderBottom:'1px solid var(--border)', opacity: n.read?0.7:1 }}>
-                    <div style={{ fontWeight:600, fontSize:13 }}>{n.title}</div>
-                    <div style={{ fontSize:12, color:'var(--text-secondary)' }}>{n.message}</div>
-                    <div style={{ fontSize:11, color:'var(--text-tertiary)', marginTop:4 }}>{timeAgo(n.createdAt)}</div>
-                  </div>
-                ))
-              }
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    function Login() {
-      const { login, addToast, session } = useData();
-      const [email, setEmail] = useState('admin@portal.demo');
-      const [password, setPassword] = useState('demo');
-      const [loading, setLoading] = useState(false);
-      const [showPw, setShowPw] = useState(false);
-      if (session) return null;
-
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setTimeout(() => {
-          const r = login(email, password);
-          if (r.success) addToast('Welcome back, '+r.user.name+'!', 'success');
-          else addToast(r.error, 'error');
-          setLoading(false);
-        }, 500);
+      const STATUS_COLORS = {
+        submitted: '#94a3b8', 'under review': '#f59e0b', assigned: '#6366f1',
+        'in progress': '#8b5cf6', resolved: '#10b981', closed: '#64748b',
+        reopened: '#ef4444', rejected: '#ef4444'
       };
+      const PRIORITY_COLORS = { low: '#94a3b8', medium: '#f59e0b', high: '#f97316', critical: '#ef4444' };
+      const ZONES = ['academic', 'hostel', 'library', 'cafeteria', 'admin', 'transport'];
+      const ZONE_LABELS = { academic: 'Academic', hostel: 'Hostel', library: 'Library', cafeteria: 'Cafeteria', admin: 'Admin', transport: 'Transport' };
+      const CATEGORIES = ['Infrastructure','Academic','Faculty','Examination','Hostel','Transport','Library','IT / Technology','Security','Cleanliness','Electricity','Water','Harassment / Misconduct','Administration','Other'];
+      const PRIORITIES = ['low','medium','high','critical'];
 
-      return (
-        <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:20, position:'relative' }}>
-          <div className="login-bg">
-            <div className="login-blob" style={{ width:400, height:400, background:'#c7d2fe', top:-100, left:-100 }} />
-            <div className="login-blob" style={{ width:300, height:300, background:'#e9d5ff', bottom:-50, right:-50, animationDelay:'2s' }} />
-            <div className="login-blob" style={{ width:250, height:250, background:'#bae6fd', top:'40%', left:'60%', animationDelay:'4s' }} />
-          </div>
-          <div className="glass animate-scale" style={{ maxWidth:440, width:'100%', borderRadius:'var(--radius-xl)', padding:'40px 36px', position:'relative', zIndex:1 }}>
-            <div style={{ textAlign:'center', marginBottom:32 }}>
-              <div style={{ fontSize:36, fontWeight:900, letterSpacing:'-1.5px', background:'linear-gradient(135deg,var(--primary-dark),var(--secondary))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>ResolveHub</div>
-              <div style={{ color:'var(--text-secondary)', fontSize:15, fontWeight:500, marginTop:4 }}>Smart Complaint Management</div>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Email</label>
-                <input type="email" className="input" value={email} onChange={e=>setEmail(e.target.value)} placeholder="admin@portal.demo" required />
-              </div>
-              <div className="form-group" style={{ position:'relative' }}>
-                <label>Password</label>
-                <input type={showPw?'text':'password'} className="input" value={password} onChange={e=>setPassword(e.target.value)} placeholder="•••••••" required style={{ paddingRight:48 }} />
-                <button type="button" onClick={()=>setShowPw(!showPw)} style={{ position:'absolute', right:16, bottom:14, background:'none', border:'none', color:'var(--text-tertiary)', cursor:'pointer', fontSize:16 }}>
-                  <i className={`fas ${showPw?'fa-eye':'fa-eye-slash'}`} />
-                </button>
-              </div>
-              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width:'100%', padding:'14px', borderRadius:30, fontSize:16 }}>
-                {loading ? <><i className="fas fa-circle-notch fa-spin" /> Signing in...</> : 'Get Started'}
-              </button>
-            </form>
-            <div className="glass" style={{ marginTop:28, borderRadius:'var(--radius-lg)', padding:'16px 20px', fontSize:12, color:'var(--text-secondary)' }}>
-              <div style={{ fontWeight:700, marginBottom:8, color:'var(--text)', fontSize:13 }}>Demo accounts <span style={{ fontWeight:400, opacity:0.7 }}>(password: demo)</span></div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr auto', gap:'4px 12px', lineHeight:1.8 }}>
-                <span>admin@portal.demo</span><Badge color="var(--primary)">admin</Badge>
-                <span>student@portal.demo</span><Badge color="var(--secondary)">student</Badge>
-                <span>teacher@portal.demo</span><Badge color="var(--accent)">teacher</Badge>
-                <span>staff@portal.demo</span><Badge color="var(--success)">staff</Badge>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
+      function getStatusColor(s) { return STATUS_COLORS[(s||'').toLowerCase()] || '#94a3b8'; }
+      function getPriorityColor(p) { return PRIORITY_COLORS[(p||'').toLowerCase()] || '#94a3b8'; }
+      function formatDate(ts) { if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+      function timeAgo(ts) { const s=Math.floor((Date.now()-ts)/1000); const intervals={y:31536000,m:2592000,w:604800,d:86400,h:3600,n:60}; for(let[k,v]of Object.entries(intervals)){const c=Math.floor(s/v); if(c>0) return c+' '+k+(c>1?'s':'')+' ago'; } return 'Just now'; }
+      function generateId() { return 'CMP-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*100000)).padStart(5,'0'); }
+      function getGreeting() { const h=new Date().getHours(); if(h<12)return 'Good morning'; if(h<17)return 'Good afternoon'; return 'Good evening'; }
 
-    // ===================== MAIN APP =====================
-    function App() {
-      const { session, logout, data, updateData, addToast } = useData();
-      const [activeView, setActiveView] = useState('dashboard');
-      const [searchQuery, setSearchQuery] = useState('');
-      const [selectedComplaint, setSelectedComplaint] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [confetti, setConfetti] = useState(false);
-      const [viewMode, setViewMode] = useState('list');
-
-      useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 400);
-        return () => clearTimeout(timer);
-      }, []);
-
-      useEffect(() => {
-        const theme = data.settings?.theme || 'light';
-        document.body.classList.toggle('dark', theme === 'dark');
-      }, [data.settings?.theme]);
-
-      if (loading) {
-        return (
-          <div style={{ height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:24, background:'var(--bg)' }}>
-            <div style={{ width:64, height:64, borderRadius:'50%', border:'4px solid var(--border)', borderTopColor:'var(--primary)', animation:'spin 0.9s linear infinite' }} />
-            <div style={{ fontWeight:700, color:'var(--text-secondary)', fontSize:16 }}>Loading ResolveHub...</div>
-          </div>
-        );
-      }
-
-      if (!session) return <Login />;
-
-      const user = data.users.find(u => u.id === session.userId);
-      const isAdmin = session.role === 'admin';
-
-      const navItems = [
-        { id:'dashboard', label:'Dashboard', icon:'fa-gauge-high' },
-        { id:'complaints', label:'Complaints', icon:'fa-list' },
-        { id:'heatmap', label:'Heatmap', icon:'fa-map' },
-        { id:'leaderboard', label:'Leaderboard', icon:'fa-trophy' },
-        { id:'new-complaint', label:'New Issue', icon:'fa-plus-circle' },
+      const defaultUsers = [
+        { id:'u1', name:'Admin', email:'admin@portal.demo', role:'admin', department:'Administration' },
+        { id:'u2', name:'Student', email:'student@portal.demo', role:'student', department:'Engineering' },
+        { id:'u3', name:'Teacher', email:'teacher@portal.demo', role:'teacher', department:'CS' },
+        { id:'u4', name:'Staff', email:'staff@portal.demo', role:'staff', department:'Facilities' },
       ];
-      if (isAdmin) {
-        navItems.push({ id:'admin-dashboard', label:'Analytics', icon:'fa-chart-pie' });
-        navItems.push({ id:'users', label:'Users', icon:'fa-users' });
-        navItems.push({ id:'audit', label:'Audit', icon:'fa-history' });
+
+      const defaultComplaints = [
+        { id:'CMP-2026-0001', subject:'Broken AC in lab 301', description:'AC not cooling since monday.', category:'Infrastructure', priority:'high', status:'in progress', department:'Facilities', location:'Building A', zone:'academic', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:5, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-500000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-300000,note:'Assigned'},{status:'in progress',timestamp:Date.now()-150000,note:'In progress'}], resolution:'', feedback:null, createdAt:Date.now()-500000, updatedAt:Date.now()-100000 },
+        { id:'CMP-2026-0002', subject:'Exam schedule conflict', description:'Two major exams on same day.', category:'Examination', priority:'critical', status:'under review', department:'Examination', location:'Online', zone:'admin', anonymous:false, submittedBy:'u3', assignedTo:null, upvotes:12, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-400000,note:'Submitted'},{status:'under review',timestamp:Date.now()-250000,note:'Under review'}], resolution:'', feedback:null, createdAt:Date.now()-400000, updatedAt:Date.now()-200000 },
+        { id:'CMP-2026-0003', subject:'Library quiet zone noise', description:'Construction noise near library.', category:'Library', priority:'medium', status:'resolved', department:'Library', location:'Library', zone:'library', anonymous:true, submittedBy:'u2', assignedTo:'u4', upvotes:8, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-600000,note:'Submitted'},{status:'in progress',timestamp:Date.now()-400000,note:'In progress'},{status:'resolved',timestamp:Date.now()-100000,note:'Resolved'}], resolution:'Noise reduced', feedback:{rating:4,comment:'Better'}, createdAt:Date.now()-600000, updatedAt:Date.now()-100000 },
+        { id:'CMP-2026-0004', subject:'WiFi connectivity issue', description:'No WiFi in hostel block C.', category:'IT / Technology', priority:'high', status:'assigned', department:'IT', location:'Hostel C', zone:'hostel', anonymous:false, submittedBy:'u2', assignedTo:'u4', upvotes:15, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-300000,note:'Submitted'},{status:'assigned',timestamp:Date.now()-150000,note:'Assigned'}], resolution:'', feedback:null, createdAt:Date.now()-300000, updatedAt:Date.now()-150000 },
+        { id:'CMP-2026-0005', subject:'Harassment complaint', description:'Inappropriate behavior in cafeteria.', category:'Harassment / Misconduct', priority:'critical', status:'submitted', department:'Administration', location:'Cafeteria', zone:'cafeteria', anonymous:true, submittedBy:'u2', assignedTo:null, upvotes:3, upvotedBy:[], comments:[], timeline:[{status:'submitted',timestamp:Date.now()-100000,note:'Submitted'}], resolution:'', feedback:null, createdAt:Date.now()-100000, updatedAt:Date.now()-100000 },
+      ];
+
+      const defaultNotifications = [
+        { id:'n1', userId:'u2', type:'status', title:'Complaint assigned', message:'Your complaint CMP-2026-0001 has been assigned.', read:false, createdAt:Date.now()-200000 },
+      ];
+
+      const defaultAudit = [
+        { id:'a1', actorId:'u1', actorName:'Admin', role:'admin', action:'login', description:'Admin logged in', createdAt:Date.now()-10000 },
+      ];
+
+      function getDefaultData() {
+        return { users: defaultUsers, complaints: defaultComplaints, notifications: defaultNotifications, auditLogs: defaultAudit, settings: { theme:'light' } };
       }
-      navItems.push({ id:'settings', label:'Settings', icon:'fa-sliders' });
 
-      const currentNav = navItems.find(n => n.id === activeView);
+      function loadData() { 
+        try { 
+          const raw = localStorage.getItem(STORAGE_KEY); 
+          if(raw){ 
+            const parsed = JSON.parse(raw); 
+            const def = getDefaultData(); 
+            for(const k in def) if(!(k in parsed)) parsed[k] = def[k]; 
+            return parsed; 
+          } 
+        } catch(e){} 
+        return getDefaultData(); 
+      }
+      function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+      function loadSession() { try{ const s=localStorage.getItem(SESSION_KEY); return s?JSON.parse(s):null; }catch{return null;} }
+      function saveSession(s) { if(s) localStorage.setItem(SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(SESSION_KEY); }
 
-      // ===== SUB-COMPONENTS =====
-      function StatCard({ label, value, icon, color }) {
-        return (
-          <div className="stat-card animate-slide-up">
-            <div className="stat-icon" style={{ background: color+'15', color: color }}><i className={`fas ${icon}`} /></div>
-            <div>
-              <div className="stat-value">{value}</div>
-              <div className="stat-label">{label}</div>
-            </div>
-          </div>
+      // ===================== CONTEXT =====================
+      const DataContext = createContext(null);
+
+      function DataProvider({ children }) {
+        const [data, setData] = useState(loadData);
+        const [session, setSession] = useState(loadSession);
+        const [toasts, setToasts] = useState([]);
+
+        useEffect(() => { saveData(data); }, [data]);
+
+        const addToast = useCallback((message, type='info', duration=4000) => {
+          const id = Date.now() + Math.random();
+          setToasts(prev => [...prev, { id, message, type, duration }]);
+          setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
+        }, []);
+
+        const login = useCallback((email, password) => {
+          const user = data.users.find(u => u.email === email);
+          if (user) {
+            const sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
+            setSession(sess); 
+            saveSession(sess);
+            const auditEntry = { id:'a'+Date.now(), actorId:user.id, actorName:user.name, role:user.role, action:'login', description:user.name+' logged in', createdAt:Date.now() };
+            setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
+            return { success:true, user };
+          }
+          return { success:false, error:'Invalid email or password' };
+        }, [data.users]);
+
+        const logout = useCallback(() => {
+          if (session) {
+            const auditEntry = { id:'a'+Date.now(), actorId:session.userId, actorName:session.name, role:session.role, action:'logout', description:session.name+' logged out', createdAt:Date.now() };
+            setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
+          }
+          setSession(null); 
+          saveSession(null);
+        }, [session]);
+
+        const updateData = useCallback((fn) => setData(prev => typeof fn === 'function' ? fn(prev) : fn), []);
+
+        return React.createElement(
+          DataContext.Provider,
+          { value: { data, setData, updateData, session, login, logout, toasts, addToast } },
+          children
         );
       }
 
-      function ComplaintRow({ complaint }) {
-        const { session, updateData } = useData();
-        const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
-        const handleUpvote = (e) => {
-          e.stopPropagation();
-          updateData(prev => {
-            const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-            if (idx === -1) return prev;
-            const c = prev.complaints[idx];
-            const next = [...prev.complaints];
-            if (c.upvotedBy?.includes(session.userId)) {
-              next[idx] = { ...c, upvotes: (c.upvotes||0)-1, upvotedBy: c.upvotedBy.filter(id=>id!==session.userId) };
-            } else {
-              next[idx] = { ...c, upvotes: (c.upvotes||0)+1, upvotedBy: [...(c.upvotedBy||[]), session.userId] };
-            }
-            return { ...prev, complaints: next };
-          });
-        };
-        const submitter = data.users.find(u => u.id === complaint.submittedBy);
-        return (
-          <div className="complaint-row animate-slide-up" onClick={() => setSelectedComplaint(complaint)}>
-            <Avatar name={complaint.anonymous ? '?' : (submitter?.name || 'U')} size="sm" />
-            <div className="complaint-info">
-              <div className="complaint-subject">{complaint.subject}</div>
-              <div className="complaint-meta">
-                <span>{complaint.id}</span>
-                <span>·</span>
-                <span>{complaint.category}</span>
-                <span>·</span>
-                <span>{timeAgo(complaint.createdAt)}</span>
-              </div>
-            </div>
-            <div className="complaint-actions">
-              <button className={`upvote-btn ${hasUpvoted?'upvoted':''}`} onClick={handleUpvote}>
-                <i className="fas fa-arrow-up" /> {complaint.upvotes||0}
-              </button>
-              <Badge color={getPriorityColor(complaint.priority)}>{complaint.priority}</Badge>
-              <Badge color={getStatusColor(complaint.status)}>{complaint.status}</Badge>
-            </div>
-          </div>
+      function useData() { return useContext(DataContext); }
+
+      // ===================== COMPONENTS =====================
+      function Badge({ children, color }) {
+        return React.createElement('span', { 
+          className: 'badge', 
+          style: { background: color+'18', color: color } 
+        }, children);
+      }
+
+      function Avatar({ name, size }) {
+        return React.createElement('div', { 
+          className: `avatar ${size==='sm'?'avatar-sm':''}` 
+        }, name ? name[0] : 'U');
+      }
+
+      function EmptyState({ icon='fa-inbox', message }) {
+        return React.createElement('div', { className: 'empty-state animate-fade' },
+          React.createElement('i', { className: `fas ${icon}` }),
+          React.createElement('p', { style: { fontWeight: 600 } }, message)
         );
       }
 
-      function Dashboard() {
-        const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
-        const pending = userComplaints.filter(c => !['resolved','closed','rejected'].includes(c.status));
-        const inProgress = userComplaints.filter(c => ['in progress','assigned'].includes(c.status));
-        const resolved = userComplaints.filter(c => ['resolved','closed'].includes(c.status));
-
-        return (
-          <div className="animate-fade">
-            <div style={{ marginBottom:24 }}>
-              <h1 className="page-title">{getGreeting()}, {user?.name}</h1>
-              <div className="page-subtitle">Here's what's happening in your workspace.</div>
-            </div>
-            <div className="stats-grid">
-              <StatCard label="Total" value={userComplaints.length} icon="fa-folder-open" color="#6366f1" />
-              <StatCard label="Pending" value={pending.length} icon="fa-clock" color="#f59e0b" />
-              <StatCard label="In Progress" value={inProgress.length} icon="fa-spinner" color="#8b5cf6" />
-              <StatCard label="Resolved" value={resolved.length} icon="fa-check-circle" color="#10b981" />
-            </div>
-            <div className="glass" style={{ borderRadius:'var(--radius-lg)', padding:24 }}>
-              <h3 style={{ fontSize:16, fontWeight:700, marginBottom:16 }}>Recent Complaints</h3>
-              {userComplaints.slice(0,5).map(c => <ComplaintRow key={c.id} complaint={c} />)}
-              {userComplaints.length===0 && <EmptyState message="No complaints yet" />}
-            </div>
-          </div>
+      function ToastContainer() {
+        const { toasts } = useData();
+        if (!toasts.length) return null;
+        return React.createElement('div', { className: 'toast-container' },
+          toasts.map(t => 
+            React.createElement('div', { key: t.id, className: `toast toast-${t.type} slide-up` },
+              React.createElement('i', { className: `fas ${t.type==='success'?'fa-check-circle':t.type==='error'?'fa-exclamation-circle':'fa-info-circle'}` }),
+              t.message
+            )
+          )
         );
       }
 
-      function HeatmapView() {
-        const zoneCounts = {};
-        ZONES.forEach(z => { zoneCounts[z] = data.complaints.filter(c => c.zone === z).length; });
-        const maxCount = Math.max(...Object.values(zoneCounts), 1);
-        
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Campus Heatmap</h2>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
-              <div className="heatmap-grid">
-                {ZONES.map(z => {
-                  const count = zoneCounts[z] || 0;
-                  const intensity = Math.min(1, count / maxCount);
-                  const hue = 240 - intensity * 180;
-                  return (
-                    <div key={z} className="heat-cell" style={{ 
-                      background: `hsl(${hue}, 80%, ${50 + (1 - intensity) * 30}%)`,
-                      color: intensity > 0.6 ? 'white' : 'var(--text)'
-                    }}>
-                      <span className="heat-label">{ZONE_LABELS[z]}</span>
-                      <span className="heat-value">{count}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+      function Confetti({ active }) {
+        const [pieces, setPieces] = useState([]);
+        useEffect(() => {
+          if (!active) return;
+          const colors = ['#6366f1','#a855f7','#06b6d4','#10b981','#f59e0b','#ef4444'];
+          const newPieces = Array.from({length:40}).map((_,i)=>({
+            id: i, 
+            left: Math.random()*100+'vw',
+            bg: colors[Math.floor(Math.random()*colors.length)],
+            delay: Math.random()*0.5+'s',
+            duration: (2+Math.random()*2)+'s',
+            size: (6+Math.random()*8)+'px'
+          }));
+          setPieces(newPieces);
+          const timer = setTimeout(() => setPieces([]), 4000);
+          return () => clearTimeout(timer);
+        }, [active]);
+        if (!pieces.length) return null;
+        return React.createElement('div', { style: { position:'fixed', inset:0, pointerEvents:'none', zIndex:99999 } },
+          pieces.map(p => 
+            React.createElement('div', { 
+              key: p.id, 
+              className: 'confetti-piece',
+              style: {
+                left: p.left, 
+                background: p.bg, 
+                width: p.size, 
+                height: p.size,
+                animationDelay: p.delay, 
+                animationDuration: p.duration
+              }
+            })
+          )
         );
       }
 
-      function LeaderboardView() {
-        const depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration'];
-        const deptStats = depts.map(d => {
-          const comps = data.complaints.filter(c => c.department === d);
-          const resolved = comps.filter(c => ['resolved', 'closed'].includes(c.status));
-          const total = comps.length || 1;
-          const rate = Math.round((resolved.length / total) * 100);
-          const avgTime = resolved.length ? Math.round(resolved.reduce((acc, c) => {
-            const re = c.timeline?.find(t => t.status === 'resolved');
-            return acc + (re ? (re.timestamp - c.createdAt) : 0);
-          }, 0) / resolved.length / (1000 * 60 * 60)) : 0;
-          return { name: d, resolved: resolved.length, total: comps.length, rate, avgTime };
-        });
-        deptStats.sort((a, b) => b.rate - a.rate || a.avgTime - b.avgTime);
-        
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Department Leaderboard</h2>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
-              {deptStats.map((d, i) => (
-                <div key={d.name} className="dept-row">
-                  <span style={{ fontWeight: 800, fontSize: 18, minWidth: 32, color: i === 0 ? 'var(--warning)' : 'var(--text-secondary)' }}>
-                    {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`}
-                  </span>
-                  <span style={{ fontWeight: 600, minWidth: 120, fontSize: 14 }}>{d.name}</span>
-                  <div className="dept-bar-bg">
-                    <div className="dept-bar-fill" style={{ width: `${d.rate}%` }} />
-                  </div>
-                  <span style={{ fontWeight: 700, fontSize: 14, minWidth: 50, color: 'var(--primary)' }}>{d.rate}%</span>
-                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 60 }}>⏱ {d.avgTime}h</span>
-                  <span style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>({d.resolved}/{d.total})</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      function ComplaintList() {
-        let complaints = data.complaints;
-        if (!isAdmin && session.role !== 'staff') {
-          complaints = complaints.filter(c => c.submittedBy === session.userId || !c.anonymous);
-        }
-        if (searchQuery) {
-          const q = searchQuery.toLowerCase();
-          complaints = complaints.filter(c => 
-            c.id.toLowerCase().includes(q) || 
-            c.subject.toLowerCase().includes(q) || 
-            c.description.toLowerCase().includes(q)
-          );
-        }
-        complaints.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt);
-        
-        return (
-          <div className="animate-fade">
-            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-              <div>
-                <h2 className="page-title">All Complaints</h2>
-                <div className="page-subtitle">{complaints.length} issues reported</div>
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className={`btn btn-sm ${viewMode === 'list' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('list')}>
-                  <i className="fas fa-list" /> List
-                </button>
-                <button className={`btn btn-sm ${viewMode === 'kanban' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('kanban')}>
-                  <i className="fas fa-columns" /> Kanban
-                </button>
-              </div>
-            </div>
-            {viewMode === 'list' ? (
-              <div className="glass" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-                {complaints.length === 0 ? <EmptyState message="No complaints found" /> :
-                  complaints.map(c => <ComplaintRow key={c.id} complaint={c} />)}
-              </div>
-            ) : (
-              <div className="kanban-board">
-                {['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'].map(status => {
-                  const items = complaints.filter(c => c.status === status);
-                  return (
-                    <div key={status} className="kanban-column">
-                      <div className="kanban-header">
-                        <span style={{ color: getStatusColor(status) }}>{status}</span>
-                        <span className="kanban-count">{items.length}</span>
-                      </div>
-                      {items.map(c => (
-                        <div key={c.id} className="kanban-card" onClick={() => setSelectedComplaint(c)}>
-                          <div style={{ fontWeight: 600, fontSize: 13 }}>{c.subject}</div>
-                          <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 }}>
-                            {c.id} · {timeAgo(c.createdAt)}
-                          </div>
-                          <div style={{ marginTop: 8 }}>
-                            <Badge color={getPriorityColor(c.priority)}>{c.priority}</Badge>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        );
-      }
-
-      function ComplaintDetail({ complaint, onClose }) {
-        const { updateData, addToast, session } = useData();
-        const [comment, setComment] = useState('');
-
-        const handleResolve = () => {
-          updateData(prev => {
-            const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-            if (idx === -1) return prev;
-            const next = [...prev.complaints];
-            next[idx] = { 
-              ...next[idx], 
-              status: 'resolved',
-              timeline: [...next[idx].timeline, { status: 'resolved', timestamp: Date.now(), note: 'Resolved' }]
-            };
-            return { ...prev, complaints: next };
-          });
-          setConfetti(true);
-          setTimeout(() => setConfetti(false), 3000);
-          addToast('Complaint resolved! 🎉', 'success');
-          onClose();
-        };
-
-        const handleAddComment = () => {
-          if (!comment.trim()) return;
-          updateData(prev => {
-            const idx = prev.complaints.findIndex(c => c.id === complaint.id);
-            if (idx === -1) return prev;
-            const next = [...prev.complaints];
-            next[idx].comments = [...next[idx].comments, { 
-              id: 'c' + Date.now(), 
-              userId: session.userId, 
-              name: session.name, 
-              role: session.role, 
-              message: comment, 
-              timestamp: Date.now()
-            }];
-            return { ...prev, complaints: next };
-          });
-          setComment('');
-          addToast('Comment added', 'info');
-        };
-
-        return (
-          <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-            <div className="modal-box animate-scale">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 }}>
-                <div>
-                  <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)' }}>{complaint.subject}</h3>
-                  <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
-                    {complaint.id} · {complaint.category}
-                  </div>
-                </div>
-                <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, color: 'var(--text-tertiary)', cursor: 'pointer' }}>
-                  <i className="fas fa-times" />
-                </button>
-              </div>
-              
-              <p style={{ color: 'var(--text)', marginBottom: 16, fontSize: 14, lineHeight: 1.7 }}>{complaint.description}</p>
-              
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 }}>
-                <span>Priority: <Badge color={getPriorityColor(complaint.priority)}>{complaint.priority}</Badge></span>
-                <span>Status: <Badge color={getStatusColor(complaint.status)}>{complaint.status}</Badge></span>
-                <span>Location: {complaint.location}</span>
-                <span>Upvotes: <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{complaint.upvotes || 0}</span></span>
-              </div>
-
-              {isAdmin && complaint.status !== 'resolved' && (
-                <button className="btn btn-primary btn-sm" onClick={handleResolve} style={{ marginBottom: 16, background: 'linear-gradient(135deg, var(--success), #34d399)' }}>
-                  <i className="fas fa-check" /> Resolve
-                </button>
-              )}
-
-              {complaint.timeline && complaint.timeline.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 }}>Timeline</div>
-                  {complaint.timeline.map((t, i) => (
-                    <div key={i} className="timeline-item">
-                      <div className="timeline-dot" style={{ background: getStatusColor(t.status) }}>
-                        <i className="fas fa-circle" style={{ fontSize: 10 }} />
-                      </div>
-                      <div className="timeline-content">
-                        <div className="timeline-status">{t.status}</div>
-                        <div className="timeline-note">{t.note}</div>
-                        <div className="timeline-time">{formatDate(t.timestamp)}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {complaint.comments && complaint.comments.length > 0 && (
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 }}>Comments</div>
-                  {complaint.comments.map(c => (
-                    <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                      <span style={{ fontWeight: 700 }}>{c.name}</span>
-                      <span style={{ color: 'var(--text-secondary)', fontSize: 11, marginLeft: 6 }}>@{c.role}</span>
-                      <span style={{ color: 'var(--text-tertiary)', fontSize: 11, marginLeft: 8 }}>{timeAgo(c.timestamp)}</span>
-                      <div style={{ marginTop: 4, color: 'var(--text)' }}>{c.message}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div style={{ display: 'flex', gap: 8 }}>
-                <input 
-                  type="text" 
-                  className="input" 
-                  value={comment} 
-                  onChange={e => setComment(e.target.value)} 
-                  placeholder="Add a comment..." 
-                  style={{ flex: 1, borderRadius: 30 }}
-                  onKeyDown={e => { if (e.key === 'Enter') handleAddComment(); }}
-                />
-                <button className="btn btn-primary" onClick={handleAddComment} style={{ borderRadius: 30 }}>
-                  <i className="fas fa-paper-plane" /> Send
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      function ComplaintForm({ onSuccess }) {
-        const { updateData, addToast, session } = useData();
-        const [form, setForm] = useState({ 
-          subject: '', category: 'Infrastructure', description: '', 
-          priority: 'medium', department: '', location: '', zone: 'academic', anonymous: false 
-        });
-        const [loading, setLoading] = useState(false);
+      function NotificationCenter() {
+        const { data, session, updateData } = useData();
+        const [open, setOpen] = useState(false);
+        const ref = useRef();
+        const userNotes = data.notifications.filter(n => n.userId === session?.userId);
+        const unread = userNotes.filter(n => !n.read);
 
         useEffect(() => {
-          const suggestion = suggestFromText(form.description);
-          if (suggestion) {
-            setForm(prev => ({
-              ...prev,
-              category: suggestion.category || prev.category,
-              priority: suggestion.priority || prev.priority
-            }));
-          }
-        }, [form.description]);
+          function handleClick(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
+          document.addEventListener('mousedown', handleClick);
+          return () => document.removeEventListener('mousedown', handleClick);
+        }, []);
+
+        return React.createElement('div', { ref: ref, style: { position:'relative' } },
+          React.createElement('button', { 
+            className: 'btn btn-ghost btn-sm', 
+            onClick: () => setOpen(!open), 
+            style: { position:'relative' } 
+          },
+            React.createElement('i', { className: 'fas fa-bell' }),
+            unread.length > 0 && React.createElement('span', { 
+              style: { 
+                position:'absolute', top:-2, right:-2, width:18, height:18, 
+                borderRadius:'50%', background:'var(--danger)', color:'white', 
+                fontSize:10, fontWeight:800, display:'flex', alignItems:'center', 
+                justifyContent:'center' 
+              }
+            }, unread.length)
+          ),
+          open && React.createElement('div', { className: 'notification-dropdown glass' },
+            React.createElement('div', { style: { padding:'14px 18px', borderBottom:'1px solid var(--border)', fontWeight:700 } }, 'Notifications'),
+            userNotes.length === 0 ? 
+              React.createElement('div', { style: { padding:20, textAlign:'center', color:'var(--text-secondary)' } }, 'No notifications') :
+              userNotes.map(n => 
+                React.createElement('div', { 
+                  key: n.id, 
+                  style: { padding:'12px 18px', borderBottom:'1px solid var(--border)', opacity: n.read?0.7:1 } 
+                },
+                  React.createElement('div', { style: { fontWeight:600, fontSize:13 } }, n.title),
+                  React.createElement('div', { style: { fontSize:12, color:'var(--text-secondary)' } }, n.message),
+                  React.createElement('div', { style: { fontSize:11, color:'var(--text-tertiary)', marginTop:4 } }, timeAgo(n.createdAt))
+                )
+              )
+          )
+        );
+      }
+
+      function Login() {
+        const { login, addToast, session } = useData();
+        const [email, setEmail] = useState('admin@portal.demo');
+        const [password, setPassword] = useState('demo');
+        const [loading, setLoading] = useState(false);
+        const [showPw, setShowPw] = useState(false);
+        if (session) return null;
 
         const handleSubmit = (e) => {
           e.preventDefault();
-          if (!form.subject.trim() || !form.description.trim()) {
-            addToast('Subject and description are required', 'error');
-            return;
-          }
           setLoading(true);
           setTimeout(() => {
-            const newComplaint = {
-              id: generateId(),
-              subject: form.subject.trim(),
-              description: form.description.trim(),
-              category: form.category,
-              priority: form.priority,
-              status: 'submitted',
-              department: form.department || 'General',
-              location: form.location || 'Campus',
-              zone: form.zone,
-              anonymous: form.anonymous,
-              submittedBy: session.userId,
-              assignedTo: null,
-              upvotes: 0,
-              upvotedBy: [],
-              comments: [],
-              timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted' }],
-              resolution: '',
-              feedback: null,
-              createdAt: Date.now(),
-              updatedAt: Date.now()
-            };
-            updateData(prev => ({
-              ...prev,
-              complaints: [newComplaint, ...prev.complaints]
-            }));
-            addToast(`Complaint ${newComplaint.id} created`, 'success');
-            setConfetti(true);
-            setTimeout(() => setConfetti(false), 2000);
-            onSuccess?.();
+            const r = login(email, password);
+            if (r.success) addToast('Welcome back, '+r.user.name+'!', 'success');
+            else addToast(r.error, 'error');
             setLoading(false);
           }, 500);
         };
 
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Report an Issue</h2>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 700 }}>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label>Subject <span style={{ color: 'var(--danger)' }}>*</span></label>
-                  <input className="input" value={form.subject} onChange={e => setForm({...form, subject: e.target.value})} placeholder="Brief title" required />
-                </div>
-                <div className="form-group">
-                  <label>Description <span style={{ color: 'var(--danger)' }}>*</span></label>
-                  <textarea className="input" value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={5} placeholder="Describe the issue..." required />
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Category</label>
-                    <select className="input" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                      {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label>Priority</label>
-                    <select className="input" value={form.priority} onChange={e => setForm({...form, priority: e.target.value})}>
-                      {PRIORITIES.map(p => <option key={p}>{p}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Department</label>
-                    <input className="input" value={form.department} onChange={e => setForm({...form, department: e.target.value})} placeholder="e.g. Facilities" />
-                  </div>
-                  <div className="form-group">
-                    <label>Location</label>
-                    <input className="input" value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="e.g. Building A" />
-                  </div>
-                </div>
-                <div className="form-group checkbox-wrap">
-                  <input type="checkbox" checked={form.anonymous} onChange={e => setForm({...form, anonymous: e.target.checked})} />
-                  <label style={{ cursor: 'pointer' }}>Submit anonymously</label>
-                </div>
-                <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px', borderRadius: 30, fontSize: 16 }}>
-                  {loading ? <><i className="fas fa-circle-notch fa-spin" /> Submitting...</> : <><i className="fas fa-paper-plane" /> Submit</>}
-                </button>
-              </form>
-            </div>
-          </div>
+        return React.createElement('div', { style: { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:20, position:'relative' } },
+          React.createElement('div', { className: 'login-bg' },
+            React.createElement('div', { className: 'login-blob', style: { width:400, height:400, background:'#c7d2fe', top:-100, left:-100 } }),
+            React.createElement('div', { className: 'login-blob', style: { width:300, height:300, background:'#e9d5ff', bottom:-50, right:-50, animationDelay:'2s' } }),
+            React.createElement('div', { className: 'login-blob', style: { width:250, height:250, background:'#bae6fd', top:'40%', left:'60%', animationDelay:'4s' } })
+          ),
+          React.createElement('div', { className: 'glass animate-scale', style: { maxWidth:440, width:'100%', borderRadius:'var(--radius-xl)', padding:'40px 36px', position:'relative', zIndex:1 } },
+            React.createElement('div', { style: { textAlign:'center', marginBottom:32 } },
+              React.createElement('div', { style: { fontSize:36, fontWeight:900, letterSpacing:'-1.5px', background:'linear-gradient(135deg,var(--primary-dark),var(--secondary))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' } }, 'ResolveHub'),
+              React.createElement('div', { style: { color:'var(--text-secondary)', fontSize:15, fontWeight:500, marginTop:4 } }, 'Smart Complaint Management')
+            ),
+            React.createElement('form', { onSubmit: handleSubmit },
+              React.createElement('div', { className: 'form-group' },
+                React.createElement('label', null, 'Email'),
+                React.createElement('input', { type: 'email', className: 'input', value: email, onChange: e=>setEmail(e.target.value), placeholder: 'admin@portal.demo', required: true })
+              ),
+              React.createElement('div', { className: 'form-group', style: { position:'relative' } },
+                React.createElement('label', null, 'Password'),
+                React.createElement('input', { 
+                  type: showPw?'text':'password', 
+                  className: 'input', 
+                  value: password, 
+                  onChange: e=>setPassword(e.target.value), 
+                  placeholder: '•••••••', 
+                  required: true, 
+                  style: { paddingRight:48 } 
+                }),
+                React.createElement('button', { 
+                  type: 'button', 
+                  onClick: ()=>setShowPw(!showPw), 
+                  style: { position:'absolute', right:16, bottom:14, background:'none', border:'none', color:'var(--text-tertiary)', cursor:'pointer', fontSize:16 } 
+                },
+                  React.createElement('i', { className: `fas ${showPw?'fa-eye':'fa-eye-slash'}` })
+                )
+              ),
+              React.createElement('button', { 
+                type: 'submit', 
+                disabled: loading, 
+                className: 'btn btn-primary', 
+                style: { width:'100%', padding:'14px', borderRadius:30, fontSize:16 } 
+              },
+                loading ? 
+                  React.createElement(React.Fragment, null, 
+                    React.createElement('i', { className: 'fas fa-circle-notch fa-spin' }), ' Signing in...'
+                  ) : 
+                  'Get Started'
+              )
+            ),
+            React.createElement('div', { className: 'glass', style: { marginTop:28, borderRadius:'var(--radius-lg)', padding:'16px 20px', fontSize:12, color:'var(--text-secondary)' } },
+              React.createElement('div', { style: { fontWeight:700, marginBottom:8, color:'var(--text)', fontSize:13 } }, 
+                'Demo accounts ', 
+                React.createElement('span', { style: { fontWeight:400, opacity:0.7 } }, '(password: demo)')
+              ),
+              React.createElement('div', { style: { display:'grid', gridTemplateColumns:'1fr auto', gap:'4px 12px', lineHeight:1.8 } },
+                React.createElement('span', null, 'admin@portal.demo'),
+                React.createElement(Badge, { color: 'var(--primary)' }, 'admin'),
+                React.createElement('span', null, 'student@portal.demo'),
+                React.createElement(Badge, { color: 'var(--secondary)' }, 'student'),
+                React.createElement('span', null, 'teacher@portal.demo'),
+                React.createElement(Badge, { color: 'var(--accent)' }, 'teacher'),
+                React.createElement('span', null, 'staff@portal.demo'),
+                React.createElement(Badge, { color: 'var(--success)' }, 'staff')
+              )
+            )
+          )
         );
       }
 
-      function AdminDashboard() {
-        const complaints = data.complaints;
-        const total = complaints.length;
-        const pending = complaints.filter(c => !['resolved','closed','rejected'].includes(c.status)).length;
-        const resolved = complaints.filter(c => ['resolved','closed'].includes(c.status)).length;
-        const critical = complaints.filter(c => c.priority === 'critical').length;
-        const rate = total ? Math.round((resolved/total)*100) : 0;
-        
-        const catMap = {};
-        complaints.forEach(c => { catMap[c.category] = (catMap[c.category]||0)+1; });
+      // ===================== MAIN APP =====================
+      function App() {
+        const { session, logout, data, updateData, addToast } = useData();
+        const [activeView, setActiveView] = useState('dashboard');
+        const [searchQuery, setSearchQuery] = useState('');
+        const [selectedComplaint, setSelectedComplaint] = useState(null);
+        const [loading, setLoading] = useState(true);
+        const [confetti, setConfetti] = useState(false);
+        const [viewMode, setViewMode] = useState('list');
 
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Analytics</h2>
-            <div className="stats-grid">
-              <StatCard label="Total" value={total} icon="fa-folder-open" color="#6366f1" />
-              <StatCard label="Pending" value={pending} icon="fa-clock" color="#f59e0b" />
-              <StatCard label="Resolved" value={resolved} icon="fa-check-circle" color="#10b981" />
-              <StatCard label="Critical" value={critical} icon="fa-exclamation-triangle" color="#ef4444" />
-              <StatCard label="Rate" value={rate+'%'} icon="fa-percent" color="#8b5cf6" />
-            </div>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 20 }}>
-              <h4 style={{ fontWeight: 700, marginBottom: 12, fontSize: 14 }}>By Category</h4>
-              {Object.entries(catMap).map(([k,v]) => (
-                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                  <span>{k}</span>
-                  <span style={{ fontWeight: 600, color: 'var(--primary)' }}>{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
+        useEffect(() => {
+          const timer = setTimeout(() => setLoading(false), 400);
+          return () => clearTimeout(timer);
+        }, []);
 
-      function UserManagement() {
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Users</h2>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
-              {data.users.map(u => (
-                <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <Avatar name={u.name} />
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{u.name}</div>
-                      <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{u.email}</div>
-                    </div>
-                  </div>
-                  <Badge color={u.role === 'admin' ? 'var(--primary)' : 'var(--text-secondary)'}>{u.role}</Badge>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
+        useEffect(() => {
+          const theme = data.settings?.theme || 'light';
+          document.body.classList.toggle('dark', theme === 'dark');
+        }, [data.settings?.theme]);
 
-      function AuditLogs() {
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Audit Log</h2>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 24 }}>
-              {data.auditLogs.slice(0,30).map(a => (
-                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
-                  <span style={{ fontWeight: 500 }}>{a.actorName}</span>
-                  <span style={{ color: 'var(--text-secondary)' }}>{a.action}</span>
-                  <span style={{ color: 'var(--text-tertiary)', fontSize: 12 }}>{formatDate(a.createdAt)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
+        if (loading) {
+          return React.createElement('div', { style: { height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:24, background:'var(--bg)' } },
+            React.createElement('div', { style: { width:64, height:64, borderRadius:'50%', border:'4px solid var(--border)', borderTopColor:'var(--primary)', animation:'spin 0.9s linear infinite' } }),
+            React.createElement('div', { style: { fontWeight:700, color:'var(--text-secondary)', fontSize:16 } }, 'Loading ResolveHub...')
+          );
+        }
 
-      function Settings() {
-        const { updateData, addToast } = useData();
-        const [theme, setTheme] = useState(data.settings?.theme || 'light');
-        
-        const handleTheme = (t) => {
-          setTheme(t);
-          updateData(prev => ({ ...prev, settings: { ...prev.settings, theme: t } }));
-          document.body.classList.toggle('dark', t === 'dark');
-          addToast(`Theme: ${t}`, 'info');
-        };
+        if (!session) return React.createElement(Login, null);
 
-        const handleReset = () => {
-          if (confirm('Reset all demo data?')) {
-            updateData(getDefaultData());
-            addToast('Demo data reset', 'success');
+        const user = data.users.find(u => u.id === session.userId);
+        const isAdmin = session.role === 'admin';
+
+        const navItems = [
+          { id:'dashboard', label:'Dashboard', icon:'fa-gauge-high' },
+          { id:'complaints', label:'Complaints', icon:'fa-list' },
+          { id:'heatmap', label:'Heatmap', icon:'fa-map' },
+          { id:'leaderboard', label:'Leaderboard', icon:'fa-trophy' },
+          { id:'new-complaint', label:'New Issue', icon:'fa-plus-circle' },
+        ];
+        if (isAdmin) {
+          navItems.push({ id:'admin-dashboard', label:'Analytics', icon:'fa-chart-pie' });
+          navItems.push({ id:'users', label:'Users', icon:'fa-users' });
+          navItems.push({ id:'audit', label:'Audit', icon:'fa-history' });
+        }
+        navItems.push({ id:'settings', label:'Settings', icon:'fa-sliders' });
+
+        const currentNav = navItems.find(n => n.id === activeView);
+
+        // ===== SUB-COMPONENTS =====
+        function StatCard({ label, value, icon, color }) {
+          return React.createElement('div', { className: 'stat-card animate-slide-up' },
+            React.createElement('div', { className: 'stat-icon', style: { background: color+'15', color: color } },
+              React.createElement('i', { className: `fas ${icon}` })
+            ),
+            React.createElement('div', null,
+              React.createElement('div', { className: 'stat-value' }, value),
+              React.createElement('div', { className: 'stat-label' }, label)
+            )
+          );
+        }
+
+        function ComplaintRow({ complaint }) {
+          const { session, updateData } = useData();
+          const hasUpvoted = complaint.upvotedBy?.includes(session.userId);
+          const handleUpvote = (e) => {
+            e.stopPropagation();
+            updateData(prev => {
+              const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+              if (idx === -1) return prev;
+              const c = prev.complaints[idx];
+              const next = [...prev.complaints];
+              if (c.upvotedBy?.includes(session.userId)) {
+                next[idx] = { ...c, upvotes: (c.upvotes||0)-1, upvotedBy: c.upvotedBy.filter(id=>id!==session.userId) };
+              } else {
+                next[idx] = { ...c, upvotes: (c.upvotes||0)+1, upvotedBy: [...(c.upvotedBy||[]), session.userId] };
+              }
+              return { ...prev, complaints: next };
+            });
+          };
+          const submitter = data.users.find(u => u.id === complaint.submittedBy);
+          return React.createElement('div', { className: 'complaint-row animate-slide-up', onClick: () => setSelectedComplaint(complaint) },
+            React.createElement(Avatar, { name: complaint.anonymous ? '?' : (submitter?.name || 'U'), size: 'sm' }),
+            React.createElement('div', { className: 'complaint-info' },
+              React.createElement('div', { className: 'complaint-subject' }, complaint.subject),
+              React.createElement('div', { className: 'complaint-meta' },
+                React.createElement('span', null, complaint.id),
+                React.createElement('span', null, '·'),
+                React.createElement('span', null, complaint.category),
+                React.createElement('span', null, '·'),
+                React.createElement('span', null, timeAgo(complaint.createdAt))
+              )
+            ),
+            React.createElement('div', { className: 'complaint-actions' },
+              React.createElement('button', { className: `upvote-btn ${hasUpvoted?'upvoted':''}`, onClick: handleUpvote },
+                React.createElement('i', { className: 'fas fa-arrow-up' }), ' ', complaint.upvotes||0
+              ),
+              React.createElement(Badge, { color: getPriorityColor(complaint.priority) }, complaint.priority),
+              React.createElement(Badge, { color: getStatusColor(complaint.status) }, complaint.status)
+            )
+          );
+        }
+
+        function Dashboard() {
+          const userComplaints = data.complaints.filter(c => c.submittedBy === session.userId || c.assignedTo === session.userId);
+          const pending = userComplaints.filter(c => !['resolved','closed','rejected'].includes(c.status));
+          const inProgress = userComplaints.filter(c => ['in progress','assigned'].includes(c.status));
+          const resolved = userComplaints.filter(c => ['resolved','closed'].includes(c.status));
+
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('div', { style: { marginBottom:24 } },
+              React.createElement('h1', { className: 'page-title' }, getGreeting()+', '+user?.name),
+              React.createElement('div', { className: 'page-subtitle' }, "Here's what's happening in your workspace.")
+            ),
+            React.createElement('div', { className: 'stats-grid' },
+              React.createElement(StatCard, { label: 'Total', value: userComplaints.length, icon: 'fa-folder-open', color: '#6366f1' }),
+              React.createElement(StatCard, { label: 'Pending', value: pending.length, icon: 'fa-clock', color: '#f59e0b' }),
+              React.createElement(StatCard, { label: 'In Progress', value: inProgress.length, icon: 'fa-spinner', color: '#8b5cf6' }),
+              React.createElement(StatCard, { label: 'Resolved', value: resolved.length, icon: 'fa-check-circle', color: '#10b981' })
+            ),
+            React.createElement('div', { className: 'glass', style: { borderRadius:'var(--radius-lg)', padding:24 } },
+              React.createElement('h3', { style: { fontSize:16, fontWeight:700, marginBottom:16 } }, 'Recent Complaints'),
+              userComplaints.slice(0,5).map(c => React.createElement(ComplaintRow, { key: c.id, complaint: c })),
+              userComplaints.length===0 && React.createElement(EmptyState, { message: 'No complaints yet' })
+            )
+          );
+        }
+
+        function HeatmapView() {
+          const zoneCounts = {};
+          ZONES.forEach(z => { zoneCounts[z] = data.complaints.filter(c => c.zone === z).length; });
+          const maxCount = Math.max(...Object.values(zoneCounts), 1);
+          
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Campus Heatmap'),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+              React.createElement('div', { className: 'heatmap-grid' },
+                ZONES.map(z => {
+                  const count = zoneCounts[z] || 0;
+                  const intensity = Math.min(1, count / maxCount);
+                  const hue = 240 - intensity * 180;
+                  return React.createElement('div', { 
+                    key: z, 
+                    className: 'heat-cell', 
+                    style: { 
+                      background: `hsl(${hue}, 80%, ${50 + (1 - intensity) * 30}%)`,
+                      color: intensity > 0.6 ? 'white' : 'var(--text)'
+                    } 
+                  },
+                    React.createElement('span', { className: 'heat-label' }, ZONE_LABELS[z]),
+                    React.createElement('span', { className: 'heat-value' }, count)
+                  );
+                })
+              )
+            )
+          );
+        }
+
+        function LeaderboardView() {
+          const depts = ['Facilities', 'IT', 'Examination', 'Library', 'Transport', 'Administration'];
+          const deptStats = depts.map(d => {
+            const comps = data.complaints.filter(c => c.department === d);
+            const resolved = comps.filter(c => ['resolved', 'closed'].includes(c.status));
+            const total = comps.length || 1;
+            const rate = Math.round((resolved.length / total) * 100);
+            const avgTime = resolved.length ? Math.round(resolved.reduce((acc, c) => {
+              const re = c.timeline?.find(t => t.status === 'resolved');
+              return acc + (re ? (re.timestamp - c.createdAt) : 0);
+            }, 0) / resolved.length / (1000 * 60 * 60)) : 0;
+            return { name: d, resolved: resolved.length, total: comps.length, rate, avgTime };
+          });
+          deptStats.sort((a, b) => b.rate - a.rate || a.avgTime - b.avgTime);
+          
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Department Leaderboard'),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+              deptStats.map((d, i) => 
+                React.createElement('div', { key: d.name, className: 'dept-row' },
+                  React.createElement('span', { style: { fontWeight: 800, fontSize: 18, minWidth: 32, color: i === 0 ? 'var(--warning)' : 'var(--text-secondary)' } },
+                    i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`
+                  ),
+                  React.createElement('span', { style: { fontWeight: 600, minWidth: 120, fontSize: 14 } }, d.name),
+                  React.createElement('div', { className: 'dept-bar-bg' },
+                    React.createElement('div', { className: 'dept-bar-fill', style: { width: `${d.rate}%` } })
+                  ),
+                  React.createElement('span', { style: { fontWeight: 700, fontSize: 14, minWidth: 50, color: 'var(--primary)' } }, d.rate+'%'),
+                  React.createElement('span', { style: { fontSize: 12, color: 'var(--text-secondary)', minWidth: 60 } }, '⏱ '+d.avgTime+'h'),
+                  React.createElement('span', { style: { fontSize: 11, color: 'var(--text-tertiary)' } }, '('+d.resolved+'/'+d.total+')')
+                )
+              )
+            )
+          );
+        }
+
+        function ComplaintList() {
+          let complaints = data.complaints;
+          if (!isAdmin && session.role !== 'staff') {
+            complaints = complaints.filter(c => c.submittedBy === session.userId || !c.anonymous);
+          }
+          if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            complaints = complaints.filter(c => 
+              c.id.toLowerCase().includes(q) || 
+              c.subject.toLowerCase().includes(q) || 
+              c.description.toLowerCase().includes(q)
+            );
+          }
+          complaints.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0) || b.createdAt - a.createdAt);
+          
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('div', { style: { marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 } },
+              React.createElement('div', null,
+                React.createElement('h2', { className: 'page-title' }, 'All Complaints'),
+                React.createElement('div', { className: 'page-subtitle' }, complaints.length+' issues reported')
+              ),
+              React.createElement('div', { style: { display: 'flex', gap: 8 } },
+                React.createElement('button', { 
+                  className: `btn btn-sm ${viewMode === 'list' ? 'btn-primary' : 'btn-secondary'}`, 
+                  onClick: () => setViewMode('list') 
+                },
+                  React.createElement('i', { className: 'fas fa-list' }), ' List'
+                ),
+                React.createElement('button', { 
+                  className: `btn btn-sm ${viewMode === 'kanban' ? 'btn-primary' : 'btn-secondary'}`, 
+                  onClick: () => setViewMode('kanban') 
+                },
+                  React.createElement('i', { className: 'fas fa-columns' }), ' Kanban'
+                )
+              )
+            ),
+            viewMode === 'list' ? 
+              React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', overflow: 'hidden' } },
+                complaints.length === 0 ? React.createElement(EmptyState, { message: 'No complaints found' }) :
+                complaints.map(c => React.createElement(ComplaintRow, { key: c.id, complaint: c }))
+              ) :
+              React.createElement('div', { className: 'kanban-board' },
+                ['submitted', 'under review', 'assigned', 'in progress', 'resolved', 'closed'].map(status => {
+                  const items = complaints.filter(c => c.status === status);
+                  return React.createElement('div', { key: status, className: 'kanban-column' },
+                    React.createElement('div', { className: 'kanban-header' },
+                      React.createElement('span', { style: { color: getStatusColor(status) } }, status),
+                      React.createElement('span', { className: 'kanban-count' }, items.length)
+                    ),
+                    items.map(c => 
+                      React.createElement('div', { key: c.id, className: 'kanban-card', onClick: () => setSelectedComplaint(c) },
+                        React.createElement('div', { style: { fontWeight: 600, fontSize: 13 } }, c.subject),
+                        React.createElement('div', { style: { fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 } },
+                          c.id, ' · ', timeAgo(c.createdAt)
+                        ),
+                        React.createElement('div', { style: { marginTop: 8 } },
+                          React.createElement(Badge, { color: getPriorityColor(c.priority) }, c.priority)
+                        )
+                      )
+                    )
+                  );
+                })
+              )
+          );
+        }
+
+        function ComplaintDetail({ complaint, onClose }) {
+          const { updateData, addToast, session } = useData();
+          const [comment, setComment] = useState('');
+
+          const handleResolve = () => {
+            updateData(prev => {
+              const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+              if (idx === -1) return prev;
+              const next = [...prev.complaints];
+              next[idx] = { 
+                ...next[idx], 
+                status: 'resolved',
+                timeline: [...next[idx].timeline, { status: 'resolved', timestamp: Date.now(), note: 'Resolved' }]
+              };
+              return { ...prev, complaints: next };
+            });
+            setConfetti(true);
+            setTimeout(() => setConfetti(false), 3000);
+            addToast('Complaint resolved! 🎉', 'success');
+            onClose();
+          };
+
+          const handleAddComment = () => {
+            if (!comment.trim()) return;
+            updateData(prev => {
+              const idx = prev.complaints.findIndex(c => c.id === complaint.id);
+              if (idx === -1) return prev;
+              const next = [...prev.complaints];
+              next[idx].comments = [...next[idx].comments, { 
+                id: 'c' + Date.now(), 
+                userId: session.userId, 
+                name: session.name, 
+                role: session.role, 
+                message: comment, 
+                timestamp: Date.now()
+              }];
+              return { ...prev, complaints: next };
+            });
+            setComment('');
+            addToast('Comment added', 'info');
+          };
+
+          return React.createElement('div', { className: 'modal-overlay', onClick: e => { if (e.target === e.currentTarget) onClose(); } },
+            React.createElement('div', { className: 'modal-box animate-scale' },
+              React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 } },
+                React.createElement('div', null,
+                  React.createElement('h3', { style: { fontSize: 20, fontWeight: 800, color: 'var(--text)' } }, complaint.subject),
+                  React.createElement('div', { style: { fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 } },
+                    complaint.id, ' · ', complaint.category
+                  )
+                ),
+                React.createElement('button', { onClick: onClose, style: { background: 'none', border: 'none', fontSize: 20, color: 'var(--text-tertiary)', cursor: 'pointer' } },
+                  React.createElement('i', { className: 'fas fa-times' })
+                )
+              ),
+              React.createElement('p', { style: { color: 'var(--text)', marginBottom: 16, fontSize: 14, lineHeight: 1.7 } }, complaint.description),
+              React.createElement('div', { style: { display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 } },
+                React.createElement('span', null, 'Priority: ', React.createElement(Badge, { color: getPriorityColor(complaint.priority) }, complaint.priority)),
+                React.createElement('span', null, 'Status: ', React.createElement(Badge, { color: getStatusColor(complaint.status) }, complaint.status)),
+                React.createElement('span', null, 'Location: ', complaint.location),
+                React.createElement('span', null, 'Upvotes: ', React.createElement('span', { style: { fontWeight: 700, color: 'var(--primary)' } }, complaint.upvotes || 0))
+              ),
+              isAdmin && complaint.status !== 'resolved' && 
+                React.createElement('button', { 
+                  className: 'btn btn-primary btn-sm', 
+                  onClick: handleResolve, 
+                  style: { marginBottom: 16, background: 'linear-gradient(135deg, var(--success), #34d399)' } 
+                },
+                  React.createElement('i', { className: 'fas fa-check' }), ' Resolve'
+                ),
+              complaint.timeline && complaint.timeline.length > 0 && 
+                React.createElement('div', { style: { marginBottom: 16 } },
+                  React.createElement('div', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 } }, 'Timeline'),
+                  complaint.timeline.map((t, i) => 
+                    React.createElement('div', { key: i, className: 'timeline-item' },
+                      React.createElement('div', { className: 'timeline-dot', style: { background: getStatusColor(t.status) } },
+                        React.createElement('i', { className: 'fas fa-circle', style: { fontSize: 10 } })
+                      ),
+                      React.createElement('div', { className: 'timeline-content' },
+                        React.createElement('div', { className: 'timeline-status' }, t.status),
+                        React.createElement('div', { className: 'timeline-note' }, t.note),
+                        React.createElement('div', { className: 'timeline-time' }, formatDate(t.timestamp))
+                      )
+                    )
+                  )
+                ),
+              complaint.comments && complaint.comments.length > 0 && 
+                React.createElement('div', { style: { marginBottom: 12 } },
+                  React.createElement('div', { style: { fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 8 } }, 'Comments'),
+                  complaint.comments.map(c => 
+                    React.createElement('div', { key: c.id, style: { padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
+                      React.createElement('span', { style: { fontWeight: 700 } }, c.name),
+                      React.createElement('span', { style: { color: 'var(--text-secondary)', fontSize: 11, marginLeft: 6 } }, '@'+c.role),
+                      React.createElement('span', { style: { color: 'var(--text-tertiary)', fontSize: 11, marginLeft: 8 } }, timeAgo(c.timestamp)),
+                      React.createElement('div', { style: { marginTop: 4, color: 'var(--text)' } }, c.message)
+                    )
+                  )
+                ),
+              React.createElement('div', { style: { display: 'flex', gap: 8 } },
+                React.createElement('input', { 
+                  type: 'text', 
+                  className: 'input', 
+                  value: comment, 
+                  onChange: e => setComment(e.target.value), 
+                  placeholder: 'Add a comment...', 
+                  style: { flex: 1, borderRadius: 30 },
+                  onKeyDown: e => { if (e.key === 'Enter') handleAddComment(); }
+                }),
+                React.createElement('button', { className: 'btn btn-primary', onClick: handleAddComment, style: { borderRadius: 30 } },
+                  React.createElement('i', { className: 'fas fa-paper-plane' }), ' Send'
+                )
+              )
+            )
+          );
+        }
+
+        function ComplaintForm({ onSuccess }) {
+          const { updateData, addToast, session } = useData();
+          const [form, setForm] = useState({ 
+            subject: '', category: 'Infrastructure', description: '', 
+            priority: 'medium', department: '', location: '', zone: 'academic', anonymous: false 
+          });
+          const [loading, setLoading] = useState(false);
+
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            if (!form.subject.trim() || !form.description.trim()) {
+              addToast('Subject and description are required', 'error');
+              return;
+            }
+            setLoading(true);
+            setTimeout(() => {
+              const newComplaint = {
+                id: generateId(),
+                subject: form.subject.trim(),
+                description: form.description.trim(),
+                category: form.category,
+                priority: form.priority,
+                status: 'submitted',
+                department: form.department || 'General',
+                location: form.location || 'Campus',
+                zone: form.zone,
+                anonymous: form.anonymous,
+                submittedBy: session.userId,
+                assignedTo: null,
+                upvotes: 0,
+                upvotedBy: [],
+                comments: [],
+                timeline: [{ status: 'submitted', timestamp: Date.now(), note: 'Submitted' }],
+                resolution: '',
+                feedback: null,
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+              };
+              updateData(prev => ({
+                ...prev,
+                complaints: [newComplaint, ...prev.complaints]
+              }));
+              addToast('Complaint '+newComplaint.id+' created', 'success');
+              setConfetti(true);
+              setTimeout(() => setConfetti(false), 2000);
+              onSuccess?.();
+              setLoading(false);
+            }, 500);
+          };
+
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Report an Issue'),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 700 } },
+              React.createElement('form', { onSubmit: handleSubmit },
+                React.createElement('div', { className: 'form-group' },
+                  React.createElement('label', null, 'Subject ', React.createElement('span', { style: { color: 'var(--danger)' } }, '*')),
+                  React.createElement('input', { className: 'input', value: form.subject, onChange: e => setForm({...form, subject: e.target.value}), placeholder: 'Brief title', required: true })
+                ),
+                React.createElement('div', { className: 'form-group' },
+                  React.createElement('label', null, 'Description ', React.createElement('span', { style: { color: 'var(--danger)' } }, '*')),
+                  React.createElement('textarea', { className: 'input', value: form.description, onChange: e => setForm({...form, description: e.target.value}), rows: 5, placeholder: 'Describe the issue...', required: true })
+                ),
+                React.createElement('div', { className: 'form-row' },
+                  React.createElement('div', { className: 'form-group' },
+                    React.createElement('label', null, 'Category'),
+                    React.createElement('select', { className: 'input', value: form.category, onChange: e => setForm({...form, category: e.target.value}) },
+                      CATEGORIES.map(c => React.createElement('option', { key: c }, c))
+                    )
+                  ),
+                  React.createElement('div', { className: 'form-group' },
+                    React.createElement('label', null, 'Priority'),
+                    React.createElement('select', { className: 'input', value: form.priority, onChange: e => setForm({...form, priority: e.target.value}) },
+                      PRIORITIES.map(p => React.createElement('option', { key: p }, p))
+                    )
+                  )
+                ),
+                React.createElement('div', { className: 'form-row' },
+                  React.createElement('div', { className: 'form-group' },
+                    React.createElement('label', null, 'Department'),
+                    React.createElement('input', { className: 'input', value: form.department, onChange: e => setForm({...form, department: e.target.value}), placeholder: 'e.g. Facilities' })
+                  ),
+                  React.createElement('div', { className: 'form-group' },
+                    React.createElement('label', null, 'Location'),
+                    React.createElement('input', { className: 'input', value: form.location, onChange: e => setForm({...form, location: e.target.value}), placeholder: 'e.g. Building A' })
+                  )
+                ),
+                React.createElement('div', { className: 'form-group checkbox-wrap' },
+                  React.createElement('input', { type: 'checkbox', checked: form.anonymous, onChange: e => setForm({...form, anonymous: e.target.checked}) }),
+                  React.createElement('label', { style: { cursor: 'pointer' } }, 'Submit anonymously')
+                ),
+                React.createElement('button', { 
+                  type: 'submit', 
+                  disabled: loading, 
+                  className: 'btn btn-primary', 
+                  style: { width: '100%', padding: '14px', borderRadius: 30, fontSize: 16 } 
+                },
+                  loading ? 
+                    React.createElement(React.Fragment, null, 
+                      React.createElement('i', { className: 'fas fa-circle-notch fa-spin' }), ' Submitting...'
+                    ) : 
+                    React.createElement(React.Fragment, null, 
+                      React.createElement('i', { className: 'fas fa-paper-plane' }), ' Submit'
+                    )
+                )
+              )
+            )
+          );
+        }
+
+        function AdminDashboard() {
+          const complaints = data.complaints;
+          const total = complaints.length;
+          const pending = complaints.filter(c => !['resolved','closed','rejected'].includes(c.status)).length;
+          const resolved = complaints.filter(c => ['resolved','closed'].includes(c.status)).length;
+          const critical = complaints.filter(c => c.priority === 'critical').length;
+          const rate = total ? Math.round((resolved/total)*100) : 0;
+          
+          const catMap = {};
+          complaints.forEach(c => { catMap[c.category] = (catMap[c.category]||0)+1; });
+
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Analytics'),
+            React.createElement('div', { className: 'stats-grid' },
+              React.createElement(StatCard, { label: 'Total', value: total, icon: 'fa-folder-open', color: '#6366f1' }),
+              React.createElement(StatCard, { label: 'Pending', value: pending, icon: 'fa-clock', color: '#f59e0b' }),
+              React.createElement(StatCard, { label: 'Resolved', value: resolved, icon: 'fa-check-circle', color: '#10b981' }),
+              React.createElement(StatCard, { label: 'Critical', value: critical, icon: 'fa-exclamation-triangle', color: '#ef4444' }),
+              React.createElement(StatCard, { label: 'Rate', value: rate+'%', icon: 'fa-percent', color: '#8b5cf6' })
+            ),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 20 } },
+              React.createElement('h4', { style: { fontWeight: 700, marginBottom: 12, fontSize: 14 } }, 'By Category'),
+              Object.entries(catMap).map(([k,v]) => 
+                React.createElement('div', { key: k, style: { display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
+                  React.createElement('span', null, k),
+                  React.createElement('span', { style: { fontWeight: 600, color: 'var(--primary)' } }, v)
+                )
+              )
+            )
+          );
+        }
+
+        function UserManagement() {
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Users'),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+              data.users.map(u => 
+                React.createElement('div', { key: u.id, style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' } },
+                  React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 12 } },
+                    React.createElement(Avatar, { name: u.name }),
+                    React.createElement('div', null,
+                      React.createElement('div', { style: { fontWeight: 600 } }, u.name),
+                      React.createElement('div', { style: { fontSize: 12, color: 'var(--text-secondary)' } }, u.email)
+                    )
+                  ),
+                  React.createElement(Badge, { color: u.role === 'admin' ? 'var(--primary)' : 'var(--text-secondary)' }, u.role)
+                )
+              )
+            )
+          );
+        }
+
+        function AuditLogs() {
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Audit Log'),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 24 } },
+              data.auditLogs.slice(0,30).map(a => 
+                React.createElement('div', { key: a.id, style: { display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 } },
+                  React.createElement('span', { style: { fontWeight: 500 } }, a.actorName),
+                  React.createElement('span', { style: { color: 'var(--text-secondary)' } }, a.action),
+                  React.createElement('span', { style: { color: 'var(--text-tertiary)', fontSize: 12 } }, formatDate(a.createdAt))
+                )
+              )
+            )
+          );
+        }
+
+        function Settings() {
+          const { updateData, addToast } = useData();
+          const [theme, setTheme] = useState(data.settings?.theme || 'light');
+          
+          const handleTheme = (t) => {
+            setTheme(t);
+            updateData(prev => ({ ...prev, settings: { ...prev.settings, theme: t } }));
+            document.body.classList.toggle('dark', t === 'dark');
+            addToast('Theme: '+t, 'info');
+          };
+
+          const handleReset = () => {
+            if (confirm('Reset all demo data?')) {
+              updateData(getDefaultData());
+              addToast('Demo data reset', 'success');
+            }
+          };
+
+          return React.createElement('div', { className: 'animate-fade' },
+            React.createElement('h2', { className: 'page-title', style: { marginBottom:16 } }, 'Settings'),
+            React.createElement('div', { className: 'glass', style: { borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 600 } },
+              React.createElement('div', { style: { marginBottom: 24 } },
+                React.createElement('h4', { style: { fontWeight: 700, marginBottom: 12 } }, 'Theme'),
+                React.createElement('div', { style: { display: 'flex', gap: 12 } },
+                  React.createElement('button', { 
+                    className: `btn ${theme === 'light' ? 'btn-primary' : 'btn-secondary'}`, 
+                    onClick: () => handleTheme('light') 
+                  },
+                    React.createElement('i', { className: 'fas fa-sun' }), ' Light'
+                  ),
+                  React.createElement('button', { 
+                    className: `btn ${theme === 'dark' ? 'btn-primary' : 'btn-secondary'}`, 
+                    onClick: () => handleTheme('dark') 
+                  },
+                    React.createElement('i', { className: 'fas fa-moon' }), ' Dark'
+                  )
+                )
+              ),
+              React.createElement('div', null,
+                React.createElement('h4', { style: { fontWeight: 700, marginBottom: 12 } }, 'Data'),
+                React.createElement('button', { className: 'btn btn-danger', onClick: handleReset },
+                  React.createElement('i', { className: 'fas fa-trash' }), ' Reset Demo Data'
+                )
+              ),
+              React.createElement('div', { style: { marginTop: 24, padding: 16, borderRadius: 'var(--radius)', background: 'rgba(99,102,241,0.05)', fontSize: 13, color: 'var(--text-secondary)' } },
+                React.createElement('i', { className: 'fas fa-info-circle' }), ' ResolveHub v2.0 · Data stored locally'
+              )
+            )
+          );
+        }
+
+        // ===== RENDER =====
+        const renderView = () => {
+          switch(activeView) {
+            case 'dashboard': return React.createElement(Dashboard, null);
+            case 'heatmap': return React.createElement(HeatmapView, null);
+            case 'leaderboard': return React.createElement(LeaderboardView, null);
+            case 'complaints': return React.createElement(ComplaintList, null);
+            case 'new-complaint': return React.createElement(ComplaintForm, { onSuccess: () => setActiveView('complaints') });
+            case 'admin-dashboard': return isAdmin ? React.createElement(AdminDashboard, null) : React.createElement(EmptyState, { icon: 'fa-lock', message: 'Access denied' });
+            case 'users': return isAdmin ? React.createElement(UserManagement, null) : React.createElement(EmptyState, { icon: 'fa-lock', message: 'Access denied' });
+            case 'audit': return isAdmin ? React.createElement(AuditLogs, null) : React.createElement(EmptyState, { icon: 'fa-lock', message: 'Access denied' });
+            case 'settings': return React.createElement(Settings, null);
+            default: return React.createElement(Dashboard, null);
           }
         };
 
-        return (
-          <div className="animate-fade">
-            <h2 className="page-title" style={{ marginBottom:16 }}>Settings</h2>
-            <div className="glass" style={{ borderRadius: 'var(--radius-lg)', padding: 28, maxWidth: 600 }}>
-              <div style={{ marginBottom: 24 }}>
-                <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Theme</h4>
-                <div style={{ display: 'flex', gap: 12 }}>
-                  <button className={`btn ${theme === 'light' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('light')}>
-                    <i className="fas fa-sun" /> Light
-                  </button>
-                  <button className={`btn ${theme === 'dark' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => handleTheme('dark')}>
-                    <i className="fas fa-moon" /> Dark
-                  </button>
-                </div>
-              </div>
-              <div>
-                <h4 style={{ fontWeight: 700, marginBottom: 12 }}>Data</h4>
-                <button className="btn btn-danger" onClick={handleReset}>
-                  <i className="fas fa-trash" /> Reset Demo Data
-                </button>
-              </div>
-              <div style={{ marginTop: 24, padding: 16, borderRadius: 'var(--radius)', background: 'rgba(99,102,241,0.05)', fontSize: 13, color: 'var(--text-secondary)' }}>
-                <i className="fas fa-info-circle" /> ResolveHub v2.0 · Data stored locally
-              </div>
-            </div>
-          </div>
+        return React.createElement('div', { className: 'app-shell' },
+          React.createElement(Confetti, { active: confetti }),
+          React.createElement(ToastContainer, null),
+          React.createElement('aside', { className: 'sidebar' },
+            React.createElement('div', { className: 'sidebar-brand' }, 'ResolveHub'),
+            React.createElement('nav', { className: 'sidebar-nav' },
+              navItems.map(item => 
+                React.createElement('button', {
+                  key: item.id,
+                  className: `nav-item ${activeView === item.id ? 'active' : ''}`,
+                  onClick: () => setActiveView(item.id)
+                },
+                  React.createElement('i', { className: `fas ${item.icon} nav-icon` }),
+                  React.createElement('span', null, item.label)
+                )
+              )
+            ),
+            React.createElement('div', { className: 'sidebar-footer' },
+              React.createElement('div', { className: 'user-card' },
+                React.createElement(Avatar, { name: user?.name }),
+                React.createElement('div', { style: { flex: 1, minWidth: 0 } },
+                  React.createElement('div', { style: { fontWeight: 600, fontSize: 13 } }, user?.name),
+                  React.createElement('div', { style: { fontSize: 11, color: 'var(--text-secondary)' } }, session?.role)
+                ),
+                React.createElement('button', { 
+                  className: 'btn btn-ghost btn-sm', 
+                  onClick: () => { logout(); addToast('Logged out', 'info'); } 
+                },
+                  React.createElement('i', { className: 'fas fa-sign-out-alt' })
+                )
+              )
+            )
+          ),
+          React.createElement('main', { className: 'main-area' },
+            React.createElement('div', { className: 'topbar' },
+              React.createElement('div', null,
+                React.createElement('h1', { className: 'page-title' }, currentNav?.label || 'Dashboard')
+              ),
+              React.createElement('div', { style: { display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' } },
+                React.createElement('div', { className: 'search-wrap' },
+                  React.createElement('i', { className: 'fas fa-search' }),
+                  React.createElement('input', {
+                    type: 'text',
+                    className: 'input global-search',
+                    placeholder: 'Search complaints...',
+                    value: searchQuery,
+                    onChange: e => setSearchQuery(e.target.value),
+                    style: { borderRadius: 30 }
+                  })
+                ),
+                React.createElement(NotificationCenter, null),
+                React.createElement('button', { 
+                  className: 'btn btn-primary btn-sm', 
+                  onClick: () => setActiveView('new-complaint') 
+                },
+                  React.createElement('i', { className: 'fas fa-plus' }), ' New'
+                )
+              )
+            ),
+            renderView(),
+            selectedComplaint && React.createElement(ComplaintDetail, { 
+              complaint: selectedComplaint, 
+              onClose: () => setSelectedComplaint(null) 
+            })
+          )
         );
       }
 
-      // ===== RENDER =====
-      const renderView = () => {
-        switch(activeView) {
-          case 'dashboard': return <Dashboard />;
-          case 'heatmap': return <HeatmapView />;
-          case 'leaderboard': return <LeaderboardView />;
-          case 'complaints': return <ComplaintList />;
-          case 'new-complaint': return <ComplaintForm onSuccess={() => setActiveView('complaints')} />;
-          case 'admin-dashboard': return isAdmin ? <AdminDashboard /> : <EmptyState icon="fa-lock" message="Access denied" />;
-          case 'users': return isAdmin ? <UserManagement /> : <EmptyState icon="fa-lock" message="Access denied" />;
-          case 'audit': return isAdmin ? <AuditLogs /> : <EmptyState icon="fa-lock" message="Access denied" />;
-          case 'settings': return <Settings />;
-          default: return <Dashboard />;
-        }
-      };
-
-      return (
-        <div className="app-shell">
-          <Confetti active={confetti} />
-          <ToastContainer />
-          
-          <aside className="sidebar">
-            <div className="sidebar-brand">ResolveHub</div>
-            <nav className="sidebar-nav">
-              {navItems.map(item => (
-                <button
-                  key={item.id}
-                  className={`nav-item ${activeView === item.id ? 'active' : ''}`}
-                  onClick={() => setActiveView(item.id)}
-                >
-                  <i className={`fas ${item.icon} nav-icon`} />
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </nav>
-            <div className="sidebar-footer">
-              <div className="user-card">
-                <Avatar name={user?.name} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13 }}>{user?.name}</div>
-                  <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{session?.role}</div>
-                </div>
-                <button className="btn btn-ghost btn-sm" onClick={() => { logout(); addToast('Logged out', 'info'); }}>
-                  <i className="fas fa-sign-out-alt" />
-                </button>
-              </div>
-            </div>
-          </aside>
-
-          <main className="main-area">
-            <div className="topbar">
-              <div>
-                <h1 className="page-title">{currentNav?.label || 'Dashboard'}</h1>
-              </div>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-                <div className="search-wrap">
-                  <i className="fas fa-search" />
-                  <input
-                    type="text"
-                    className="input global-search"
-                    placeholder="Search complaints..."
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    style={{ borderRadius: 30 }}
-                  />
-                </div>
-                <NotificationCenter />
-                <button className="btn btn-primary btn-sm" onClick={() => setActiveView('new-complaint')}>
-                  <i className="fas fa-plus" /> New
-                </button>
-              </div>
-            </div>
-            {renderView()}
-            {selectedComplaint && <ComplaintDetail complaint={selectedComplaint} onClose={() => setSelectedComplaint(null)} />}
-          </main>
-        </div>
+      // ===== MOUNT =====
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(
+        React.createElement(DataProvider, null,
+          React.createElement(App, null)
+        )
       );
     }
-
-    // ===== MOUNT =====
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(
-      <DataProvider>
-        <App />
-      </DataProvider>
-    );
   </script>
 </body>
 </html>
