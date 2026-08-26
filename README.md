@@ -1,8 +1,5 @@
 # 🚀 ResolveHub - Complaint Management Portal
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/resolvehub)](https://github.com/yourusername/resolvehub/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/resolvehub)](https://github.com/yourusername/resolvehub/issues)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/resolvehub)](https://github.com/yourusername/resolvehub/network)
 
 ## 🌟 Overview
 
