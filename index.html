@@ -75,11 +75,6 @@
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.92) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    @keyframes confetti-fall { 0% { transform: translateY(-120vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(120vh) rotate(960deg); opacity: 0; } }
-
-    .animate-fade { animation: fadeIn 0.4s ease forwards; }
-    .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .animate-scale { animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -100,6 +95,7 @@
     .btn-ghost:hover { background: rgba(99,102,241,0.08); color: var(--primary); }
     .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 20px; }
     .btn-danger { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+    .btn-success { background: linear-gradient(135deg, var(--success), #34d399); color: white; }
 
     .badge {
       display: inline-flex; align-items: center; gap: 4px;
@@ -290,10 +286,51 @@
       position: fixed; width: 10px; height: 10px; top: -10px; z-index: 99999;
       animation: confetti-fall 3s linear forwards;
     }
+    @keyframes confetti-fall { 0% { transform: translateY(-120vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(120vh) rotate(960deg); opacity: 0; } }
 
     .activity-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
     .activity-item:last-child { border-bottom: none; }
     .activity-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .role-card {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid var(--border);
+      background: var(--surface);
+    }
+    .role-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-light);
+      box-shadow: var(--shadow-lg);
+    }
+    .role-card.selected {
+      border-color: var(--primary);
+      background: rgba(99,102,241,0.08);
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
+    }
+    .role-card .role-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .role-card .role-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .role-card .role-email {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
 
     @media (max-width: 768px) {
       .app-shell { flex-direction: column; }
@@ -311,22 +348,16 @@
       .stat-value { font-size: 20px; }
       .modal-box { padding: 20px; }
       .heatmap-grid { grid-template-columns: repeat(3, 1fr); }
+      .role-selector { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-  <div id="root">
-    <div style="height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px; background:#f8fafc; font-family:'Inter',sans-serif;">
-      <div style="width:64px; height:64px; border-radius:50%; border:4px solid rgba(99,102,241,0.12); border-top-color:#6366f1; animation:spin 0.9s linear infinite;"></div>
-      <div style="font-weight:600; color:#64748b; font-size:16px;">Loading ResolveHub...</div>
-    </div>
-  </div>
+  <div id="root"></div>
 
-  <!-- Load React and ReactDOM -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   
-  <!-- The app is rendered via this script -->
   <script>
     // Check if React loaded
     if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
@@ -334,12 +365,11 @@
         <div style="height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px; font-family:'Inter',sans-serif; padding:20px; text-align:center;">
           <div style="font-size:48px;">⚠️</div>
           <h2 style="color:#0f172a;">Failed to load React</h2>
-          <p style="color:#64748b; max-width:400px;">Please check your internet connection and try again. Make sure you can access unpkg.com.</p>
+          <p style="color:#64748b; max-width:400px;">Please check your internet connection and try again.</p>
           <button onclick="location.reload()" style="padding:10px 24px; background:#6366f1; color:white; border:none; border-radius:12px; font-weight:600; cursor:pointer;">Retry</button>
         </div>
       `;
     } else {
-      // If React loaded, render the app using plain JavaScript (no JSX)
       const { useState, useEffect, useCallback, useContext, useRef, createContext } = React;
 
       // ===================== CONSTANTS & HELPERS =====================
@@ -423,7 +453,7 @@
           setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
         }, []);
 
-        const login = useCallback((email, password) => {
+        const login = useCallback((email) => {
           const user = data.users.find(u => u.email === email);
           if (user) {
             const sess = { userId: user.id, role: user.role, name: user.name, email: user.email };
@@ -433,7 +463,7 @@
             setData(prev => ({ ...prev, auditLogs: [auditEntry, ...prev.auditLogs] }));
             return { success:true, user };
           }
-          return { success:false, error:'Invalid email or password' };
+          return { success:false, error:'User not found' };
         }, [data.users]);
 
         const logout = useCallback(() => {
@@ -573,21 +603,34 @@
         );
       }
 
+      // ===================== LOGIN PAGE =====================
       function Login() {
         const { login, addToast, session } = useData();
-        const [email, setEmail] = useState('admin@portal.demo');
-        const [password, setPassword] = useState('demo');
+        const [selectedRole, setSelectedRole] = useState(null);
         const [loading, setLoading] = useState(false);
-        const [showPw, setShowPw] = useState(false);
+        
         if (session) return null;
 
-        const handleSubmit = (e) => {
-          e.preventDefault();
+        const roles = [
+          { id: 'admin', name: 'Admin', email: 'admin@portal.demo', icon: 'fa-user-shield', color: '#6366f1', description: 'Full access & analytics' },
+          { id: 'student', name: 'Student', email: 'student@portal.demo', icon: 'fa-user-graduate', color: '#10b981', description: 'Submit & track issues' },
+          { id: 'teacher', name: 'Teacher', email: 'teacher@portal.demo', icon: 'fa-chalkboard-teacher', color: '#f59e0b', description: 'Report & monitor' },
+          { id: 'staff', name: 'Staff', email: 'staff@portal.demo', icon: 'fa-user-tie', color: '#06b6d4', description: 'Handle assignments' }
+        ];
+
+        const handleLogin = () => {
+          if (!selectedRole) {
+            addToast('Please select a role first', 'error');
+            return;
+          }
           setLoading(true);
           setTimeout(() => {
-            const r = login(email, password);
-            if (r.success) addToast('Welcome back, '+r.user.name+'!', 'success');
-            else addToast(r.error, 'error');
+            const r = login(selectedRole.email);
+            if (r.success) {
+              addToast('Welcome, '+r.user.name+'!', 'success');
+            } else {
+              addToast(r.error, 'error');
+            }
             setLoading(false);
           }, 500);
         };
@@ -598,63 +641,49 @@
             React.createElement('div', { className: 'login-blob', style: { width:300, height:300, background:'#e9d5ff', bottom:-50, right:-50, animationDelay:'2s' } }),
             React.createElement('div', { className: 'login-blob', style: { width:250, height:250, background:'#bae6fd', top:'40%', left:'60%', animationDelay:'4s' } })
           ),
-          React.createElement('div', { className: 'glass animate-scale', style: { maxWidth:440, width:'100%', borderRadius:'var(--radius-xl)', padding:'40px 36px', position:'relative', zIndex:1 } },
+          React.createElement('div', { className: 'glass animate-scale', style: { maxWidth:520, width:'100%', borderRadius:'var(--radius-xl)', padding:'40px 36px', position:'relative', zIndex:1 } },
             React.createElement('div', { style: { textAlign:'center', marginBottom:32 } },
               React.createElement('div', { style: { fontSize:36, fontWeight:900, letterSpacing:'-1.5px', background:'linear-gradient(135deg,var(--primary-dark),var(--secondary))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' } }, 'ResolveHub'),
               React.createElement('div', { style: { color:'var(--text-secondary)', fontSize:15, fontWeight:500, marginTop:4 } }, 'Smart Complaint Management')
             ),
-            React.createElement('form', { onSubmit: handleSubmit },
-              React.createElement('div', { className: 'form-group' },
-                React.createElement('label', null, 'Email'),
-                React.createElement('input', { type: 'email', className: 'input', value: email, onChange: e=>setEmail(e.target.value), placeholder: 'admin@portal.demo', required: true })
-              ),
-              React.createElement('div', { className: 'form-group', style: { position:'relative' } },
-                React.createElement('label', null, 'Password'),
-                React.createElement('input', { 
-                  type: showPw?'text':'password', 
-                  className: 'input', 
-                  value: password, 
-                  onChange: e=>setPassword(e.target.value), 
-                  placeholder: '•••••••', 
-                  required: true, 
-                  style: { paddingRight:48 } 
-                }),
-                React.createElement('button', { 
-                  type: 'button', 
-                  onClick: ()=>setShowPw(!showPw), 
-                  style: { position:'absolute', right:16, bottom:14, background:'none', border:'none', color:'var(--text-tertiary)', cursor:'pointer', fontSize:16 } 
-                },
-                  React.createElement('i', { className: `fas ${showPw?'fa-eye':'fa-eye-slash'}` })
+            
+            React.createElement('div', { style: { marginBottom: 20 } },
+              React.createElement('label', { style: { fontWeight: 700, fontSize: 14, color: 'var(--text)' } }, 'Select Your Role'),
+              React.createElement('div', { className: 'role-selector' },
+                roles.map(role => 
+                  React.createElement('div', { 
+                    key: role.id,
+                    className: `role-card ${selectedRole?.id === role.id ? 'selected' : ''}`,
+                    onClick: () => setSelectedRole(role)
+                  },
+                    React.createElement('span', { className: 'role-icon', style: { color: role.color } }, 
+                      React.createElement('i', { className: `fas ${role.icon}` })
+                    ),
+                    React.createElement('div', { className: 'role-name' }, role.name),
+                    React.createElement('div', { className: 'role-email' }, role.email),
+                    React.createElement('div', { style: { fontSize: 11, color: 'var(--text-tertiary)', marginTop: 4 } }, role.description)
+                  )
                 )
-              ),
-              React.createElement('button', { 
-                type: 'submit', 
-                disabled: loading, 
-                className: 'btn btn-primary', 
-                style: { width:'100%', padding:'14px', borderRadius:30, fontSize:16 } 
-              },
-                loading ? 
-                  React.createElement(React.Fragment, null, 
-                    React.createElement('i', { className: 'fas fa-circle-notch fa-spin' }), ' Signing in...'
-                  ) : 
-                  'Get Started'
               )
             ),
-            React.createElement('div', { className: 'glass', style: { marginTop:28, borderRadius:'var(--radius-lg)', padding:'16px 20px', fontSize:12, color:'var(--text-secondary)' } },
-              React.createElement('div', { style: { fontWeight:700, marginBottom:8, color:'var(--text)', fontSize:13 } }, 
-                'Demo accounts ', 
-                React.createElement('span', { style: { fontWeight:400, opacity:0.7 } }, '(password: demo)')
-              ),
-              React.createElement('div', { style: { display:'grid', gridTemplateColumns:'1fr auto', gap:'4px 12px', lineHeight:1.8 } },
-                React.createElement('span', null, 'admin@portal.demo'),
-                React.createElement(Badge, { color: 'var(--primary)' }, 'admin'),
-                React.createElement('span', null, 'student@portal.demo'),
-                React.createElement(Badge, { color: 'var(--secondary)' }, 'student'),
-                React.createElement('span', null, 'teacher@portal.demo'),
-                React.createElement(Badge, { color: 'var(--accent)' }, 'teacher'),
-                React.createElement('span', null, 'staff@portal.demo'),
-                React.createElement(Badge, { color: 'var(--success)' }, 'staff')
-              )
+
+            React.createElement('button', { 
+              className: 'btn btn-primary', 
+              onClick: handleLogin,
+              disabled: loading,
+              style: { width:'100%', padding:'14px', borderRadius:30, fontSize:16 } 
+            },
+              loading ? 
+                React.createElement(React.Fragment, null, 
+                  React.createElement('i', { className: 'fas fa-circle-notch fa-spin' }), ' Logging in...'
+                ) : 
+                React.createElement(React.Fragment, null, 
+                  React.createElement('i', { className: 'fas fa-sign-in-alt' }), ' Continue as ' + (selectedRole?.name || 'Guest')
+                )
+            ),
+
+            React.createElement('div', { style: { marginTop: 24, padding: 16, borderRadius: 'var(--radius-lg)', background: 'rgba(99,102,241,0.06)', fontSize: 12, color: 'var(--text-secondary)' } },
+              React.createElement('i', { className: 'fas fa-info-circle' }), ' Select a role to login. No password required for demo.'
             )
           )
         );
@@ -666,26 +695,13 @@
         const [activeView, setActiveView] = useState('dashboard');
         const [searchQuery, setSearchQuery] = useState('');
         const [selectedComplaint, setSelectedComplaint] = useState(null);
-        const [loading, setLoading] = useState(true);
         const [confetti, setConfetti] = useState(false);
         const [viewMode, setViewMode] = useState('list');
-
-        useEffect(() => {
-          const timer = setTimeout(() => setLoading(false), 400);
-          return () => clearTimeout(timer);
-        }, []);
 
         useEffect(() => {
           const theme = data.settings?.theme || 'light';
           document.body.classList.toggle('dark', theme === 'dark');
         }, [data.settings?.theme]);
-
-        if (loading) {
-          return React.createElement('div', { style: { height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:24, background:'var(--bg)' } },
-            React.createElement('div', { style: { width:64, height:64, borderRadius:'50%', border:'4px solid var(--border)', borderTopColor:'var(--primary)', animation:'spin 0.9s linear infinite' } }),
-            React.createElement('div', { style: { fontWeight:700, color:'var(--text-secondary)', fontSize:16 } }, 'Loading ResolveHub...')
-          );
-        }
 
         if (!session) return React.createElement(Login, null);
 
@@ -983,9 +999,9 @@
               ),
               isAdmin && complaint.status !== 'resolved' && 
                 React.createElement('button', { 
-                  className: 'btn btn-primary btn-sm', 
+                  className: 'btn btn-success btn-sm', 
                   onClick: handleResolve, 
-                  style: { marginBottom: 16, background: 'linear-gradient(135deg, var(--success), #34d399)' } 
+                  style: { marginBottom: 16 } 
                 },
                   React.createElement('i', { className: 'fas fa-check' }), ' Resolve'
                 ),
